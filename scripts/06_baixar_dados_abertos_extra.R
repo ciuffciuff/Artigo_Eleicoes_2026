@@ -78,7 +78,9 @@ perf <- list.files(pastas$perfil, "\\.csv$", full.names = TRUE)
 ufs_perf <- toupper(sub(".*_([A-Za-z]{2})\\.csv$", "\\1", perf))
 sem <- setdiff(ufs_esperadas, ufs_perf)
 if (length(sem)) message("  Perfil sem as UFs: ", paste(sem, collapse = ", "))
-c1 <- checar("perfil do eleitorado", perf, c(sec, "QT_ELEITORES_PERFIL"))
+# a contagem chama QT_ELEITORES em 2026 (QT_ELEITORES_PERFIL em anos anteriores)
+col_qt <- if (length(perf) && "QT_ELEITORES" %in% cabecalho(perf[1])) "QT_ELEITORES" else "QT_ELEITORES_PERFIL"
+c1 <- checar("perfil do eleitorado", perf, c(sec, col_qt))
 c2 <- checar("locais de votação", list.files(pastas$locais, "\\.csv$", full.names = TRUE),
              c("CD_MUNICIPIO", "NR_ZONA", "NR_SECAO", "NR_LATITUDE", "NR_LONGITUDE"))
 c3 <- checar("votação 2022", list.files(pastas$v2022, "_BR\\.csv$", full.names = TRUE),

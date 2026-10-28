@@ -70,7 +70,7 @@ for (uf in ufs) {
     g <- CJ(DS_GENERO = gen, DS_FAIXA_ETARIA = fx, DS_GRAU_ESCOLARIDADE = esc, sorted = FALSE)
     pr <- pg[match(g$DS_GENERO, gen)] * pf[match(g$DS_FAIXA_ETARIA, fx)] * pe[match(g$DS_GRAU_ESCOLARIDADE, esc)]
     q <- as.vector(rmultinom(1, aptos, pr))
-    g[, `:=`(QT_ELEITORES_PERFIL = q, QT_ELEITORES_BIOMETRIA = rbinom(length(q), q, 0.85))][QT_ELEITORES_PERFIL > 0]
+    g[, `:=`(QT_ELEITORES = q, QT_ELEITORES_BIOMETRIA = rbinom(length(q), q, 0.85))][QT_ELEITORES > 0]
   }, by = .(SG_UF, CD_MUNICIPIO, NM_MUNICIPIO, NR_ZONA, NR_SECAO)]
   w(p, file.path(dest, sprintf("tse_2026/extra/perfil/perfil_eleitor_secao_2026_%s.csv", uf)))
   w(e[, .(NR_TURNO = 2L, SG_UF, CD_MUNICIPIO, NR_ZONA, NR_SECAO, NR_LOCAL_VOTACAO,

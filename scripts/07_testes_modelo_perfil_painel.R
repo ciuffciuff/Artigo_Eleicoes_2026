@@ -98,7 +98,10 @@ if (!length(arqs_perfil)) {
              "QT_ELEITORES_PERFIL", "QT_ELEITORES_BIOMETRIA")
   ler_perfil_uf <- function(f) {
     message("  Lendo ", basename(f))
-    p <- ler_csv_tse(f, col_p)
+    p <- ler_csv_tse(f, c(col_p, "QT_ELEITORES"))
+    # em 2026 a contagem chama QT_ELEITORES (QT_ELEITORES_PERFIL em anos anteriores)
+    if (!"QT_ELEITORES_PERFIL" %in% names(p) && "QT_ELEITORES" %in% names(p))
+      setnames(p, "QT_ELEITORES", "QT_ELEITORES_PERFIL")
     falta <- setdiff(c(sec, "QT_ELEITORES_PERFIL"), names(p))
     if (length(falta)) stop("Perfil sem as colunas: ", paste(falta, collapse = ", "), " em ", basename(f))
     for (cc in setdiff(col_p, names(p))) p[, (cc) := NA]
