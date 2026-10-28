@@ -35,7 +35,25 @@ apagar_zip   <- FALSE           # TRUE apaga cada ZIP depois de processado
 ambiente     <- "eleicoes2026"
 
 if (!file.exists("09_arquivos_urna.py")) stop("09_arquivos_urna.py não está na pasta do projeto.")
-if (!dir.exists("urna_vendor")) stop("Pasta urna_vendor/ não encontrada (vem no ZIP dos scripts).")
+# Código de leitura dos arquivos de urna (DataUrnas-BR, licença MIT). Se a pasta
+# urna_vendor/ não estiver aqui, baixa do GitHub público na versão fixada.
+if (!file.exists(file.path("urna_vendor", "src", "dataurnas", "parsers", "bu.py"))) {
+  etapa("Baixando o código DataUrnas-BR (só na 1ª vez)")
+  commit <- "12f0433bd20882d305dd7b9e4987d6dcf3b321a9"
+  url_v  <- sprintf("https://github.com/alissonlinneker/DataUrnas-BR/archive/%s.zip", commit)
+  zv <- tempfile(fileext = ".zip"); dv <- tempfile()
+  ok <- tryCatch({ download.file(url_v, zv, mode = "wb", quiet = TRUE); TRUE }, error = function(e) FALSE)
+  if (!ok) stop("Não consegui baixar o DataUrnas-BR. Descompacte urna_vendor.zip (enviado na conversa) ",
+                "na pasta do projeto, ao lado do 09_arquivos_urna.py, e rode de novo.")
+  zip::unzip(zv, exdir = dv)
+  raiz <- list.dirs(dv, recursive = FALSE)[1]
+  dir.create("urna_vendor", showWarnings = FALSE)
+  file.copy(file.path(raiz, c("src", "spec", "LICENSE")), "urna_vendor", recursive = TRUE)
+  unlink(file.path("urna_vendor", "src", "dataurnas", c("dashboard", "database")), recursive = TRUE)
+  if (!file.exists(file.path("urna_vendor", "src", "dataurnas", "parsers", "bu.py")))
+    stop("Download do DataUrnas-BR incompleto. Use o urna_vendor.zip enviado na conversa.")
+  message("  urna_vendor/ criada (DataUrnas-BR, commit ", substr(commit, 1, 7), ")")
+}
 if (modo == "zip") exigir_espaco(if (apagar_zip) 15 else 100 * length(turnos), ".")
 
 # ---- 1. reticulate --------------------------------------------------------------
