@@ -1,0 +1,146 @@
+﻿UF;origem;para_A;para_B;fora_de_0_1
+BRASIL;votou em LUIZ INÁCIO LULA DA SILVA;1.032;-0.036;FALSE
+BRASIL;votou em FLAVIO NANTES BOLSONARO;-0.014;1.007;FALSE
+BRASIL;votou em outros;0.441;0.441;FALSE
+BRASIL;branco/nulo;0.63;-0.016;FALSE
+BRASIL;eleitor a mais no 2º turno;0.549;0.411;FALSE
+AC;votou em LUIZ INÁCIO LULA DA SILVA;0.918;0.028;FALSE
+AC;votou em FLAVIO NANTES BOLSONARO;0.034;0.943;FALSE
+AC;votou em outros;0.503;0.504;FALSE
+AC;branco/nulo;0.336;0.218;FALSE
+AC;eleitor a mais no 2º turno;0.332;0.629;FALSE
+AL;votou em LUIZ INÁCIO LULA DA SILVA;1.026;-0.033;FALSE
+AL;votou em FLAVIO NANTES BOLSONARO;-0.004;0.994;FALSE
+AL;votou em outros;0.513;0.361;FALSE
+AL;branco/nulo;0.681;0.081;FALSE
+AL;eleitor a mais no 2º turno;0.575;0.371;FALSE
+AM;votou em LUIZ INÁCIO LULA DA SILVA;0.99;-0.013;FALSE
+AM;votou em FLAVIO NANTES BOLSONARO;0.025;0.967;FALSE
+AM;votou em outros;0.538;0.401;FALSE
+AM;branco/nulo;0.455;0.047;FALSE
+AM;eleitor a mais no 2º turno;0.561;0.405;FALSE
+AP;votou em LUIZ INÁCIO LULA DA SILVA;0.962;0.036;FALSE
+AP;votou em FLAVIO NANTES BOLSONARO;0.07;0.922;FALSE
+AP;votou em outros;0.505;0.389;FALSE
+AP;branco/nulo;0.556;0.185;FALSE
+AP;eleitor a mais no 2º turno;0.491;0.48;FALSE
+BA;votou em LUIZ INÁCIO LULA DA SILVA;1.003;-0.01;FALSE
+BA;votou em FLAVIO NANTES BOLSONARO;-0.028;1.022;FALSE
+BA;votou em outros;0.681;0.215;FALSE
+BA;branco/nulo;0.581;-0.007;FALSE
+BA;eleitor a mais no 2º turno;0.766;0.19;FALSE
+CE;votou em LUIZ INÁCIO LULA DA SILVA;1.013;-0.018;FALSE
+CE;votou em FLAVIO NANTES BOLSONARO;0.013;0.982;FALSE
+CE;votou em outros;0.494;0.366;FALSE
+CE;branco/nulo;0.63;0.045;FALSE
+CE;eleitor a mais no 2º turno;0.669;0.289;FALSE
+DF;votou em LUIZ INÁCIO LULA DA SILVA;1.002;-0.007;FALSE
+DF;votou em FLAVIO NANTES BOLSONARO;0.012;0.978;FALSE
+DF;votou em outros;0.433;0.448;FALSE
+DF;branco/nulo;0.622;-0.089;TRUE
+DF;eleitor a mais no 2º turno;0.534;0.419;FALSE
+ES;votou em LUIZ INÁCIO LULA DA SILVA;1.017;-0.047;FALSE
+ES;votou em FLAVIO NANTES BOLSONARO;-0.018;1.006;FALSE
+ES;votou em outros;0.55;0.397;FALSE
+ES;branco/nulo;0.402;0.018;FALSE
+ES;eleitor a mais no 2º turno;0.464;0.444;FALSE
+GO;votou em LUIZ INÁCIO LULA DA SILVA;1.079;-0.08;TRUE
+GO;votou em FLAVIO NANTES BOLSONARO;-0.024;1.013;FALSE
+GO;votou em outros;0.398;0.528;FALSE
+GO;branco/nulo;0.565;0.122;FALSE
+GO;eleitor a mais no 2º turno;0.498;0.458;FALSE
+MA;votou em LUIZ INÁCIO LULA DA SILVA;1.013;-0.019;FALSE
+MA;votou em FLAVIO NANTES BOLSONARO;0.009;0.985;FALSE
+MA;votou em outros;0.545;0.317;FALSE
+MA;branco/nulo;0.72;0.01;FALSE
+MA;eleitor a mais no 2º turno;0.69;0.268;FALSE
+MG;votou em LUIZ INÁCIO LULA DA SILVA;1.03;-0.036;FALSE
+MG;votou em FLAVIO NANTES BOLSONARO;-0.02;1.016;FALSE
+MG;votou em outros;0.504;0.366;FALSE
+MG;branco/nulo;0.591;0.03;FALSE
+MG;eleitor a mais no 2º turno;0.55;0.42;FALSE
+MS;votou em LUIZ INÁCIO LULA DA SILVA;1.055;-0.054;TRUE
+MS;votou em FLAVIO NANTES BOLSONARO;-0.012;1.01;FALSE
+MS;votou em outros;0.383;0.462;FALSE
+MS;branco/nulo;0.512;0.128;FALSE
+MS;eleitor a mais no 2º turno;0.56;0.401;FALSE
+MT;votou em LUIZ INÁCIO LULA DA SILVA;1.05;-0.054;TRUE
+MT;votou em FLAVIO NANTES BOLSONARO;-0.013;1.01;FALSE
+MT;votou em outros;0.479;0.395;FALSE
+MT;branco/nulo;0.527;0.165;FALSE
+MT;eleitor a mais no 2º turno;0.466;0.509;FALSE
+PA;votou em LUIZ INÁCIO LULA DA SILVA;1.003;-0.006;FALSE
+PA;votou em FLAVIO NANTES BOLSONARO;0.006;0.987;FALSE
+PA;votou em outros;0.582;0.291;FALSE
+PA;branco/nulo;0.638;0.142;FALSE
+PA;eleitor a mais no 2º turno;0.577;0.385;FALSE
+PB;votou em LUIZ INÁCIO LULA DA SILVA;1.021;-0.021;FALSE
+PB;votou em FLAVIO NANTES BOLSONARO;-0.002;0.989;FALSE
+PB;votou em outros;0.462;0.393;FALSE
+PB;branco/nulo;0.696;0.006;FALSE
+PB;eleitor a mais no 2º turno;0.643;0.308;FALSE
+PE;votou em LUIZ INÁCIO LULA DA SILVA;1.022;-0.026;FALSE
+PE;votou em FLAVIO NANTES BOLSONARO;-0.017;1.01;FALSE
+PE;votou em outros;0.509;0.35;FALSE
+PE;branco/nulo;0.659;0.037;FALSE
+PE;eleitor a mais no 2º turno;0.714;0.235;FALSE
+PI;votou em LUIZ INÁCIO LULA DA SILVA;1.002;-0.01;FALSE
+PI;votou em FLAVIO NANTES BOLSONARO;0.022;0.975;FALSE
+PI;votou em outros;0.601;0.275;FALSE
+PI;branco/nulo;0.56;0.088;FALSE
+PI;eleitor a mais no 2º turno;0.716;0.227;FALSE
+PR;votou em LUIZ INÁCIO LULA DA SILVA;1.052;-0.051;TRUE
+PR;votou em FLAVIO NANTES BOLSONARO;-0.015;1.01;FALSE
+PR;votou em outros;0.377;0.479;FALSE
+PR;branco/nulo;0.537;0.108;FALSE
+PR;eleitor a mais no 2º turno;0.48;0.48;FALSE
+RJ;votou em LUIZ INÁCIO LULA DA SILVA;1.043;-0.04;FALSE
+RJ;votou em FLAVIO NANTES BOLSONARO;0.005;0.983;FALSE
+RJ;votou em outros;0.395;0.459;FALSE
+RJ;branco/nulo;0.628;-0.003;FALSE
+RJ;eleitor a mais no 2º turno;0.458;0.507;FALSE
+RN;votou em LUIZ INÁCIO LULA DA SILVA;1.014;-0.026;FALSE
+RN;votou em FLAVIO NANTES BOLSONARO;0.017;0.971;FALSE
+RN;votou em outros;0.456;0.449;FALSE
+RN;branco/nulo;0.565;-0.015;FALSE
+RN;eleitor a mais no 2º turno;0.616;0.333;FALSE
+RO;votou em LUIZ INÁCIO LULA DA SILVA;1.018;-0.022;FALSE
+RO;votou em FLAVIO NANTES BOLSONARO;-0.01;1.005;FALSE
+RO;votou em outros;0.538;0.346;FALSE
+RO;branco/nulo;0.513;0.133;FALSE
+RO;eleitor a mais no 2º turno;0.273;0.692;FALSE
+RR;votou em LUIZ INÁCIO LULA DA SILVA;1.004;-0.006;FALSE
+RR;votou em FLAVIO NANTES BOLSONARO;0.026;0.968;FALSE
+RR;votou em outros;0.352;0.522;FALSE
+RR;branco/nulo;0.282;0.415;FALSE
+RR;eleitor a mais no 2º turno;0.257;0.709;FALSE
+RS;votou em LUIZ INÁCIO LULA DA SILVA;1.063;-0.06;TRUE
+RS;votou em FLAVIO NANTES BOLSONARO;-0.028;1.023;FALSE
+RS;votou em outros;0.405;0.459;FALSE
+RS;branco/nulo;0.586;0.07;FALSE
+RS;eleitor a mais no 2º turno;0.53;0.445;FALSE
+SC;votou em LUIZ INÁCIO LULA DA SILVA;1.078;-0.073;TRUE
+SC;votou em FLAVIO NANTES BOLSONARO;-0.017;1.014;FALSE
+SC;votou em outros;0.352;0.502;FALSE
+SC;branco/nulo;0.511;0.074;FALSE
+SC;eleitor a mais no 2º turno;0.423;0.551;FALSE
+SE;votou em LUIZ INÁCIO LULA DA SILVA;1.02;-0.022;FALSE
+SE;votou em FLAVIO NANTES BOLSONARO;0.005;0.984;FALSE
+SE;votou em outros;0.547;0.307;FALSE
+SE;branco/nulo;0.608;0.074;FALSE
+SE;eleitor a mais no 2º turno;0.677;0.272;FALSE
+SP;votou em LUIZ INÁCIO LULA DA SILVA;1.065;-0.062;TRUE
+SP;votou em FLAVIO NANTES BOLSONARO;-0.025;1.017;FALSE
+SP;votou em outros;0.393;0.453;FALSE
+SP;branco/nulo;0.565;0.029;FALSE
+SP;eleitor a mais no 2º turno;0.513;0.451;FALSE
+TO;votou em LUIZ INÁCIO LULA DA SILVA;0.982;-0.028;FALSE
+TO;votou em FLAVIO NANTES BOLSONARO;0.013;0.978;FALSE
+TO;votou em outros;0.516;0.424;FALSE
+TO;branco/nulo;0.451;0.023;FALSE
+TO;eleitor a mais no 2º turno;0.454;0.458;FALSE
+ZZ;votou em LUIZ INÁCIO LULA DA SILVA;1.058;-0.054;TRUE
+ZZ;votou em FLAVIO NANTES BOLSONARO;-0.089;1.088;TRUE
+ZZ;votou em outros;0.562;0.28;FALSE
+ZZ;branco/nulo;0.251;0.224;FALSE
+ZZ;eleitor a mais no 2º turno;0.679;0.318;FALSE

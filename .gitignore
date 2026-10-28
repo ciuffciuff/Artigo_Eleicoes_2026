@@ -1,0 +1,17 @@
+# dados brutos do TSE (vários GB) - baixados pelos scripts
+tse_2026/
+*.zip
+*.parcial
+# R / Python
+.Rhistory
+.RData
+.Rproj.user/
+__pycache__/
+*.pyc
+# LaTeX
+*.aux
+*.log
+*.bbl
+*.blg
+*.out
+*.synctex.gz

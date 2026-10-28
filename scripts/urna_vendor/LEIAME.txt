@@ -1,0 +1,11 @@
+Código de terceiros usado pelo 09_arquivos_urna.py
+
+Origem: DataUrnas-BR (https://github.com/alissonlinneker/DataUrnas-BR),
+commit 12f0433bd20882d305dd7b9e4987d6dcf3b321a9 (15/10/2026), licença MIT
+(ver LICENSE nesta pasta). Copiados sem alteração: src/dataurnas (parsers e
+analyzer) e spec/ (especificações ASN.1 v1 e v2 publicadas pelo TSE).
+Removidos: painel (dashboard), banco de dados, CLI e downloader, que não são
+usados aqui.
+
+Citar no artigo: Linneker, A. DataUrnas-BR: auditoria independente dos
+arquivos públicos da urna eletrônica brasileira (versão 0.2.2), 2026.

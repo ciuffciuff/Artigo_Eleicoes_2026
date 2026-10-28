@@ -1,0 +1,55 @@
+Log resumido (linhas de progresso removidas). Tabelas completas nos CSVs T1 a T7.
+
+T1 - zeros e 100%
+ turno votavel nome              zeros_obs zeros_esp cem_obs cem_esp zeros_p   cem_p
+ 1     13      LULA              8         3.723     38      18.470  3.63e-02  4.54e-05
+ 1     22      FLAVIO BOLSONARO  81        37.410    2       0.409   4.60e-10  6.40e-02
+ 2     13      LULA              4         2.289     106     49.701  1.98e-01  2.75e-12
+ 2     22      FLAVIO BOLSONARO  106       49.701    4       2.289   2.75e-12  1.98e-01
+
+T2/T3 - dígitos (p simulado)
+ turno nome              ult_media ult_p_sim ult_desvio_max_pp seg_media seg_p_sim seg_desvio_max_pp
+ 1     TOTAL DA SEÇÃO    4.500     (teórico 0.889)
+ 1     LULA              4.498     0.475     0.08              3.879     0.607     0.06
+ 1     FLAVIO BOLSONARO  4.493     0.667     0.06              3.816     0.0149    0.09
+ 2     TOTAL DA SEÇÃO    4.502     (teórico 0.350)
+ 2     LULA              4.504     0.763     0.08              3.858     0.112     0.10
+ 2     FLAVIO BOLSONARO  4.494     0.234     0.10              3.971     0.0027    0.12
+
+T4 - percentuais inteiros (100 simulações)
+ turno nome                inteiro_obs inteiro_esp razao  p_empirico
+ 1     LULA                10571       10429.9     1.014  0.0594
+ 1     RENAN SANTOS        3505        3390.5      1.034  0.0297
+ 1     FLAVIO BOLSONARO    10776       10682.1     1.009  0.1782
+ 1     ROMEU ZEMA          405         458.6       0.883  0.9901
+ 1     RONALDO CAIADO      3204        3150.8      1.017  0.0792
+ 1     AUGUSTO CURY        4540        4293.4      1.057  0.0099
+ 2     LULA                10184       10236.6     0.995  0.7228
+ 2     FLAVIO BOLSONARO    10184       10230.8     0.995  0.6931
+
+T5 - homogeneidade no local
+ turno nome              secoes_testadas razao_dispersao sinalizadas
+ 1     LULA              477022          1.23            85
+ 1     FLAVIO BOLSONARO  477020          1.24            67
+ 2     LULA              477010          1.26            69
+ 2     FLAVIO BOLSONARO  477010          1.26            69
+ (demais candidatos: 0 sinalizadas)
+
+T6 - consistência entre turnos
+ nome              secoes  r2_dentro_municipio sinalizadas
+ LULA              499205  0.9318              14
+ FLAVIO BOLSONARO  499205  0.9318              14
+
+T7 - comparecimento x voto (correlação dentro do município)
+ turno nome              cor_dentro_mun p_valor  secoes_comparec_95_e_voto_95
+ 1     LULA              -0.0947        0        26
+ 1     FLAVIO BOLSONARO  0.0857         0        1
+ 1     AUGUSTO CURY      0.0690         0        0
+ 1     ROMEU ZEMA        0.0301         1.7e-100 0
+ 2     LULA              -0.0689        0        64
+ 2     FLAVIO BOLSONARO  0.0689         0        2
+
+T7 - comparecimento em percentual inteiro
+ turno inteiro_obs inteiro_esp p_empirico
+ 1     7635        7581.5      0.267
+ 2     7088        7155.4      0.851

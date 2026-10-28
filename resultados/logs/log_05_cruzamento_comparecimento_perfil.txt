@@ -1,0 +1,30 @@
+Log resumido (linhas de progresso removidas). Tabelas completas nos CSVs T8_*.
+
+Decis de variação de comparecimento x mudança de perfil não explicada (a favor de Lula)
+ decil secoes var_comparec_media_pct mudanca_perfil_media_pp nao_explicada_media_pp ic95_inf ic95_sup
+ 1     49896  -4.82                  -0.052                  -0.048                 -0.068   -0.028
+ 2     49895  -2.55                  -0.064                  -0.092                 -0.110   -0.075
+ 3     49896  -1.64                  -0.027                  -0.055                 -0.072   -0.038
+ 4     49896  -0.92                  -0.032                  -0.051                 -0.068   -0.034
+ 5     51845  -0.27                   0.015                  -0.006                 -0.022    0.011
+ 6     47954   0.30                   0.035                   0.023                  0.006    0.040
+ 7     49884   0.95                   0.059                   0.058                  0.041    0.075
+ 8     49898   1.71                   0.073                   0.078                  0.061    0.095
+ 9     49895   2.73                   0.107                   0.130                  0.113    0.148
+ 10    49893   5.14                   0.143                   0.222                  0.203    0.241
+
+Spearman Brasil: 0.0446 (bruto 0.0310); por UF em T8_correlacao.csv
+
+Transferência ecológica (Brasil)
+ origem                       para_Lula para_Flavio
+ votou em Lula                1.032     -0.036
+ votou em Flávio Bolsonaro   -0.014      1.007
+ votou em outros              0.441      0.441
+ branco/nulo                  0.630     -0.016
+ eleitor a mais no 2º turno   0.549      0.411
+
+Simetria das seções sinalizadas
+ mais votos, a favor de Lula      88
+ mais votos, a favor de Flávio    70
+ menos votos, a favor de Lula     263
+ menos votos, a favor de Flávio   173

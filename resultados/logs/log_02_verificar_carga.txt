@@ -1,0 +1,10 @@
+   NR_TURNO   UFs secoes     votos
+      <int> <int>  <int>     <num>
+1:        1    28 499206 125275835
+2:        2    28 499205 128236074
+data.table vazia (0 linhas e 6 colunas): UF,turno,secoes,iguais,diferentes,maior_diferenca
+    SG_UF                             tipo                     explicacao     N
+   <char>                           <char>                         <char> <int>
+1:     ZZ no detalhe, sem votos na votação explicada: comparecimento zero    85
+2:     ZZ                   só no 1º turno explicada: comparecimento zero     1
+(tabela completa por UF e turno em ../02_carga_por_uf.csv)
