@@ -203,14 +203,29 @@ machines are used in particular regions. Within the same polling place ---
 or more models --- no model had a significant effect on Lula's share, turnout
 or blank and null votes (all BH $q\geq0.29$; largest coefficient 0.037 in the
 logit). The model reported in the machine signature agreed with the model in
-the TSE detail file in all but 6 sections.
+the TSE detail file in all but 6 sections. Figure~\ref{fig:n6n7}a shows the
+estimates for Lula's share: all confidence intervals of the newer models
+contain zero, and the larger point estimates of the oldest model (UE2013)
+do not survive the BH correction.
+
+\begin{figure*}[ht]
+\centering
+\includegraphics[width=\linewidth]{Figures/fig_n6_n7_coef.pdf}
+\caption{Fixed-effect estimates with 95\% cluster-robust intervals.
+(a) N6: effect of the machine model on Lula's logit share within the same
+polling place, relative to UE2020, in each round. (b) N7: effect of the
+share of each group in the section's electorate on Lula's runoff logit
+share, within the municipality (blue: positive; orange: negative).}
+\label{fig:n6n7}
+\end{figure*}
 
 \paragraph{Electorate profile (N7)} A logit model with municipality fixed
 effects relates each section's vote to the profile of its voters
 \cite{tse2026eleitorado}. The coefficients have the expected signs: Lula's share grows
 with the shares of women, voters aged 16--24, voters with low schooling and
 voters with registered biometrics, and falls with the shares aged 45--59 and
-60 or more; the profile explains 26\% of the within-municipality variance of
+60 or more (Figure~\ref{fig:n6n7}b); low schooling has by far the largest
+coefficient; the profile explains 26\% of the within-municipality variance of
 the runoff. Over-dispersion is small ($\rho=0.013$). Using BH ($q<0.001$),
 1,024 runoff sections (0.21\%) deviate from the model, about 190 of them
 in indigenous villages according to the polling-place name. Predictive
@@ -233,7 +248,20 @@ the Maxakali indigenous land in Minas Gerais, where Lula fell from 99.5\% to
 70.1\%. The opponent in 2026 was a different candidate from 2022, so local
 swings are expected. Indigenous sections are over-represented among the
 extreme swings, as remote areas were in Turkey \cite{klimek2023}, but here
-the swings mostly ran against the winner.
+the swings mostly ran against the winner. Figure~\ref{fig:n8uf} shows that
+the mean change has different signs across states, from $-3.0$ points in
+Tocantins to $+4.3$ in the Federal District, and that extreme swings are
+concentrated in Amazonas (14 per 1,000 sections) and Maranh\~ao (7.6),
+states with many indigenous villages.
+
+\begin{figure*}[ht]
+\centering
+\includegraphics[width=\linewidth]{Figures/fig_n8_uf.pdf}
+\caption{Panel 2022--2026 (N8) by state. (a) Mean change in Lula's share
+of the two finalists in the same section (dashed line: Brazil). (b) Sections
+with robust $|z|>6$ per 1,000 sections of the panel.}
+\label{fig:n8uf}
+\end{figure*}
 
 \begin{figure}[ht]
 \centering
@@ -255,18 +283,44 @@ round values than expected (0.05\% of sections; 95\% interval 0.01--0.09\%;
 $p=0.008$), spread over the foci between 30\% and 50\% rather than
 concentrated on high round values such as those found in falsified Russian
 results \cite{kobak2016}. Given the number of series tested (six), this
-single small excess is weak evidence.
+single small excess is weak evidence. Figure~\ref{fig:n9} shows the
+deviation at each round value: those of the candidates are small and of
+both signs, without a systematic excess at high values; turnout shows the
+largest deviations, of opposite signs at 80--85\% and at 90\%, which cancel
+in the total.
+
+\begin{figure*}[ht]
+\centering
+\includegraphics[width=\linewidth]{Figures/fig_n9_foci.pdf}
+\caption{Round-number spikes (N9): observed minus expected number of
+sections within 0.05 percentage points of each multiple of 5\%, where the
+expected value is the mean of 500 binomial resamples of the same sections.}
+\label{fig:n9}
+\end{figure*}
 
 \paragraph{Spatial clustering (N10)} Polling places were geocoded and
 linked to their eight nearest neighbours within the state. Global Moran's
 $I$ was low for the residuals of the cross-round test (median across states
 0.025) and of the panel (0.039), and higher for the profile model (0.200),
-which indicates spatially structured variables missing from that model. No
+which indicates spatially structured variables missing from that model
+(Figure~\ref{fig:n10}); the values are highest in the Federal District
+(0.71) and Rio de Janeiro (0.65), large urban areas where neighbouring
+polling places share a social profile that the broad categories of N7 do
+not capture. No
 local cluster of extreme residuals reached significance. This null result
 is not informative, however: with 199 permutations the smallest attainable
 $p$-value is 0.005, which cannot survive the BH correction over about 90,000
 polling places. The test must be rerun with many more permutations or with
 analytical inference before it can be interpreted.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{Figures/fig_n10_moran.pdf}
+\caption{Global Moran's $I$ by state (N10) for the residuals of the
+cross-round test, the 2022--2026 panel and the profile model; states
+ordered by the profile residual.}
+\label{fig:n10}
+\end{figure}
 
 \paragraph{Machine learning (N11)} Following Zhang, Alvarez and Levin
 \cite{zhang2019}, we generated 150,000 clean synthetic sections, from the real
@@ -283,7 +337,7 @@ appeared in T6 and T8. At this threshold, however, sensitivity is low
 test is a conservative screen. The distribution of predicted probabilities
 for real sections is bimodal, with a secondary mode near 0.75 holding
 roughly a tenth of the sections (Figure~\ref{fig:n11}). The last digit of Lula's
-count is the second most important feature, and fabricated counts in the
+count is the second most important feature (Figure~\ref{fig:n11imp}), and fabricated counts in the
 training data end in zero; since about 10\% of honest counts end in zero
 (T2), this mode is probably an artifact of that feature, which should be
 confirmed by refitting the model without it.
@@ -295,6 +349,14 @@ confirmed by refitting the model without it.
 real runoff sections (x axis) and number of sections (y axis); dashed line:
 threshold for a 0.1\% false-positive rate.}
 \label{fig:n11}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{Figures/fig_n11_importance.pdf}
+\caption{Importance of the features of the random forest (N11), as share
+of the total decrease in node impurity. Orange: last-digit features.}
+\label{fig:n11imp}
 \end{figure}
 
 \paragraph{Local multimodality (N12)} A mixture of two voting regimes inside

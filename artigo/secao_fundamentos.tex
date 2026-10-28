@@ -1,0 +1,284 @@
+%======================================================================
+\section{Mathematical and Statistical Foundations}
+\label{sec:foundations}
+
+This section states the null models, statistics and decision rules used by
+each test, in the form in which they are implemented in the scripts of
+Table~\ref{tab:pipeline}. For section $s$ we write $n_s$ for the number of
+valid votes (or of votes for the two finalists, when stated), $y_s$ for the
+votes of a candidate, $\hat p_s=y_s/n_s$ for the observed share and $\pi_s$
+for its expected value under the null hypothesis. $m(s)$ denotes the
+municipality and $\ell(s)$ the polling place of the section.
+
+\subsection{Binomial reference and over-dispersion}
+
+The common starting point is that, given the share $\pi_s$ expected for its
+electorate, the count of a section is binomial,
+\begin{equation}
+y_s \mid \pi_s \sim \mathrm{Bin}(n_s,\pi_s),
+\label{eq:bin}
+\end{equation}
+with $\mathrm{E}(y_s)=n_s\pi_s$ and $\mathrm{Var}(y_s)=n_s\pi_s(1-\pi_s)$.
+Real sections vary more than (\ref{eq:bin}) allows, because voters are not
+assigned to sections at random. Two corrections are used. In the
+quasi-binomial approach \cite{wedderburn1974} the variance is multiplied by
+a dispersion factor estimated from the Pearson residuals,
+\begin{equation}
+\hat\varphi=\max\Bigl\{1,\;\frac{1}{N}\sum_{s}\frac{(y_s-n_s\bar\pi_{\ell(s)})^2}{n_s\bar\pi_{\ell(s)}(1-\bar\pi_{\ell(s)})}\Bigr\},
+\label{eq:phi}
+\end{equation}
+where $\bar\pi_\ell$ is the pooled share of the polling place. In the
+beta-binomial model \cite{williams1982} $\pi_s$ itself varies around its
+mean with intra-section correlation $\rho$, so that
+\begin{equation}
+\mathrm{Var}(y_s)=n_s\pi_s(1-\pi_s)\bigl[1+(n_s-1)\rho\bigr],
+\label{eq:bb}
+\end{equation}
+and $\rho$ is estimated by the method of moments,
+\begin{equation}
+\hat\rho=\max\Bigl\{0,\;\frac{\sum_s(r_s^2-1)(n_s-1)}{\sum_s(n_s-1)^2}\Bigr\},
+\label{eq:rho}
+\end{equation}
+with $r_s$ the Pearson residual under (\ref{eq:bin}). Models on the share scale use the
+empirical logit $\lambda_s=\ln\{(y_s+\tfrac12)/(n_s-y_s+\tfrac12)\}$, which
+is finite at 0\% and 100\% \cite{haldane1956}.
+
+\subsection{Robust scores and multiple testing}
+
+Outliers are measured with the robust $z$-score
+\begin{equation}
+z_s=\frac{x_s-\operatorname{med}(x)}{1.4826\,\operatorname{med}\bigl|x-\operatorname{med}(x)\bigr|},
+\label{eq:zrob}
+\end{equation}
+where the constant makes the scaled median absolute deviation a consistent
+estimator of the standard deviation under normality; median and MAD have
+the highest possible breakdown point, so a few extreme sections do not mask
+themselves \cite{hampel1974,leys2013}. Thresholds of $|z|\geq4$ or $6$ are
+therefore conservative even when $x$ has heavier tails than the normal.
+
+When $m$ hypotheses are tested together, the Benjamini--Hochberg procedure
+\cite{benjamini1995} sorts the $p$-values $p_{(1)}\leq\dots\leq p_{(m)}$ and
+rejects the $k^\ast$ smallest, with
+\begin{equation}
+k^\ast=\max\{k: p_{(k)}\leq kq/m\},
+\label{eq:bh}
+\end{equation}
+which keeps the expected proportion of false discoveries below $q$. For a
+small family of global tests (eight digit tests, six series of N9) we use
+the Bonferroni bound $\alpha/m$ \cite{dunn1961}. All Monte Carlo and
+permutation $p$-values are computed as
+\begin{equation}
+p=\frac{1+\#\{b: T^{(b)}\geq T_{\mathrm{obs}}\}}{B+1},
+\label{eq:pmc}
+\end{equation}
+which is exact under the null and never zero \cite{phipson2010}; its
+minimum, $1/(B+1)$, limits the evidence a test with $B$ replicates can
+provide.
+
+\subsection{Count regularities (T1--T5, N9)}
+
+\paragraph{T1} With $\pi_s$ taken as the candidate's share in the
+\emph{other} sections of the same polling place (or of the municipality, if
+the place has a single section), the expected numbers of sections with no
+votes and with all votes are
+$E_0=\sum_s(1-\pi_s)^{n_s}$ and $E_{100}=\sum_s\pi_s^{n_s}$. Being a sum of
+many small, nearly independent probabilities, the observed count is
+compared with a Poisson distribution, $p=\Pr\{\mathrm{Pois}(E)\geq O\}$.
+
+\paragraph{T2 and T3} Under Benford's law the second significant digit $d$
+has probability \cite{hill1995}
+\begin{equation}
+\Pr(D_2=d)=\sum_{k=1}^{9}\log_{10}\Bigl(1+\frac{1}{10k+d}\Bigr),\qquad d=0,\dots,9,
+\label{eq:benford2}
+\end{equation}
+and, for counts of two or more digits, the last digit is approximately
+uniform. Observed frequencies $O_d$ are compared with expected
+frequencies $E_d$ by Pearson's statistic \cite{pearson1900}
+\begin{equation}
+X^2=\sum_{d=0}^{9}\frac{(O_d-E_d)^2}{E_d}\;\overset{H_0}{\sim}\;\chi^2_9.
+\label{eq:chi2}
+\end{equation}
+Because bounded section sizes distort both references, $E_d$ is also
+computed by simulation: each count is redrawn from (\ref{eq:bin}) with
+$\pi_s=\hat p_s$, which preserves the size distribution of the sections.
+
+\paragraph{T4 and N9} A count has an integer percentage when
+$0<y_s<n_s$ and $100\,y_s\equiv0 \pmod{n_s}$; N9 counts sections whose
+share lies within 0.05 percentage points of a multiple of 5\%. In both
+cases the statistic $T$ is the number of such sections and its null
+distribution is obtained by redrawing every section from
+(\ref{eq:bin}) with $\pi_s=\hat p_s$, $B=100$ times in T4 and $B=500$ times
+in N9, which is the resampled-kernel idea of Rozenas \cite{rozenas2017}:
+spikes produced by small denominators are reproduced, spikes produced by
+people are not. The $p$-value follows (\ref{eq:pmc}).
+
+\paragraph{T5} Each section is compared with the rest of its polling place
+by the two-proportion statistic
+\begin{equation}
+z_s=\frac{\hat p_s-\hat p_{-s}}{\sqrt{\bar\pi_\ell(1-\bar\pi_\ell)\bigl(n_s^{-1}+n_{-s}^{-1}\bigr)}},\qquad
+\tilde z_s=z_s/\sqrt{\hat\varphi},
+\label{eq:t5}
+\end{equation}
+where $-s$ denotes the other sections of $\ell(s)$ and $\hat\varphi$ is
+(\ref{eq:phi}). A section is flagged when $\tilde z_s$ is significant after
+(\ref{eq:bh}) with $q=0.001$ and $|\hat p_s-\hat p_{-s}|\geq20$
+percentage points.
+
+\subsection{Cross-round and turnout models (T6--T8)}
+
+\paragraph{T6} The runoff share of a finalist is regressed on the
+first-round composition of the same section, $\mathbf c_s=(c_{s1},\dots,c_{sK})$,
+the shares of every candidate and of blank and null votes (one category
+omitted, since they sum to one), with municipality fixed effects removed by
+the weighted within transformation (a double dot denotes the deviation from
+the municipal mean weighted by $n_s$, the regression weight):
+\begin{equation}
+\ddot p^{(2)}_s=\sum_{k=1}^{K-1}\beta_k\,\ddot c_{sk}+e_s,
+\label{eq:t6}
+\end{equation}
+The $R^2$ of (\ref{eq:t6}) is the
+within-municipality $R^2$ reported in Section~\ref{sec:results}; the scaled residuals
+$e_s\sqrt{n_s}$ are converted to robust scores (\ref{eq:zrob}). Turnout
+change is $\Delta C_s=\ln(V_{2,s}/V_{1,s})$, centred on the municipality.
+
+\paragraph{T7} The fingerprint is the two-dimensional histogram of turnout
+$t_s=V_s/A_s$ ($A_s$ eligible voters) and leader share. In the model of
+Klimek et al.\ \cite{klimek2012}, ballot stuffing moves a fraction of the
+abstentions and of the opponent's votes to the leader in a subset of units,
+which produces a second mode near $(t,\hat p)=(1,1)$ and a positive
+association between $t_s$ and $\hat p_s$ within regions; both are checked.
+
+\paragraph{T8} Goodman's ecological regression \cite{goodman1953}
+estimates, by state and without intercept, how first-round votes transfer to
+each finalist:
+\begin{equation}
+V^{A}_{2,s}=\sum_{j\in\{A,B,O,\mathit{BN}\}}\gamma^{A}_{j}V_{1,s}^{j}+u_s,
+\label{eq:goodman}
+\end{equation}
+and analogously for $B$, where $O$ are the other candidates and
+$\mathit{BN}$ blank and null votes. The predicted share is
+$\tilde p_{2,s}=\hat V^A_{2,s}/(\hat V^A_{2,s}+\hat V^B_{2,s})$ and the
+unexplained shift is $\Delta P_s=100(p_{2,s}-\tilde p_{2,s})$. The
+transfer coefficients $\gamma$ are valid proportions only if transfer rates
+are constant within the state; values outside $[0,1]$ signal that this
+assumption fails. The association between $\Delta C$ and $\Delta P$ is
+measured by Spearman's rank correlation \cite{spearman1904},
+$\rho_S=1-6\sum_i d_i^2/\{N(N^2-1)\}$ with $d_i$ the rank differences, and by
+decile means with normal 95\% intervals. Among the $M$ sections with extreme
+$\Delta C>0$ and $\Delta P$, the number $X$ that shifted toward the first
+finalist is tested against $X\sim\mathrm{Bin}(M,\tfrac12)$, the distribution
+expected if neither side benefited.
+
+\subsection{Fixed effects and clustered errors (N4--N8)}
+
+N4--N7 estimate linear models of the form $y_s=\mathbf x_s^\top\boldsymbol\beta+\alpha_{g(s)}+\varepsilon_s$
+with weights $w_s$ and fixed effects $\alpha_g$ for the polling place (N6)
+or the municipality (N4, N5, N7). The weighted within transformation
+$\ddot y_s=y_s-\sum_{g(i)=g(s)}w_iy_i/\sum_{g(i)=g(s)}w_i$ (and likewise for
+$\mathbf x_s$) removes $\alpha_g$, and
+$\hat{\boldsymbol\beta}=(\ddot X^\top W\ddot X)^{-1}\ddot X^\top W\ddot{\mathbf y}$.
+Because sections of the same municipality share unobserved shocks, the
+variance is estimated with the cluster-robust sandwich \cite{cameron2015}
+\begin{equation}
+\widehat{\mathrm V}(\hat{\boldsymbol\beta})=c\,\mathbf H^{-1}
+\Bigl(\sum_{h=1}^{G}\mathbf g_h\mathbf g_h^\top\Bigr)\mathbf H^{-1},
+\label{eq:sandwich}
+\end{equation}
+with $\mathbf H=\ddot X^\top W\ddot X$ and cluster scores
+$\mathbf g_h=\sum_{s\in h}w_s\ddot{\mathbf x}_s\hat u_s$ summed over the
+$G$ municipalities, and small-sample factor
+$c=G(n-1)/\{(G-1)(n-k)\}$. Two-sided $p$-values use the normal
+approximation and the BH correction (\ref{eq:bh}).
+
+In N7 the model is fitted on the empirical logit $\lambda_s$; the fitted
+probability is $\hat\pi_s=\operatorname{logit}^{-1}(\mathbf x_s^\top\hat{\boldsymbol\beta}+\hat\alpha_{m(s)})$,
+over-dispersion is estimated from (\ref{eq:bb}), and each section is scored
+by $z_s=(y_s-n_s\hat\pi_s)/\{n_s\hat\pi_s(1-\hat\pi_s)[1+(n_s-1)\hat\rho]\}^{1/2}$.
+The model is checked by simulation \cite{rubin1984,gelman1996}: $R=200$
+replicated data sets $y^{(r)}_s\sim\text{Beta-Bin}(n_s,\hat\pi_s,\hat\rho)$
+give the reference distribution of discrepancy statistics $T(\mathbf y)$
+(sections at 0\%, above 90\% and below 10\%, and the within-municipality
+standard deviation), with two-sided predictive $p$-value
+$p=\min\{1,2\min(\Pr[T(\mathbf y^{(r)})\geq T(\mathbf y)],\Pr[T(\mathbf y^{(r)})\leq T(\mathbf y)])\}$.
+In N8 the change $\delta_s=\lambda^{2026}_s-\lambda^{2022}_s$ of the same
+section is centred on the municipal median and scored with (\ref{eq:zrob})
+by state.
+
+\subsection{Spatial dependence (N10)}
+
+Let $z_i$ be a standardized residual averaged over polling place $i$ and
+$w_{ij}=1/k$ if $j$ is one of the $k=8$ nearest polling places of $i$ in
+the same state (zero otherwise). Global and local Moran statistics are
+\cite{moran1950,anselin1995}
+\begin{equation}
+I=\frac{\sum_i z_i\sum_j w_{ij}z_j}{\sum_i z_i^2},\qquad
+I_i=z_i\sum_j w_{ij}z_j .
+\label{eq:moran}
+\end{equation}
+$I>0$ means that neighbouring places have similar residuals. The local
+statistic is assessed by conditional permutation: the neighbours of $i$
+are replaced $B=199$ times by places drawn at random, and $p_i$ follows
+(\ref{eq:pmc}), with (\ref{eq:bh}) at $q=0.01$. Since $p_i\geq1/(B+1)=0.005$
+and (\ref{eq:bh}) over $m\approx9\times10^4$ places requires
+$p_{(k)}\leq kq/m$, no place can be significant unless at least
+$0.005\,m/q\approx4.6\times10^4$ places reach that minimum together; this
+is why the null result of N10 is
+uninformative (Section~\ref{sec:extended}).
+
+\subsection{Classification and multimodality (N11, N12)}
+
+\paragraph{N11} A random forest \cite{breiman2001,wright2017} estimates,
+from synthetic sections, the probability $\hat f(\mathbf x)$ that a section
+with features $\mathbf x$ was manipulated. Discrimination is measured by the area under the ROC curve, which
+equals the Mann--Whitney probability that a manipulated section receives a
+higher score than a clean one \cite{mann1947,hanley1982}:
+\begin{equation}
+\mathrm{AUC}=\frac{R_1-n_1(n_1+1)/2}{n_1n_0},
+\label{eq:auc}
+\end{equation}
+with $R_1$ the rank sum of the $n_1$ manipulated sections among all
+$n_1+n_0$ scores. The decision threshold is the $(1-\alpha)$ quantile of
+the scores of held-out clean sections, $\tau=\hat F_0^{-1}(1-\alpha)$ with
+$\alpha=0.001$, so that among $N$ clean real sections about $\alpha N$
+would be flagged by chance.
+
+\paragraph{N12} Hartigan's dip \cite{hartigan1985} is the distance between
+the empirical distribution function $F_n$ of the section shares of a
+municipality and the closest unimodal distribution,
+\begin{equation}
+D(F_n)=\inf_{G\in\mathcal U}\;\sup_x\bigl|F_n(x)-G(x)\bigr|,
+\label{eq:dip}
+\end{equation}
+where $\mathcal U$ is the class of unimodal distribution functions. Its
+$p$-value is taken from the null distribution under the uniform, the least
+favourable unimodal case, and the municipalities are corrected with
+(\ref{eq:bh}) at $q=0.05$.
+
+\subsection{Integrity of the machine files (N1, N2)}
+
+N1 is an identity test: for every section and office, the vector of votes
+recounted from the RDV must equal the vector printed in the BU, and the BU
+must equal the published CSV. N2 relies on two primitives. SHA-512
+\cite{fips180} maps a file to a 512-bit digest $h=H(F)$; a change in any bit
+of $F$ changes $h$ unpredictably, so equality of the recomputed digest with
+the signed one shows that the file is the one that was signed. The signature
+on the digest list is verified with the public key embedded in the
+machine certificate. For ECDSA over P-521 \cite{fips186,johnson2001}, with
+base point $G$ of order $q$, public key $Q$, message digest $e$ and signature
+$(r,s)$, the verifier computes
+\begin{equation}
+w=s^{-1}\bmod q,\quad (x_1,y_1)=(ew\bmod q)\,G+(rw\bmod q)\,Q,
+\label{eq:ecdsa}
+\end{equation}
+and accepts iff $x_1\equiv r\pmod q$. For EdDSA \cite{bernstein2012,rfc8032}
+on the Edwards curve E-521, $x^2+y^2=1-376014\,x^2y^2$ over
+$\mathbb F_{2^{521}-1}$ \cite{aranha2013}, a signature $(R,S)$ on message
+$M$ under public key $A$ is accepted iff
+\begin{equation}
+[S]B=R+[k]A,\qquad k=H(R\,\|\,A\,\|\,M),
+\label{eq:eddsa}
+\end{equation}
+with $B$ the base point. Forging either signature without the private key
+requires solving the elliptic-curve discrete logarithm problem, so a valid
+signature binds the files to the key of the certificate they carry; it does
+not, by itself, show that the key belongs to a genuine machine.

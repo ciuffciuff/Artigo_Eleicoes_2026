@@ -21,6 +21,7 @@ scripts/        pipeline em R (e Python chamado pelo R)
 resultados/     saídas já geradas dos testes T1-T8 e N1-N12 (CSV, PNG) e logs resumidos
 artigo/         manuscrito LaTeX (classe SelfArx da RITA), bibliografia e figuras
   artigo_eleicoes_2026_RITA.tex      arquivo principal (compilar este)
+  secao_fundamentos.tex              fundamentos matemáticos e estatísticos, incluído por \input
   secoes_maquina_testes_extras.tex   seções N1-N12, incluídas por \input
 testes/         simulador de dados no layout do TSE e arquivos reais de urna de 2026 usados nos testes
 ```
@@ -52,6 +53,8 @@ como diretório de trabalho antes de rodar. Os resultados novos vão para `scrip
   - Figuras geradas pelos scripts R estão com rótulos em português.
 - `artigo/Figures/fig_t8_*.pdf`: geradas por `scripts/gerar_figuras_t8.R` a partir de `resultados/T8_*.csv`.
 - `artigo/Figures/fig_n4_hourly.pdf`: gerada a partir de `resultados/N4_votos_por_hora.csv`.
+- `artigo/Figures/fig_n6_n7_coef.pdf`, `fig_n8_uf.pdf`, `fig_n9_foci.pdf`, `fig_n10_moran.pdf`, `fig_n11_importance.pdf`:
+  geradas por `scripts/gerar_figuras_n6_n11.py` (Python, pandas e matplotlib) a partir de `resultados/N*.csv`.
 - Para compilar o artigo: `pdflatex`, `bibtex`, `pdflatex`, `pdflatex` (requer os pacotes `abntex2cite` e `multibib`).
 
 ## Licenças e créditos
