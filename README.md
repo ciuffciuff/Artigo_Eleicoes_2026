@@ -42,8 +42,7 @@ como diretório de trabalho antes de rodar. Os resultados novos vão para `scrip
 - T1-T8: executados nos dados reais (resultados em `resultados/`).
 - Novos testes 1, 2 e 4-12: scripts prontos e validados com dados simulados e com arquivos reais
   de urna de 2026 (`testes/fixtures`); execução nos dados completos pendente.
-- `artigo/`: as figuras `fig_t8_deciles.pdf` e `fig_t8_uf.pdf` citadas no .tex ainda precisam ser
-  adicionadas a `artigo/Figures/`.
+- `artigo/Figures/fig_t8_*.pdf`: geradas por `scripts/gerar_figuras_t8.R` a partir de `resultados/T8_*.csv`.
 
 ## Licenças e créditos
 
