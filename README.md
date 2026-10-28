@@ -18,8 +18,10 @@ scripts/        pipeline em R (e Python chamado pelo R)
   10_testes_arquivos_urna.R       resumo dos testes 1, 2, 4 e 5
   99_executar_tudo.R              roda a sequência inteira, parando no primeiro erro
   urna_vendor/                    código de terceiros (DataUrnas-BR, MIT) para ler os arquivos de urna
-resultados/     saídas já geradas dos testes T1-T8 (CSV, PNG) e logs resumidos
+resultados/     saídas já geradas dos testes T1-T8 e N1-N12 (CSV, PNG) e logs resumidos
 artigo/         manuscrito LaTeX (classe SelfArx da RITA), bibliografia e figuras
+  artigo_eleicoes_2026_RITA.tex      arquivo principal (compilar este)
+  secoes_maquina_testes_extras.tex   seções N1-N12, incluídas por \input
 testes/         simulador de dados no layout do TSE e arquivos reais de urna de 2026 usados nos testes
 ```
 
@@ -40,11 +42,20 @@ como diretório de trabalho antes de rodar. Os resultados novos vão para `scrip
 ## Situação
 
 - T1-T8: executados nos dados reais (resultados em `resultados/`).
-- Novos testes 1, 2 e 4-12: scripts prontos e validados com dados simulados e com arquivos reais
-  de urna de 2026 (`testes/fixtures`); execução nos dados completos pendente.
+- N1, N2, N4-N12: executados nos dados reais dos dois turnos (resultados `resultados/N*`).
+  O processamento dos arquivos de urna (script 09) levou 143 min com 15 processos.
+  N3 (boletins impressos x publicados) depende de amostra de campo e não foi executado.
+- Pendências conhecidas:
+  - N10: refazer com mais permutações (com 199, o menor p possível é 0,005 e não sobrevive à correção BH).
+  - N11: reajustar o modelo sem a variável do último dígito (provável causa da segunda moda em ~0,75).
+  - `classificar_locais_t6.R`: o padrão `"LAR "` também casa com "ESCOLAR ".
+  - Figuras geradas pelos scripts R estão com rótulos em português.
 - `artigo/Figures/fig_t8_*.pdf`: geradas por `scripts/gerar_figuras_t8.R` a partir de `resultados/T8_*.csv`.
+- `artigo/Figures/fig_n4_hourly.pdf`: gerada a partir de `resultados/N4_votos_por_hora.csv`.
+- Para compilar o artigo: `pdflatex`, `bibtex`, `pdflatex`, `pdflatex` (requer os pacotes `abntex2cite` e `multibib`).
 
 ## Licenças e créditos
 
-- `scripts/urna_vendor/`: DataUrnas-BR, de Alisson Linneker, licença MIT (ver `LICENSE` e `LEIAME.txt` na pasta).
+- `scripts/urna_vendor/`: [DataUrnas-BR](https://github.com/alissonlinneker/DataUrnas-BR), de Alisson Linneker,
+  versão 0.2.2 (commit `12f0433`), licença MIT (ver `LICENSE` e `LEIAME.txt` na pasta).
 - `artigo/SelfArx.cls`: classe do template da RITA.

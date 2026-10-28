@@ -1,0 +1,17 @@
+﻿NR_TURNO;SG_UF;CD_MUNICIPIO;NR_ZONA;NR_SECAO;votos_log;comparecimento_bu;diferenca_log_bu;votos_antes_pronta;votos_apos_encerramento;max_votos_minuto;intervalos_lt_5s;intervalos_lt_10s;z_pico;z_lt10;flags_log
+1;BA;39934;183;175;236;272;-36;0;0;1;0;0;0;0;log_votos_diverge
+1;ES;56995;53;211;264;265;-1;0;0;1;0;0;0;0;log_votos_diverge
+1;RJ;58971;87;184;256;258;-2;0;0;1;0;0;0;0;log_votos_diverge
+1;RN;16039;29;28;241;242;-1;0;0;1;0;0;0;0;log_votos_diverge
+1;RS;89036;83;44;278;279;-1;0;0;1;0;0;0;0;log_votos_diverge
+1;SP;63614;227;305;289;290;-1;0;0;1;0;0;0;0;log_votos_diverge
+1;SP;64254;291;346;277;278;-1;0;0;2;0;0;1;0;log_votos_diverge
+1;SP;71072;2;35;232;247;-15;0;0;2;0;0;1;0;log_votos_diverge
+1;SP;71072;260;37;284;285;-1;0;0;1;0;0;0;0;log_votos_diverge
+2;BA;34711;21;178;233;234;-1;0;0;2;0;0;0;0;"log_votos_diverge;log_voto_outra_data"
+2;BA;35653;173;235;204;217;-13;0;0;2;0;0;0;0;"log_votos_diverge;log_voto_outra_data"
+2;ES;57932;9;85;612;308;304;0;0;4;0;0;2;0;"log_votos_diverge;log_voto_outra_data"
+2;MA;8893;47;609;188;224;-36;0;0;2;0;0;0;0;"log_votos_diverge;log_voto_outra_data"
+2;PB;21750;2;254;303;304;-1;0;0;2;0;0;0;0;"log_votos_diverge;log_voto_outra_data"
+2;PI;11533;3;216;258;259;-1;0;0;2;0;0;0;0;"log_votos_diverge;log_voto_outra_data"
+2;RS;89060;17;191;90;92;-2;0;0;2;0;0;0;0;"log_votos_diverge;log_voto_outra_data"

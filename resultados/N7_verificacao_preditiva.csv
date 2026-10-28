@@ -1,0 +1,13 @@
+﻿alvo;estatistica;observado;simulado_media;simulado_p2.5;simulado_p97.5;p_preditivo
+Lula (2º turno, % dos 2 finalistas);secoes_com_zero;3;0.035;0;1;0
+Lula (2º turno, % dos 2 finalistas);secoes_acima_90pct;6714;4734.355;4622.925;4843.1;0
+Lula (2º turno, % dos 2 finalistas);secoes_abaixo_10pct;367;272.27;244.9;304;0
+Lula (2º turno, % dos 2 finalistas);dp_dentro_municipio;0.0733897028214062;0.0745536333875458;0.0743955288323654;0.0747002715258177;0
+Lula (1º turno, % dos válidos);secoes_com_zero;5;0.105;0;1;0
+Lula (1º turno, % dos válidos);secoes_acima_90pct;3564;1531.52;1465.975;1596.05;0
+Lula (1º turno, % dos válidos);secoes_abaixo_10pct;869;1193.32;1133.9;1251.075;0
+Lula (1º turno, % dos válidos);dp_dentro_municipio;0.0729116875018143;0.072954990190201;0.0728343994935715;0.0730837337889624;0.52
+Flávio (1º turno, % dos válidos);secoes_com_zero;65;1.035;0;3;0
+Flávio (1º turno, % dos válidos);secoes_acima_90pct;177;89.87;73.975;110.05;0
+Flávio (1º turno, % dos válidos);secoes_abaixo_10pct;6322;4105.13;4008.925;4198.075;0
+Flávio (1º turno, % dos válidos);dp_dentro_municipio;0.0695437907845366;0.0708724985030329;0.0707416081516779;0.0710023317331318;0

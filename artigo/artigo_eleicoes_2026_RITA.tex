@@ -90,59 +90,61 @@ Urna eletr\^onica --- Lei de Benford --- Integridade eleitoral}
 %----------------------------------------------------------------------------------------
 %	ABSTRACT
 %----------------------------------------------------------------------------------------
-\Abstract{Brazil publishes the vote count of every polling section,
-which allows anyone to test whether the counts follow the statistical
-regularities expected from an unmanipulated tally. We applied eight
-forensic tests to the 2026 presidential election (first round on
-4~October, 499,206 sections; runoff on 25~October, 499,205 sections),
-using the Superior Electoral Court (TSE) open data and the six phases of
-CRISP-DM. Every test was first validated on synthetic sections with and
-without inserted frauds. Votes matched turnout in every section. Last-digit,
-second-digit and integer-percentage tests stayed within the expected range
-for both finalists; sections at the same polling place were only 1.23--1.26
-times more dispersed than random allocation of voters; and the first-round
-profile explained 93\% of the within-municipality variance of the runoff
-($R^2=0.93$). The turnout--vote fingerprint showed no smear toward the
-100\%/100\% corner, and within-municipality turnout was \emph{negatively}
-correlated with the winner's share ($r=-0.07$). Crossing the turnout change
-between rounds with the unexplained change in vote profile produced a small
-monotonic gradient (Spearman $\rho=0.045$; at most 0.22 percentage points),
-with opposite signs in 9 of 28 units; among the 158 extreme sections that
-gained voters, 88 shifted toward one finalist and 70 toward the other
-(binomial $p=0.18$). The remaining outliers (about 0.01\% of sections)
-concentrate in indigenous villages, prisons, sections abroad and a few urban
-sections, and mostly repeat across rounds. We list the sections for manual
-check against the printed tally and propose twelve further tests, including
-a full recount of the digital vote record.}
+\Abstract{Brazil publishes the vote count and the files of every voting
+machine, which allows anyone to check the 2026 presidential result
+independently. We audited both rounds (4 and 25~October; 499,206 and 499,205
+polling sections) with the Superior Electoral Court (TSE) open data, in
+CRISP-DM phases, using eight statistical forensic tests (T1--T8), validated
+beforehand on synthetic data with inserted frauds, and eleven further tests
+(N1--N12, except N3) that include the machines' own files. Recounting every vote in the
+digital vote records (RDV) reproduced the tally sheet (BU) in all
+3,030,617 section--office comparisons, and the BUs reproduced the official
+totals without a single vote of difference; the SHA-512 hashes and the
+hardware signatures of all 998,414 section files were valid. Machine logs
+showed no votes before opening or after closing and at most four votes per
+minute. Digit, integer-percentage, local-homogeneity and fingerprint tests
+were within the expected range; the first round explained 93\% of the
+within-municipality variance of the runoff; the machine model had no effect
+within the same polling place; turnout change between rounds was linked to
+the unexplained vote shift by a gradient of at most 0.22 percentage points
+whose sign varied across states; and sections that gained voters shifted
+symmetrically between finalists (88 vs.\ 70; $p=0.18$). A random forest
+trained on synthetic frauds flagged 2 real sections, against 499 expected
+from its false-positive rate. Remaining outliers (at most about 0.2\% of
+sections, depending on the test) include a disproportionate number of
+indigenous villages, prisons and sections abroad, and municipalities with
+bimodal vote distributions all contain indigenous lands. We list the sections for manual
+verification, report the limits of each test and release the code.}
 
-\Resumo{O Brasil publica a contagem de votos de cada se\c{c}\~ao eleitoral,
-o que permite testar se as contagens seguem as regularidades estat\'isticas
-esperadas em uma apura\c{c}\~ao sem manipula\c{c}\~ao. Aplicamos oito testes
-forenses \`a elei\c{c}\~ao presidencial de 2026 (1\textordmasculine{} turno
-em 4 de outubro, 499.206 se\c{c}\~oes; 2\textordmasculine{} turno em 25 de
-outubro, 499.205 se\c{c}\~oes), com os dados abertos do Tribunal Superior
-Eleitoral (TSE) e as seis fases do CRISP-DM. Cada teste foi validado antes
-com se\c{c}\~oes sint\'eticas com e sem fraudes inseridas. Os votos
-coincidiram com o comparecimento em todas as se\c{c}\~oes. Os testes de
-\'ultimo d\'igito, de segundo d\'igito e de percentuais inteiros ficaram
-dentro do esperado para os dois finalistas; se\c{c}\~oes do mesmo local de
-vota\c{c}\~ao foram apenas 1,23 a 1,26 vez mais dispersas que uma
-aloca\c{c}\~ao aleat\'oria de eleitores; e o perfil do 1\textordmasculine{}
-turno explicou 93\% da vari\^ancia do 2\textordmasculine{} turno dentro do
-munic\'ipio. A ``impress\~ao digital'' comparecimento--voto n\~ao mostrou
-deslocamento para o canto 100\%/100\%, e o comparecimento dentro do
-munic\'ipio foi \emph{negativamente} correlacionado com a vota\c{c}\~ao do
-vencedor ($r=-0,07$). O cruzamento entre a varia\c{c}\~ao de comparecimento
-e a mudan\c{c}a n\~ao explicada de perfil entre turnos mostrou um gradiente
-pequeno (Spearman $\rho=0,045$; no m\'aximo 0,22 ponto percentual), com sinal
-oposto em 9 de 28 unidades; entre as 158 se\c{c}\~oes extremas que ganharam
-eleitores, 88 se deslocaram para um finalista e 70 para o outro (binomial
-$p=0,18$). Os casos extremos restantes (cerca de 0,01\% das se\c{c}\~oes)
-concentram-se em aldeias ind\'igenas, pres\'idios, se\c{c}\~oes no exterior
-e poucas se\c{c}\~oes urbanas, e em geral se repetem nos dois turnos.
-Listamos as se\c{c}\~oes para confer\^encia no Boletim de Urna e propomos
-doze novos testes, entre eles a recontagem integral do Registro Digital do
-Voto.}
+\Resumo{O Brasil publica a contagem de votos e os arquivos de cada urna
+eletr\^onica, o que permite conferir de forma independente o resultado
+presidencial de 2026. Auditamos os dois turnos (4 e 25 de outubro; 499.206 e
+499.205 se\c{c}\~oes) com os dados abertos do Tribunal Superior Eleitoral
+(TSE), seguindo as fases do CRISP-DM, com oito testes forenses estat\'isticos
+(T1--T8), validados antes em dados sint\'eticos com fraudes inseridas, e onze
+testes adicionais (N1--N12, exceto N3), que incluem os arquivos das pr\'oprias urnas. A
+recontagem de todos os votos do Registro Digital do Voto (RDV) reproduziu o
+Boletim de Urna (BU) nas 3.030.617 compara\c{c}\~oes se\c{c}\~ao--cargo, e os
+BUs reproduziram os totais oficiais sem um \'unico voto de diferen\c{c}a; os
+\emph{hashes} SHA-512 e as assinaturas de \emph{hardware} dos arquivos das
+998.414 se\c{c}\~oes foram v\'alidos. Os \emph{logs} n\~ao mostraram votos
+antes da abertura nem depois do encerramento, e no m\'aximo quatro votos por
+minuto. Os testes de d\'igitos, percentuais inteiros, homogeneidade local e
+impress\~ao digital ficaram dentro do esperado; o 1\textordmasculine{} turno
+explicou 93\% da vari\^ancia do 2\textordmasculine{} dentro do
+munic\'ipio; o modelo da urna n\~ao teve efeito dentro do mesmo local de
+vota\c{c}\~ao; a varia\c{c}\~ao de comparecimento entre turnos se associou
+\`a mudan\c{c}a n\~ao explicada de voto por um gradiente de no m\'aximo 0,22
+ponto percentual, com sinal vari\'avel entre UFs; e as se\c{c}\~oes que
+ganharam eleitores se deslocaram de forma sim\'etrica entre os finalistas
+(88 contra 70; $p=0,18$). Uma floresta aleat\'oria treinada com fraudes
+sint\'eticas sinalizou 2 se\c{c}\~oes reais, contra 499 esperadas pela sua
+taxa de falso positivo. Os casos extremos restantes (no m\'aximo cerca de
+0,2\% das se\c{c}\~oes, conforme o teste) incluem n\'umero desproporcional de
+aldeias ind\'igenas, pres\'idios e se\c{c}\~oes no exterior, e todos os
+munic\'ipios com distribui\c{c}\~ao bimodal de votos t\^em terras
+ind\'igenas. Listamos as se\c{c}\~oes para confer\^encia, relatamos os
+limites de cada teste e publicamos o c\'odigo.}
 
 %----------------------------------------------------------------------------------------
 \begin{document}
@@ -173,24 +175,32 @@ analysis of the 2022 runoff found no statistical sign of ballot stuffing or
 voter rigging \cite{csh2022}.
 
 This article applies and extends that line of work to the 2026 presidential
-election. Three research questions guide the study:
+election. Four research questions guide the study:
 \textbf{RQ1} --- do section-level counts follow the regularities expected
 from an unmanipulated tally?;
 \textbf{RQ2} --- where there are deviations, are they systematic or
 isolated, and do they have a plausible demographic explanation?; and
 \textbf{RQ3} --- are the changes in turnout and in vote profile between the
-first round and the runoff consistent with each other?
+first round and the runoff consistent with each other?; and
+\textbf{RQ4} --- does the published result match what the voting machines
+recorded and signed?
 
-\paragraph{Contributions} (i) a reproducible CRISP-DM pipeline, in R, that
-validates every test on synthetic data with known inserted frauds before
-using it on real data; (ii) the use of \emph{local} references --- the other
-sections of the same polling place or municipality --- instead of national
-medians, which removes the regional false alarms we found in a first
-version; (iii) a new cross-round test (T8) that relates the change in
-turnout of each section to the part of its vote change that the
-first-round composition does not explain, with a symmetry test between the
-two finalists; and (iv) a list of flagged sections, classified by the name
-of the polling place, ready for manual verification.
+\paragraph{Contributions} (i) a reproducible CRISP-DM pipeline, in R and
+Python, that validates the statistical tests on synthetic data with known
+inserted frauds before using them on real data; (ii) the use of
+\emph{local} references --- the other sections of the same polling place or
+municipality --- instead of national medians, which removes the regional
+false alarms we found in a first version; (iii) a new cross-round test (T8)
+that relates the change in turnout of each section to the part of its vote
+change that the first-round composition does not explain, with a symmetry
+test between the two finalists; (iv) a full, independent recount of every
+digital vote record of both rounds, with verification of the hashes and
+hardware signatures of every machine file, and an analysis of the timing of
+votes in the machine logs; (v) seven further statistical tests (machine
+model, electorate profile, 2022--2026 panel, round-number spikes, spatial
+clustering, machine learning and local multimodality); and (vi) lists of
+flagged sections, classified by the name of the polling place, ready for
+manual verification.
 
 The study is statistical and exploratory. An unusual pattern indicates
 where to look; it does not prove irregularity. Likewise, the absence of a
@@ -308,12 +318,15 @@ target different objects: campaign donations \cite{gamermann2018} and
 Senate elections from 1994 to 2018 with a change of numerical base
 \cite{gueron2022}.
 
-\paragraph{Gap} Previous Brazilian studies analysed one round at a time,
-used national references, and did not report how each test behaves on data
-with known frauds. This study analyses both rounds, links them section by
-section, uses local references, validates every test on synthetic frauds
-before using real data, and identifies the flagged sections by the name of
-the polling place.
+\paragraph{Gap} The Brazilian studies above analysed one round at a time,
+used national references, relied only on the published counts and did not
+report how each test behaves on data with known frauds. This study analyses
+both rounds, links them section by section and to 2022, uses local
+references, validates the statistical tests on synthetic frauds before using
+real data, and complements statistical forensics with the direct check that
+Cant\'u \cite{cantu2019} showed to be decisive: the comparison of the
+published result with the primary record --- here, the files signed by each
+voting machine.
 
 \begin{table*}[ht]
 \caption{Related studies at the polling-unit level}
@@ -335,7 +348,7 @@ Cant\'u \cite{cantu2019} & Mexico 1988 & CNN on tally-sheet images & Alterations
 Figueiredo Filho et al.\ \cite{figueiredo2022} & Brazil 2018 & Five tests (digits, turnout, kernel) & No evidence of fraud \\
 Klimek and Thurner \cite{csh2022} & Brazil 2022, runoff & Fingerprint, ballot stuffing and rigging & No signs of fraud \\
 Klimek et al.\ \cite{klimek2023} & Turkey 2023, two rounds & Fingerprint, cross-round swings & Extreme swings in remote areas \\
-\textbf{This study} & \textbf{Brazil 2026, two rounds} & \textbf{T1--T8 with synthetic validation, local references, cross-round turnout $\times$ profile} & \textbf{See Sections~\ref{sec:results}--\ref{sec:cross}} \\
+\textbf{This study} & \textbf{Brazil 2026, two rounds} & \textbf{T1--T8 with synthetic validation; full RDV recount and signature check; N4--N12} & \textbf{See Sections~\ref{sec:results}--\ref{sec:extended}} \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -382,8 +395,15 @@ details by polling section'' (\texttt{detalhe\_votacao\_\allowbreak secao\_2026}
 generated by the TSE on 26~October 2026 \cite{tse2026}. The first has one
 row per section, round and candidate, with state (UF), municipality, zone,
 section, polling place and votes; blank votes have code 95 and null votes
-code 96. The second has eligible voters and turnout per section. State files
-contain only state-level offices.
+code 96. The second has eligible voters, turnout and the voting-machine
+model per section. State files contain only state-level offices. For the
+further tests we also used, from the same portal, the electorate profile per
+section (sex, age group, schooling and biometric registration), the
+coordinates of the polling places \cite{tse2026eleitorado}, the 2022
+presidential vote per section \cite{tse2022res} and the ``files transmitted
+for tallying'': one ZIP per state and round with the
+BU, RDV, log and signature files of every voting machine
+\cite{tse2026urna}, up to 25.8~GB per file (S\~ao Paulo, runoff).
 
 \paragraph{Data preparation} Rows were filtered for the office of President
 and converted from Latin-1 to UTF-8. The TSE does not publish rows with zero
@@ -393,11 +413,14 @@ exclude codes 95, 96 and 97. A load check compared both files: the sum of
 votes equals the reported turnout in \emph{every} section of both rounds
 (125,275,835 votes in the first round and 128,236,074 in the runoff, for
 158,745,502 eligible voters; turnout of 78.9\% and 80.8\%). The detail file
-lists 42 extra sections abroad in the first round and 43 in the runoff, all
-with eligible voters but zero turnout.
+lists 43 further sections abroad (42 in the first round and 43 in the
+runoff) with eligible voters but zero turnout, and therefore no votes.
 
-\paragraph{Modelling} Eight tests, T1 to T8, described in
-Sections~\ref{sec:results} and \ref{sec:cross}. References are local: the
+\paragraph{Modelling} Eight statistical tests, T1 to T8, described in
+Sections~\ref{sec:results} and \ref{sec:cross}, and eleven further tests,
+N1 to N12, described in Sections~\ref{sec:machine} and \ref{sec:extended}
+(N3, the comparison of printed and published tally sheets, needs field
+samples and was not run). References are local: the
 other sections of the same polling place or municipality, not the national
 median. Section-level tests use the Benjamini--Hochberg correction
 ($q<0.001$) and robust $z$-scores \cite{leys2013}.
@@ -430,10 +453,38 @@ T8 Turnout $\times$ profile & 1 section (lost votes) & 4 of 5 inflated, all ``mo
 \end{tabular}
 \end{table}
 
-\paragraph{Deployment} Three reproducible scripts: download with integrity
-check, section-level distribution and the test battery, plus the T8 script.
-Results are written as CSV and PNG files, ready for checking against the
-tally sheets.
+\paragraph{Deployment} The pipeline is a set of numbered scripts
+(Table~\ref{tab:pipeline}) that share one configuration file and can be run
+in sequence by a single command. Each script starts with a load check and
+writes its results as CSV and PNG files, ready for checking against the
+tally sheets. The machine files are decoded in Python with the ASN.1
+specification published by the TSE \cite{tse2022doc}, reusing the parsers of
+the open-source DataUrnas-BR project \cite{dataurnas}; processing both rounds
+took 143 minutes on a desktop computer with 15 parallel processes.
+
+\begin{table*}[ht]
+\caption{Analysis pipeline}
+\label{tab:pipeline}
+\centering\scriptsize
+\begin{tabular}{@{}L{5.6cm} L{9.5cm}@{}}
+\toprule
+\textbf{Script} & \textbf{Purpose} \\
+\midrule
+\texttt{00\_config.R} & Paths, helpers, fixed-effect regression, BH \\
+\texttt{01\_baixar\_dados.R} & Download vote and detail files (integrity check) \\
+\texttt{02\_verificar\_carga.R} & Votes $=$ turnout per section; coverage \\
+\texttt{03\_distribuicao\_presidente.R} & Section-level distributions \\
+\texttt{04\_testes\_forenses.R} & T1--T7 \\
+\texttt{05\_cruzamento\_comparecimento\_perfil.R} & T8 \\
+\texttt{06\_baixar\_dados\_abertos\_extra.R} & Profile, coordinates, 2022 votes \\
+\texttt{07\_testes\_modelo\_perfil\_painel.R} & N6--N8 \\
+\texttt{08\_testes\_padroes\_espaciais\_ml.R} & N9--N12 \\
+\texttt{09\_arquivos\_urna.py} & Decode BU, RDV, log, signatures (N1, N2, N4, N5) \\
+\texttt{10\_testes\_arquivos\_urna.R} & Summaries and tests N1, N2, N4, N5 \\
+\texttt{99\_executar\_tudo.R} & Runs the whole sequence \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 %======================================================================
 \section{Results}
@@ -465,9 +516,9 @@ excess is small in absolute terms (Table~\ref{tab:t1}).
 \end{table}
 
 Three facts point to communities with homogeneous vote rather than to
-manipulation. The sections lie mostly in the states of MG (26 sections),
-AM (23), MA (22), PA (21) and RS (11) and typically have between 10 and 150
-valid votes (median 81). The same sections are
+manipulation. The sections are small (median of 81 valid votes in the
+listed cases) and more than half lie in the North and in Maranh\~ao, led by
+PA, AM and MA, with others in MG and RS. The same sections are
 unanimous in both rounds (for instance AM 2690/280, MA 8958/170 and 179, and
 PA 4111/516 and 519), and some sections are unanimous for the other
 finalist in both rounds (RS 85839/81, PA 4200/44). The expected value
@@ -538,9 +589,9 @@ Sections of the same building are almost as similar as they would be with
 randomly assigned voters: the dispersion ratio was 1.23--1.24 in the first
 round and 1.26 in the runoff for the finalists. After the quasi-binomial
 adjustment and the BH correction, between 67 and 85 sections per candidate
-and round differ by at least 20 percentage points, about 0.014\% of the
-total. Almost all differ in the same direction and by a similar amount in
-both rounds (e.g.\ SP 62499/402, MG 41238/336, MA 9610/468), a pattern
+and round differ by at least 20 percentage points, 0.014--0.018\% of the
+sections tested. The 46 sections flagged for Lula in both rounds deviate in
+the same direction in both (e.g.\ SP 62499/402, MG 41238/336, MA 9610/468), a pattern
 typical of a different electorate in the section, such as a special section
 or transferred voters.
 
@@ -598,13 +649,12 @@ each section with the national median and flagged 2,088 sections, which
 were in fact whole states (AC, AP, RR, MA and PA) where turnout fell in the
 runoff. The corrected version compares each section with its own
 municipality. It flagged 730 sections (0.15\%) with robust $|z|\geq6$ on
-the log-ratio of votes between rounds: 574 with \emph{fewer} votes in the
-runoff and 156 with more. A keyword classification of the polling-place
-names (approximate; script \texttt{classificar\_locais\_t6.R}) found 54
-prisons or juvenile detention units, 53 of them losing voters, consistent
-with releases and transfers of inmates between rounds; 53 indigenous
-villages, 40 of them gaining voters; 18 hospitals or care homes; and 18
-sections abroad, 17 of them gaining voters. The flagged sections concentrate in PA
+the log-ratio of votes between rounds: 574 had \emph{fewer} votes in the
+runoff and 156 more. A keyword classification of the polling-place names
+(approximate) found 54 prisons or juvenile detention units, 53 of them
+losing voters, consistent with releases and transfers of inmates between
+rounds; 53 indigenous villages, 40 of them gaining voters; and 18 sections
+abroad. The remaining 80\% are ordinary polling places. The flagged sections concentrate in PA
 (128), AC (85), AM (68), MA (67) and AP (64). The largest increases occurred
 in indigenous schools in PA and MS (e.g.\ PA 4111/18/519, from 21 to 35
 votes; PA 5835/106/330, from 128 to 212) and in the embassy in Canberra
@@ -669,8 +719,9 @@ estimated by state \cite{goodman1953}. $\Delta P$ thus measures the part of
 the profile change that the first round does not explain.
 
 \paragraph{Deciles} Figure~\ref{fig:t8dec} shows the mean of $\Delta P$ per
-decile of $\Delta C$. The curve is not flat: it rises from $-0.09$ to
-$+0.22$ percentage points, so sections whose turnout grew most relative to
+decile of $\Delta C$. The curve is not flat: it goes from $-0.05$ in the
+lowest decile (minimum $-0.09$ in the second) to $+0.22$ percentage points
+in the highest, so sections whose turnout grew most relative to
 their municipality shifted slightly toward Lula, and those whose turnout
 fell most shifted slightly toward Fl\'avio Bolsonaro. The effect is
 statistically clear (non-overlapping 95\% intervals at the extremes) but
@@ -723,11 +774,9 @@ symmetry ($p=0.18$). Among the 436 that lost voters, 263 shifted toward Lula
 and 173 toward Fl\'avio Bolsonaro ($p=1.9\times10^{-5}$); this asymmetry
 cannot come from added ballots and is consistent with the prisons, villages
 and urban sections found by T6. The four S\~ao Paulo sections of T6 appear
-again, within a group of ten sections of zone~2 of the same municipality
-(five at the same school and five at another polling place) that all gained
-votes and shifted toward Fl\'avio Bolsonaro. A shared shift across two
-polling places reinforces the hypothesis of a change in the electorate
-(transit voters) rather than an anomaly specific to one candidate.
+again, with more votes and a shift toward Fl\'avio Bolsonaro, which reinforces
+the hypothesis of a change in the electorate (transit voters) rather than an
+anomaly specific to one candidate.
 
 \begin{figure}[ht]
 \centering
@@ -740,47 +789,11 @@ relative to the municipality (x axis, \%); density plot.}
 In the validation, T8 found 4 of the 5 inflated sections, and even with the
 inserted frauds the overall correlation stayed at $-0.005$: a few inflated
 sections do not move the correlation. The list of sections and the symmetry
-test are therefore the decisive outputs, and both point to no
-one-sided pattern.
+test are therefore the decisive outputs: among sections that gained voters
+--- the pattern that inflation would create --- neither finalist was
+favoured.
 
-%======================================================================
-\section{Proposed Further Tests}
-\label{sec:proposals}
-
-The strongest tests stop looking only at votes and use the voting
-machine's own files and the profile of the electorate
-(Table~\ref{tab:proposals}). The first three answer directly whether the
-published result is what the machine recorded; the others refine the search
-for unusual patterns.
-
-\begin{table*}[ht]
-\caption{Proposed tests}
-\label{tab:proposals}
-\centering\small
-\begin{tabular}{@{}c L{3.0cm} L{4.2cm} L{3.4cm} L{5.0cm}@{}}
-\toprule
-\textbf{\#} & \textbf{Test} & \textbf{What it checks} & \textbf{TSE data} & \textbf{Method} \\
-\midrule
-1 & BU $\times$ RDV recount & Tally sheet matches the votes recorded one by one & Machine files: BU and RDV & Decode with the published ASN.1 specification \cite{tse2022doc} and recount all sections; 0 divergences expected \\
-2 & Digital signature & Published files were not altered after the machine & Machine files: signatures and hashes & Verify the signature of every BU and RDV \\
-3 & Printed BU $\times$ published BU & Paper posted at the section equals the tallied file & BU QR code collected by observers & Stratified random sample by state, with CI for the divergence rate \\
-4 & Voting rhythm in the log & Votes recorded at a human pace, 8~a.m.--5~p.m. & Machine log & Time between votes, votes per hour, bursts, votes after closing; robust $z$ \\
-5 & Releases without biometrics & Excess of voters enabled by code, without fingerprint & Machine log & Rate per section versus municipality, crossed with T8 \\
-6 & Machine model & Vote does not depend on equipment model & Log/BU (UE2009 to UE2022) & Regression with municipality fixed effect; model effect should be zero \\
-7 & Electorate profile & Section vote consistent with age, sex and schooling & Electorate profile by section & Hierarchical beta-binomial model; posterior predictive checks \\
-8 & Panel 2022 $\to$ 2026 & Abrupt changes in the same section between elections & 2022 vote by section & Residual of 2022$\to$2026 change, centred on municipality \\
-9 & Percentage spikes (RKD) & Excess of round percentages independent of section size & Vote by section & Resampled kernel density \cite{rozenas2017} \\
-10 & Spatial autocorrelation & Clusters of anomalous nearby sections & Polling-place coordinates & Local Moran (LISA) on T6 and T8 residuals \\
-11 & Machine-learning detection & Sections similar to simulated fraud scenarios & All of the above & Random forest on synthetic data \cite{zhang2019,cantu2011} \\
-12 & Local multimodality & Mixture of two vote regimes within a municipality & Vote by section & Hartigan dip test \cite{hartigan1985} per municipality, BH correction \\
-\bottomrule
-\end{tabular}
-\end{table*}
-
-Tests 1 and 2 have an advantage that no statistical test has: if the RDV
-recount matches the BU in every section and all signatures are valid, it is
-demonstrated that the published result is the one recorded by the machines,
-without depending on any model or assumption about voters.
+\input{secoes_maquina_testes_extras}
 
 %======================================================================
 \section{Discussion}
@@ -788,59 +801,95 @@ without depending on any model or assumption about voters.
 
 Regarding \textbf{RQ1}, the 2026 section-level counts follow the expected
 regularities: digits, integer percentages, local homogeneity and the
-fingerprint behave as in clean data, and the runoff is predicted by the
-first round with $R^2=0.93$. Regarding \textbf{RQ2}, deviations are rare
-(about 0.01\% of sections for vote tests and 0.15\% for turnout change), most
-repeat in both rounds, and their polling-place names point to indigenous
-villages, prisons, care homes, sections abroad and a few urban sites, where
-the electorate is either homogeneous or changes between rounds. Regarding
-\textbf{RQ3}, turnout change and profile change are linked by a small,
-monotonic gradient whose sign varies across states, and extreme cases
-that gained voters are symmetric between the finalists.
+fingerprint behave as in clean data, the runoff is predicted by the first
+round with $R^2=0.93$, the machine model has no effect within the same
+polling place, and a classifier trained on synthetic frauds finds fewer
+suspicious sections than its own false-positive rate. Regarding
+\textbf{RQ2}, deviations are rare (at most about 0.2\% of sections,
+depending on the test), many repeat in both rounds, and the most extreme
+ones include a disproportionate number of indigenous villages, prisons and
+sections abroad, where the electorate is either homogeneous or changes
+between rounds, although most flagged sections are ordinary polling places
+that should be checked individually; every municipality with a bimodal
+vote distribution contains indigenous lands. Regarding \textbf{RQ3}, turnout
+change and profile change are linked by a small, broadly increasing gradient whose
+sign varies across states, and extreme cases that gained voters are
+symmetric between the finalists; among sections that \emph{lost} voters the
+shift favoured Lula (263 vs.\ 173), a pattern that added ballots cannot
+produce. Regarding \textbf{RQ4}, the recount of every RDV reproduced every
+BU, every BU reproduced the official result, and every file carried a valid
+hardware signature; the logs show the rhythm of human voting.
+
+The recount changes the meaning of the statistical results. Statistical
+forensics can only show that the counts look honest; it cannot exclude a
+small, spread-out alteration that preserves every regularity. The machine
+files close most of that gap: an alteration after the votes were recorded
+would have to reproduce the RDV, the BU, the log and their signed hashes
+consistently in every affected section. What the files cannot show is
+whether the machine recorded each vote as the voter intended, which depends
+on the software and hardware audits that the TSE carries out before and
+during election day, and not on published data.
 
 These results agree with the earlier Brazilian studies for 2018
 \cite{figueiredo2022} and 2022 \cite{csh2022}. They differ from the Turkish
 case \cite{klimek2023}, where extreme cross-round swings in remote areas
 favoured the incumbent: in Brazil 2026 the remote sections with extreme
-changes do not favour one finalist systematically.
+changes do not favour one finalist systematically between rounds, and
+between 2022 and 2026 they mostly moved against the winner.
 
 \paragraph{Threats to validity}
-\emph{Construct validity}: the tests detect specific forms of manipulation
---- invented numbers, rounding and inflated sections. A small, spread-out
-alteration that preserves all these regularities would not be seen; tests 1
-to 3 of Section~\ref{sec:proposals} address this. \emph{Internal validity}:
-binomial references assume similar voters within a polling place, which
-underestimates unanimity in isolated communities (T1); the ecological
-regression of T8 does not fit in 9 units; and the classification of
-polling places by keywords is approximate. \emph{External validity}: the
-results refer to the data published by the TSE on 26~October 2026; later
-updates may change marginal counts. \emph{Reliability}: all steps are
-scripted and the outputs are saved as files, so the analysis can be
-reproduced by third parties.
+\emph{Construct validity}: the statistical tests detect specific forms of
+manipulation --- invented numbers, rounding and inflated or swapped
+sections --- and the machine-file tests verify integrity after recording,
+not the correctness of recording; the machine signatures were verified up
+to the embedded certificate but not to the root authority.
+\emph{Internal validity}: binomial references assume similar voters within a
+polling place, which underestimates unanimity in isolated communities (T1,
+N7); the ecological regression of T8 does not fit in 9 units; the
+profile model is an approximation of the hierarchical model and does not
+reproduce the tails; the spatial test N10 lacked power; the classifier N11
+has low sensitivity at its threshold and depends on the fraud scenarios
+simulated; and the classification of polling places by keywords is
+approximate. \emph{External validity}: the results refer to the data and
+files published by the TSE up to 28~October 2026; later updates may change
+marginal counts. \emph{Reliability}: all steps are scripted, seeded and
+saved as files, so the analysis can be reproduced by third parties.
 
 %======================================================================
 \section{Conclusion and Future Work}
 \label{sec:conc}
 
-The section-level data of the 2026 Brazilian presidential election do not
-show the typical patterns of count manipulation. Digit and
-integer-percentage tests are within the expected range for both finalists;
-sections of the same polling place are homogeneous; the runoff of each
-section is predicted by its first round; the fingerprint has no smear
-toward full turnout and full support; and the sections that gained voters
-between rounds do not favour one finalist. The deviations found are rare,
-mostly repeated in both rounds, and located in sections whose electorate is
-homogeneous or changes between rounds.
+The 2026 Brazilian presidential result can be reproduced, vote by vote, from
+the files signed by the voting machines: the recount of all digital vote
+records matched every tally sheet, the tally sheets matched the official
+result exactly, and all signatures and hashes were valid. The section-level
+data do not show the typical patterns of count manipulation either: digit
+and integer-percentage tests are within the expected range; sections of the
+same polling place are homogeneous; the runoff of each section is predicted
+by its first round and by the 2022 result; the fingerprint has no smear
+toward full turnout and full support; the machine model has no effect; and
+the sections that gained voters between rounds do not favour one finalist.
+The deviations found are rare; the most extreme ones are often in sections
+whose electorate is homogeneous or changes between rounds, and all of them
+are listed for individual checking.
 
-We recommend: (i) checking the 14 sections flagged by T6 against the tally
-sheets in the TSE ``Machine Files'' portal, and verifying whether the four
-S\~ao Paulo sections are transit-voting sections; (ii) confirming the type of
-the flagged polling places with the official register rather than keywords;
-(iii) prioritizing the full BU $\times$ RDV recount and signature
-verification, the only tests that confirm the result directly; (iv)
-publishing code, data version and results openly; and (v) communicating the
-findings as statistical: a flagged section is a point to check, not
-evidence of fraud.
+We recommend: (i) checking the flagged sections --- the 14 of T6, the 16
+log--BU divergences of N4 and the most extreme biographic releases of N5
+--- against the minutes and tally sheets, and verifying whether the four
+S\~ao Paulo sections that appear in T6 and T8 (two of them also in N11) are transit-voting
+sections; (ii) confirming the type of the flagged polling places with the
+official register; (iii) rerunning N10 with adequate inference and N11
+without the last-digit feature; (iv) running N3 on a field sample of printed
+tally sheets and asking the TSE to publish the root certificates of the
+machines; (v) publishing code, data version and results openly; and (vi)
+communicating the findings as statistical: a flagged section is a point to
+check, not evidence of fraud.
+
+\section*{Data and code availability}
+All data are public and were obtained from the TSE Open Data Portal
+\cite{tse2026,tse2026urna}. The scripts in Table~\ref{tab:pipeline} and the
+result files are available at
+\url{https://github.com/ciuffciuff/Artigo_Eleicoes_2026}.
 
 %--------------------------------------------------------------------------------
 \section*{Acknowledgements}
