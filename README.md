@@ -16,6 +16,7 @@ scripts/        pipeline em R (e Python chamado pelo R)
   09_arquivos_urna.R              prepara o Python (reticulate) e roda 09_arquivos_urna.py
   09_arquivos_urna.py             novos testes 1 (RDV x BU), 2 (assinatura), 4 (ritmo), 5 (biometria)
   10_testes_arquivos_urna.R       resumo dos testes 1, 2, 4 e 5
+  11_teste_liberacao_biografica.R novo teste 13 (liberação biográfica com eleitor ausente), sem reprocessar
   99_executar_tudo.R              roda a sequência inteira, parando no primeiro erro
   urna_vendor/                    código de terceiros (DataUrnas-BR, MIT) para ler os arquivos de urna
 resultados/     saídas já geradas dos testes T1-T8 e N1-N12 (CSV, PNG) e logs resumidos
@@ -46,6 +47,9 @@ como diretório de trabalho antes de rodar. Os resultados novos vão para `scrip
 - N1, N2, N4-N12: executados nos dados reais dos dois turnos (resultados `resultados/N*`).
   O processamento dos arquivos de urna (script 09) levou 143 min com 15 processos.
   N3 (boletins impressos x publicados) depende de amostra de campo e não foi executado.
+- N13 (`scripts/11_teste_liberacao_biografica.R`): pronto e testado em dados simulados
+  (`testes/teste_11_simulado.R`); falta rodar nos dados reais. Usa só a saída do 09
+  (`tse_2026/urna/saida/secoes_*.csv` e `horas_*.csv`), sem baixar os ZIPs de novo.
 - Pendências conhecidas:
   - N10: refazer com mais permutações (com 199, o menor p possível é 0,005 e não sobrevive à correção BH).
   - N11: reajustar o modelo sem a variável do último dígito (provável causa da segunda moda em ~0,75).

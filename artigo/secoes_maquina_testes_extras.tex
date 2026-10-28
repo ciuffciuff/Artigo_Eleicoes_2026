@@ -163,7 +163,12 @@ municipality, the coefficient was small and significant only in the first
 round (+0.0033 in the logit per point; $p=0.03$; runoff $p=0.32$).
 Fingerprint recognition is known to fail more often for older voters and
 manual workers, groups that leaned toward Lula (Section~\ref{sec:extended});
-this hypothesis was not tested directly.
+this hypothesis was not tested directly. Biographic releases also matter for
+another reason: since the poll worker can disable biometric identification,
+a release could be used to let someone vote in the name of an absent voter
+\cite{vandegraaf2017}. A high share of releases alone does not separate this
+from a failing reader; test N13 (Section~\ref{sec:n13}) is designed to do
+so.
 
 %======================================================================
 \section{Further Statistical Tests (N6--N12)}
@@ -370,6 +375,34 @@ Campin\'apolis (MT), Tocant\'inia (TO), Ipua\c{c}u (SC) and Amambai (MS),
 which were not multimodal, or had too few sections to be tested, in 2022.
 All eight contain indigenous lands, where sections in villages vote very
 differently from urban sections.
+
+\subsection{Biographic impersonation (N13): designed, not yet run}
+\label{sec:n13}
+
+Impersonation of an absent voter through a biographic release would leave
+three marks in the \emph{same} section: one more biographic release, one more
+voter and, usually, one more vote late in the day, when absences are known;
+a failing fingerprint reader leaves only the first. N13 uses the files
+already extracted for N4 and N5, without reprocessing the machine files.
+Its main statistic compares the two rounds of each section, so that the
+fixed profile of the section cancels out: with $\mathrm{d}V$ and
+$\mathrm{d}B$ the changes in voters and in biographic releases as
+percentages of the eligible voters, the slope of $\mathrm{d}V$ on
+$\mathrm{d}B$ with municipality fixed effects estimates the number of extra
+voters per extra release, close to zero if releases come from reader
+failures and close to one if they come from impersonation. Each section is
+also scored by $S=(z_{\mathrm dB}+z_{\mathrm dV}+z_{\mathrm dL})/\sqrt3$,
+with the robust scores (\ref{eq:zrob}) computed within the municipality and
+$\mathrm{d}L$ the change in the share of votes cast from 15:00 on; sections
+with $S>4$ are listed and tested for symmetry between the finalists, as in
+T8. In a simulation with 6,000 sections that included 150 failing readers
+per round, the score flagged 14 clean sections (0.23\%); after impersonation
+was inserted in 300 of them, it found 54--63 (depending on the random draw)
+when 10--40\% of the absent voters were impersonated and 239--242 when
+40--80\% were, and the slope rose from 0.009 to 0.023 and to 0.08--0.09. The section score is therefore a screen for large-scale
+impersonation, and the slope the more sensitive aggregate test. The script
+(\texttt{11\_teste\_liberacao\_biografica.R}) repeats this validation on a
+copy of the real data; it has not yet been run on the 2026 files.
 
 \subsection{Remaining checks}
 

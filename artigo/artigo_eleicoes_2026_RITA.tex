@@ -91,8 +91,8 @@ Urna eletr\^onica --- Lei de Benford --- Integridade eleitoral}
 %	ABSTRACT
 %----------------------------------------------------------------------------------------
 \Abstract{Brazil publishes the vote count and the files of every voting
-machine, which allows anyone to check the 2026 presidential result
-independently. We audited both rounds (4 and 25~October; 499,206 and 499,205
+machine, which allows anyone to check whether the 2026 presidential result
+is consistent with what the machines recorded. We audited both rounds (4 and 25~October; 499,206 and 499,205
 polling sections) with the Superior Electoral Court (TSE) open data, in
 CRISP-DM phases, using eight statistical forensic tests (T1--T8), validated
 beforehand on synthetic data with inserted frauds, and eleven further tests
@@ -114,11 +114,14 @@ from its false-positive rate. Remaining outliers (at most about 0.2\% of
 sections, depending on the test) include a disproportionate number of
 indigenous villages, prisons and sections abroad, and municipalities with
 bimodal vote distributions all contain indigenous lands. We list the sections for manual
-verification, report the limits of each test and release the code.}
+verification, report the limits of each test and release the code. Because
+the digital vote record and the tally sheet are produced by the same machine
+software, these checks establish consistency and post-recording integrity,
+not that each vote was recorded as cast.}
 
 \Resumo{O Brasil publica a contagem de votos e os arquivos de cada urna
-eletr\^onica, o que permite conferir de forma independente o resultado
-presidencial de 2026. Auditamos os dois turnos (4 e 25 de outubro; 499.206 e
+eletr\^onica, o que permite conferir se o resultado presidencial de 2026 \'e
+consistente com o que as urnas registraram. Auditamos os dois turnos (4 e 25 de outubro; 499.206 e
 499.205 se\c{c}\~oes) com os dados abertos do Tribunal Superior Eleitoral
 (TSE), seguindo as fases do CRISP-DM, com oito testes forenses estat\'isticos
 (T1--T8), validados antes em dados sint\'eticos com fraudes inseridas, e onze
@@ -144,7 +147,10 @@ taxa de falso positivo. Os casos extremos restantes (no m\'aximo cerca de
 aldeias ind\'igenas, pres\'idios e se\c{c}\~oes no exterior, e todos os
 munic\'ipios com distribui\c{c}\~ao bimodal de votos t\^em terras
 ind\'igenas. Listamos as se\c{c}\~oes para confer\^encia, relatamos os
-limites de cada teste e publicamos o c\'odigo.}
+limites de cada teste e publicamos o c\'odigo. Como o Registro Digital do
+Voto e o Boletim de Urna s\~ao produzidos pelo mesmo software da urna, essas
+verifica\c{c}\~oes atestam consist\^encia e integridade ap\'os a grava\c{c}\~ao,
+e n\~ao que cada voto foi gravado como digitado.}
 
 %----------------------------------------------------------------------------------------
 \begin{document}
@@ -193,8 +199,9 @@ municipality --- instead of national medians, which removes the regional
 false alarms we found in a first version; (iii) a new cross-round test (T8)
 that relates the change in turnout of each section to the part of its vote
 change that the first-round composition does not explain, with a symmetry
-test between the two finalists; (iv) a full, independent recount of every
-digital vote record of both rounds, with verification of the hashes and
+test between the two finalists; (iv) a full recount of every digital vote
+record of both rounds, carried out with code independent of the electoral
+court's tallying system, with verification of the hashes and
 hardware signatures of every machine file, and an analysis of the timing of
 votes in the machine logs; (v) seven further statistical tests (machine
 model, electorate profile, 2022--2026 panel, round-number spikes, spatial
@@ -320,6 +327,23 @@ the 2022 Brazilian elections. Other Brazilian applications of Benford's law
 target different objects: campaign donations \cite{gamermann2018} and
 Senate elections from 1994 to 2018 with a change of numerical base
 \cite{gueron2022}.
+
+\paragraph{Security of the Brazilian voting machine} A separate line of work
+examines the machine itself. Rivest \cite{rivest2008} defines a voting
+system as \emph{software independent} if an undetected change or error in
+its software cannot cause an undetectable change in the outcome; paperless
+direct-recording machines such as the Brazilian one are software dependent.
+In the Public Security Tests of the Electoral Court, Aranha et al.\ recovered
+the order of the votes from the digital vote record, whose shuffling was
+seeded by the machine clock \cite{aranha2014}, and later executed arbitrary
+code on the machine \cite{aranha2018}. Van de Graaf \cite{vandegraaf2017}
+summarizes the consequences for non-specialists: the digital vote record is
+a second copy written by the same software, not a physical record verified
+by the voter, so it cannot reveal a fault in how votes were captured; and
+because the poll worker can disable biometric identification, absent voters
+can in principle be impersonated, which the machine logs may reveal. These
+works do not test election data, but they define what a data audit such as
+ours can and cannot show.
 
 \paragraph{Gap} The Brazilian studies above analysed one round at a time,
 used national references, relied only on the published counts and did not
@@ -484,6 +508,7 @@ took 143 minutes on a desktop computer with 15 parallel processes.
 \texttt{08\_testes\_padroes\_espaciais\_ml.R} & N9--N12 \\
 \texttt{09\_arquivos\_urna.py} & Decode BU, RDV, log, signatures (N1, N2, N4, N5) \\
 \texttt{10\_testes\_arquivos\_urna.R} & Summaries and tests N1, N2, N4, N5 \\
+\texttt{11\_teste\_liberacao\_biografica.R} & N13, from the files extracted by script 09 (not yet run) \\
 \texttt{99\_executar\_tudo.R} & Runs the whole sequence \\
 \bottomrule
 \end{tabular}
@@ -823,15 +848,26 @@ produce. Regarding \textbf{RQ4}, the recount of every RDV reproduced every
 BU, every BU reproduced the official result, and every file carried a valid
 hardware signature; the logs show the rhythm of human voting.
 
-The recount changes the meaning of the statistical results. Statistical
-forensics can only show that the counts look honest; it cannot exclude a
-small, spread-out alteration that preserves every regularity. The machine
-files close most of that gap: an alteration after the votes were recorded
-would have to reproduce the RDV, the BU, the log and their signed hashes
-consistently in every affected section. What the files cannot show is
-whether the machine recorded each vote as the voter intended, which depends
-on the software and hardware audits that the TSE carries out before and
-during election day, and not on published data.
+The recount changes the meaning of the statistical results, but only up to
+a point. Statistical forensics can only show that the counts look honest; it
+cannot exclude a small, spread-out alteration that preserves every
+regularity. The machine files close that gap for everything that happens
+\emph{after} a vote is recorded: an alteration during transmission or
+tallying would have to reproduce the RDV, the BU, the log and their signed
+hashes consistently in every affected section. They do not close it for the
+recording itself. The RDV and the BU are written by the same software in the
+same machine, so a fault or a malicious change in that software that records
+a vote different from the one typed would produce an RDV that agrees with the
+BU and files that carry valid signatures; the recount would match by
+construction. In the terms of Rivest \cite{rivest2008}, the Brazilian
+system is software dependent, and the RDV is a second electronic copy, not
+the voter-verified physical record that would make an independent recount
+possible \cite{vandegraaf2017}. Whether each vote was recorded as cast
+therefore rests on the software audits, public security tests and
+pre-election checks of the TSE \cite{aranha2014,aranha2018}, not on the
+published data analysed here. What the statistical tests add is that, if
+such a fault existed, it left none of the aggregate traces that manipulation
+usually leaves.
 
 These results agree with the earlier Brazilian studies for 2018
 \cite{figueiredo2022} and 2022 \cite{csh2022}. They differ from the Turkish
@@ -844,8 +880,9 @@ between 2022 and 2026 they mostly moved against the winner.
 \emph{Construct validity}: the statistical tests detect specific forms of
 manipulation --- invented numbers, rounding and inflated or swapped
 sections --- and the machine-file tests verify integrity after recording,
-not the correctness of recording; the machine signatures were verified up
-to the embedded certificate but not to the root authority.
+not the correctness of recording, because the RDV and the BU come from the
+same software; the machine signatures were verified up to the embedded
+certificate but not to the root authority.
 \emph{Internal validity}: binomial references assume similar voters within a
 polling place, which underestimates unanimity in isolated communities (T1,
 N7); the ecological regression of T8 does not fit in 9 units; the
@@ -865,7 +902,10 @@ saved as files, so the analysis can be reproduced by third parties.
 The 2026 Brazilian presidential result can be reproduced, vote by vote, from
 the files signed by the voting machines: the recount of all digital vote
 records matched every tally sheet, the tally sheets matched the official
-result exactly, and all signatures and hashes were valid. The section-level
+result exactly, and all signatures and hashes were valid. This rules out
+alterations after the votes were recorded; it cannot, by itself, show that
+the machines recorded each vote as cast, since the files are produced by the
+machine software. The section-level
 data do not show the typical patterns of count manipulation either: digit
 and integer-percentage tests are within the expected range; sections of the
 same polling place are homogeneous; the runoff of each section is predicted
@@ -884,7 +924,8 @@ sections; (ii) confirming the type of the flagged polling places with the
 official register; (iii) rerunning N10 with adequate inference and N11
 without the last-digit feature; (iv) running N3 on a field sample of printed
 tally sheets and asking the TSE to publish the root certificates of the
-machines; (v) publishing code, data version and results openly; and (vi)
+machines; (v) running N13, already coded, on the extracted machine files;
+(vi) publishing code, data version and results openly; and (vii)
 communicating the findings as statistical: a flagged section is a point to
 check, not evidence of fraud.
 
