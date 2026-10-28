@@ -55,4 +55,9 @@ mtext(expression("Spearman " * rho * " (" * Delta * C * ", " * Delta * P * ")"),
 legend("bottomright", c("toward Lula", "toward F. Bolsonaro"), fill = c(azul, laranja), border = NA, bty = "n", cex = 0.7,
        text.col = tinta)
 invisible(dev.off())
+# pdflatex aceita PDF até a versão 1.5; o cairo grava 1.7. Se o qpdf existir, ajusta.
+if (nzchar(Sys.which("qpdf"))) for (f in file.path(sai, c("fig_t8_deciles.pdf", "fig_t8_uf.pdf"))) {
+  tmp <- paste0(f, ".tmp")
+  if (system2("qpdf", c("--force-version=1.5", "--object-streams=disable", shQuote(f), shQuote(tmp))) == 0) file.rename(tmp, f)
+}
 message("Figuras gravadas em ", sai)

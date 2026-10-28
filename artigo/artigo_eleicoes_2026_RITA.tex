@@ -393,7 +393,8 @@ exclude codes 95, 96 and 97. A load check compared both files: the sum of
 votes equals the reported turnout in \emph{every} section of both rounds
 (125,275,835 votes in the first round and 128,236,074 in the runoff, for
 158,745,502 eligible voters; turnout of 78.9\% and 80.8\%). The detail file
-has 86 extra sections abroad with eligible voters but zero turnout.
+lists 42 extra sections abroad in the first round and 43 in the runoff, all
+with eligible voters but zero turnout.
 
 \paragraph{Modelling} Eight tests, T1 to T8, described in
 Sections~\ref{sec:results} and \ref{sec:cross}. References are local: the
@@ -464,8 +465,9 @@ excess is small in absolute terms (Table~\ref{tab:t1}).
 \end{table}
 
 Three facts point to communities with homogeneous vote rather than to
-manipulation. The sections lie mostly in the states of AM, PA, MA, RR, AP
-and TO and typically have between 10 and 150 votes. The same sections are
+manipulation. The sections lie mostly in the states of MG (26 sections),
+AM (23), MA (22), PA (21) and RS (11) and typically have between 10 and 150
+valid votes (median 81). The same sections are
 unanimous in both rounds (for instance AM 2690/280, MA 8958/170 and 179, and
 PA 4111/516 and 519), and some sections are unanimous for the other
 finalist in both rounds (RS 85839/81, PA 4200/44). The expected value
@@ -486,7 +488,7 @@ deviations of at most 0.12 percentage points (Table~\ref{tab:digits}).
 \centering\small
 \begin{tabular}{@{}c l c c c@{}}
 \toprule
-\textbf{Rd.} & \textbf{Candidate} & \textbf{Last, $p$} & \textbf{2nd, $p$} & \textbf{Max.\ dev.\ (p.p.)} \\
+\textbf{Rd.} & \textbf{Candidate} & \textbf{Last, $p$} & \textbf{2nd, $p$} & \textbf{2nd, max.\ dev.\ (p.p.)} \\
 \midrule
 1st & Lula & 0.48 & 0.61 & 0.06 \\
 1st & F.\ Bolsonaro & 0.67 & 0.015 & 0.09 \\
@@ -596,12 +598,13 @@ each section with the national median and flagged 2,088 sections, which
 were in fact whole states (AC, AP, RR, MA and PA) where turnout fell in the
 runoff. The corrected version compares each section with its own
 municipality. It flagged 730 sections (0.15\%) with robust $|z|\geq6$ on
-the log-ratio of votes between rounds: 561 with \emph{fewer} votes in the
-runoff and 169 with more. A keyword classification of the polling-place
-names (approximate) found 48 prisons or juvenile detention units, 47 of them
-losing voters, consistent with releases and transfers of inmates between
-rounds; 53 indigenous villages, 43 of them gaining voters; 17 hospitals or
-care homes; and 9 sections abroad. The flagged sections concentrate in PA
+the log-ratio of votes between rounds: 574 with \emph{fewer} votes in the
+runoff and 156 with more. A keyword classification of the polling-place
+names (approximate; script \texttt{classificar\_locais\_t6.R}) found 54
+prisons or juvenile detention units, 53 of them losing voters, consistent
+with releases and transfers of inmates between rounds; 53 indigenous
+villages, 40 of them gaining voters; 18 hospitals or care homes; and 18
+sections abroad, 17 of them gaining voters. The flagged sections concentrate in PA
 (128), AC (85), AM (68), MA (67) and AP (64). The largest increases occurred
 in indigenous schools in PA and MS (e.g.\ PA 4111/18/519, from 21 to 35
 votes; PA 5835/106/330, from 128 to 212) and in the embassy in Canberra
@@ -720,9 +723,11 @@ symmetry ($p=0.18$). Among the 436 that lost voters, 263 shifted toward Lula
 and 173 toward Fl\'avio Bolsonaro ($p=1.9\times10^{-5}$); this asymmetry
 cannot come from added ballots and is consistent with the prisons, villages
 and urban sections found by T6. The four S\~ao Paulo sections of T6 appear
-again, with more votes and a shift toward Fl\'avio Bolsonaro, which reinforces
-the hypothesis of a change in the electorate (transit voters) rather than an
-anomaly specific to one candidate.
+again, within a group of ten sections of zone~2 of the same municipality
+(five at the same school and five at another polling place) that all gained
+votes and shifted toward Fl\'avio Bolsonaro. A shared shift across two
+polling places reinforces the hypothesis of a change in the electorate
+(transit voters) rather than an anomaly specific to one candidate.
 
 \begin{figure}[ht]
 \centering
