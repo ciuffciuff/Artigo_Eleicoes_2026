@@ -1,0 +1,62 @@
+   NR_TURNO   UFs secoes     votos
+      <int> <int>  <int>     <num>
+1:        1    28 499206 125275835
+2:        2    28 499205 128236074
+     decil secoes var_comparec_media_pct mudanca_perfil_media_pp nao_explicada_media_pp ic95_inf ic95_sup               candidato_A
+    <fctr>  <int>                  <num>                   <num>                  <num>    <num>    <num>                    <char>
+ 1:      1  49896                  -4.82                  -0.052                 -0.048   -0.068   -0.028 LUIZ INÁCIO LULA DA SILVA
+ 2:      2  49895                  -2.55                  -0.064                 -0.092   -0.110   -0.075 LUIZ INÁCIO LULA DA SILVA
+ 3:      3  49896                  -1.64                  -0.027                 -0.055   -0.072   -0.038 LUIZ INÁCIO LULA DA SILVA
+ 4:      4  49896                  -0.92                  -0.032                 -0.051   -0.068   -0.034 LUIZ INÁCIO LULA DA SILVA
+ 5:      5  51845                  -0.27                   0.015                 -0.006   -0.022    0.011 LUIZ INÁCIO LULA DA SILVA
+ 6:      6  47954                   0.30                   0.035                  0.023    0.006    0.040 LUIZ INÁCIO LULA DA SILVA
+ 7:      7  49884                   0.95                   0.059                  0.058    0.041    0.075 LUIZ INÁCIO LULA DA SILVA
+ 8:      8  49898                   1.71                   0.073                  0.078    0.061    0.095 LUIZ INÁCIO LULA DA SILVA
+ 9:      9  49895                   2.73                   0.107                  0.130    0.113    0.148 LUIZ INÁCIO LULA DA SILVA
+10:     10  49893                   5.14                   0.143                  0.222    0.203    0.241 LUIZ INÁCIO LULA DA SILVA
+        UF secoes spearman spearman_bruto                                                                          leitura
+    <char>  <int>    <num>          <num>                                                                           <char>
+ 1: BRASIL 498952   0.0446         0.0310 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+ 2:     ZZ   1211   0.1630         0.1459 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+ 3:     SC  17320   0.1145         0.1070 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+ 4:     MS   7104   0.1080         0.0823 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+ 5:     PR  27138   0.1068         0.0943 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+ 6:     AP   1912  -0.1007        -0.0934   comparecimento maior acompanha deslocamento a favor de FLAVIO NANTES BOLSONARO
+ 7:     AC   2270  -0.1000        -0.0749   comparecimento maior acompanha deslocamento a favor de FLAVIO NANTES BOLSONARO
+ 8:     DF   6966   0.0951         0.1155 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+ 9:     MT   8283   0.0877         0.0861 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+10:     RS  27532   0.0788         0.0782 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+11:     SP 103628   0.0720         0.0513 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+12:     PI  10221  -0.0704        -0.1095   comparecimento maior acompanha deslocamento a favor de FLAVIO NANTES BOLSONARO
+13:     ES   9840   0.0695         0.0514 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+14:     BA  35472   0.0585         0.0178 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+15:     MG  52044   0.0541         0.0356 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+16:     GO  15680   0.0524         0.0331 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+17:     RR   1517  -0.0498        -0.0517   comparecimento maior acompanha deslocamento a favor de FLAVIO NANTES BOLSONARO
+18:     AM   8155  -0.0438        -0.0456   comparecimento maior acompanha deslocamento a favor de FLAVIO NANTES BOLSONARO
+19:     PE  21415   0.0431         0.0372 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+20:     MA  18083  -0.0411        -0.0427   comparecimento maior acompanha deslocamento a favor de FLAVIO NANTES BOLSONARO
+21:     TO   4384  -0.0392        -0.0381   comparecimento maior acompanha deslocamento a favor de FLAVIO NANTES BOLSONARO
+22:     RJ  37674   0.0281        -0.0015 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+23:     AL   7101  -0.0237        -0.0059   comparecimento maior acompanha deslocamento a favor de FLAVIO NANTES BOLSONARO
+24:     RO   4694   0.0207         0.0058 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+25:     PB  10707  -0.0204        -0.0054   comparecimento maior acompanha deslocamento a favor de FLAVIO NANTES BOLSONARO
+26:     RN   8114   0.0132         0.0285 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+27:     PA  20809   0.0095         0.0307 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+28:     CE  23757   0.0034        -0.0035 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+29:     SE   5921   0.0032        -0.0180 comparecimento maior acompanha deslocamento a favor de LUIZ INÁCIO LULA DA SILVA
+        UF secoes spearman spearman_bruto                                                                          leitura
+    <char>  <int>    <num>          <num>                                                                           <char>
+       UF                             origem para_A para_B fora_de_0_1
+   <char>                             <char>  <num>  <num>      <lgcl>
+1: BRASIL votou em LUIZ INÁCIO LULA DA SILVA  1.032 -0.036       FALSE
+2: BRASIL   votou em FLAVIO NANTES BOLSONARO -0.014  1.007       FALSE
+3: BRASIL                    votou em outros  0.441  0.441       FALSE
+4: BRASIL                        branco/nulo  0.630 -0.016       FALSE
+5: BRASIL         eleitor a mais no 2º turno  0.549  0.411       FALSE
+                                              padrao     N
+                                              <char> <int>
+1:  mais votos, a favor de LUIZ INÁCIO LULA DA SILVA    88
+2:    mais votos, a favor de FLAVIO NANTES BOLSONARO    70
+3: menos votos, a favor de LUIZ INÁCIO LULA DA SILVA   263
+4:   menos votos, a favor de FLAVIO NANTES BOLSONARO   173

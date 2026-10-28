@@ -1,0 +1,38 @@
+   NR_TURNO   UFs secoes     votos
+      <int> <int>  <int>     <num>
+1:        1    28 499206 125275835
+2:        2    28 499205 128236074
+Processados 806566 grupos de 998411. 81% concluído. Tempo decorrido: 3s. Estimado: 0s.Processados 998411 grupos de 998411. 100% concluído. Tempo decorrido: 3s. Estimado: 0s.
+   turno                    serie secoes secoes_em_focos_obs esperado excesso excesso_pct_secoes ic95_inf ic95_sup  p_empirico
+   <int>                   <char>  <int>               <int>    <num>   <num>              <num>    <num>    <num>       <num>
+1:     1         Lula (% válidos) 499155               11152  10904.6   247.4             0.0496   0.0096   0.0868 0.007984032
+2:     1       Flávio (% válidos) 499155               11178  11212.5   -34.5            -0.0069  -0.0473   0.0368 0.644710579
+3:     2         Lula (% válidos) 499130               10965  10899.6    65.4             0.0131  -0.0235   0.0548 0.265469062
+4:     2       Flávio (% válidos) 499130               10965  10900.3    64.7             0.0130  -0.0277   0.0508 0.235528942
+5:     1 Comparecimento (% aptos) 499206                8192   8370.1  -178.1            -0.0357  -0.0678  -0.0001 0.974051896
+6:     2 Comparecimento (% aptos) 499205                8548   8599.7   -51.7            -0.0104  -0.0474   0.0277 0.702594810
+   variavel locais significativos alto_alto baixo_baixo extremos_agrupados
+     <char>  <int>          <int>     <int>       <int>              <int>
+1:  z_turno  93342              0         0           0                  0
+2: z_painel  86165              0         0           0                  0
+3: z_perfil  93407              0         0           0                  0
+   variavel moran_I_mediano minimo maximo
+     <char>           <num>  <num>  <num>
+1:  z_turno           0.025  0.002  0.460
+2: z_painel           0.039 -0.024  0.175
+3: z_perfil           0.200  0.105  0.705
+         auc auc_enchimento auc_troca auc_fabricacao sensibilidade_fpr1pct    limiar fpr_sinteticas sensibilidade_enchimento sensibilidade_troca
+       <num>          <num>     <num>          <num>                 <num>     <num>          <num>                    <num>               <num>
+1: 0.8632361      0.8584396 0.7940609      0.9377381             0.2548757 0.9709844    0.001030619                0.1817725           0.1519872
+   sensibilidade_fabricacao
+                      <num>
+1:              0.003219964
+   secoes_reais sinalizadas esperado_se_limpas razao_obs_esp
+          <int>       <int>              <num>         <num>
+1:       498950           2                499             0
+Processados 4814 grupos de 5706. 84% concluído. Tempo decorrido: 3s. Estimado: 0s.Processados 5706 grupos de 5706. 100% concluído. Tempo decorrido: 3s. Estimado: 0s.
+Processados 5294 grupos de 5697. 93% concluído. Tempo decorrido: 3s. Estimado: 0s.Processados 5697 grupos de 5697. 100% concluído. Tempo decorrido: 3s. Estimado: 0s.
+      ano municipios_testados multimodais
+   <char>               <int>       <int>
+1:   2026                3932           8
+2:   2022                3774           4

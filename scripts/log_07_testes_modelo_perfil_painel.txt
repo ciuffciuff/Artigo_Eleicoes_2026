@@ -1,0 +1,120 @@
+   NR_TURNO   UFs secoes     votos
+      <int> <int>  <int>     <num>
+1:        1    28 499206 125275835
+2:        2    28 499205 128236074
+Processados 749570 grupos de 998411. 75% concluído. Tempo decorrido: 3s. Estimado: 0s.Processados 998411 grupos de 998411. 100% concluído. Tempo decorrido: 3s. Estimado: 0s.
+   NR_TURNO modelo secoes lula_pct comparec_pct
+      <int> <char>  <int>    <num>        <num>
+1:        1 UE2013  11920    51.15        71.62
+2:        1 UE2015  88036    49.16        78.53
+3:        1 UE2020 200466    48.73        79.05
+4:        1 UE2022 198754    49.04        79.44
+5:        2 UE2013  12455    53.84        74.85
+6:        2 UE2015  87473    51.98        80.76
+7:        2 UE2020 200504    51.53        80.90
+8:        2 UE2022 198746    51.83        81.08
+Processados 33652 grupos de 189362. 18% concluído. Tempo decorrido: 3s. Estimado: 13s.Processados 45107 grupos de 189362. 24% concluído. Tempo decorrido: 4s. Estimado: 13s.Processados 59415 grupos de 189362. 31% concluído. Tempo decorrido: 5s. Estimado: 11s.Processados 73370 grupos de 189362. 39% concluído. Tempo decorrido: 6s. Estimado: 10s.Processados 86955 grupos de 189362. 46% concluído. Tempo decorrido: 8s. Estimado: 9s.Processados 100162 grupos de 189362. 53% concluído. Tempo decorrido: 9s. Estimado: 8s.Processados 111574 grupos de 189362. 59% concluído. Tempo decorrido: 10s. Estimado: 7s.Processados 118146 grupos de 189362. 62% concluído. Tempo decorrido: 11s. Estimado: 6s.Processados 129202 grupos de 189362. 68% concluído. Tempo decorrido: 12s. Estimado: 5s.Processados 139384 grupos de 189362. 74% concluído. Tempo decorrido: 13s. Estimado: 4s.Processados 149623 grupos de 189362. 79% concluído. Tempo decorrido: 14s. Estimado: 3s.Processados 161161 grupos de 189362. 85% concluído. Tempo decorrido: 15s. Estimado: 2s.Processados 172411 grupos de 189362. 91% concluído. Tempo decorrido: 16s. Estimado: 1s.Processados 184045 grupos de 189362. 97% concluído. Tempo decorrido: 17s. Estimado: 0s.Processados 189362 grupos de 189362. 100% concluído. Tempo decorrido: 17s. Estimado: 0s.
+   NR_TURNO locais_com_2_ou_mais_modelos
+      <int>                        <int>
+1:        1                         7896
+2:        2                         8525
+    turno          desfecho         termo    coef     ep      p     q      n
+    <int>            <char>        <char>   <num>  <num>  <num> <num>  <int>
+ 1:     1        lula_logit modelo_UE2013  0.0366 0.0152 0.0163 0.293 499176
+ 2:     1        lula_logit modelo_UE2015  0.0282 0.0144 0.0502 0.301 499176
+ 3:     1        lula_logit modelo_UE2022 -0.0018 0.0021 0.3970 0.806 499176
+ 4:     1      comparec_pct modelo_UE2013 -0.0718 0.5612 0.8980 0.998 499176
+ 5:     1      comparec_pct modelo_UE2015  0.0557 0.5416 0.9180 0.998 499176
+ 6:     1      comparec_pct modelo_UE2022 -0.0608 0.0502 0.2260 0.679 499176
+ 7:     1 brancos_nulos_pct modelo_UE2013 -0.0036 0.1182 0.9760 0.998 499176
+ 8:     1 brancos_nulos_pct modelo_UE2015  0.0003 0.1102 0.9980 0.998 499176
+ 9:     1 brancos_nulos_pct modelo_UE2022 -0.0259 0.0205 0.2070 0.679 499176
+10:     2        lula_logit modelo_UE2013  0.0293 0.0147 0.0456 0.301 499178
+11:     2        lula_logit modelo_UE2015  0.0221 0.0134 0.0982 0.442 499178
+12:     2        lula_logit modelo_UE2022 -0.0013 0.0019 0.5010 0.806 499178
+13:     2      comparec_pct modelo_UE2013 -0.0037 0.5107 0.9940 0.998 499178
+14:     2      comparec_pct modelo_UE2015  0.0017 0.5003 0.9970 0.998 499178
+15:     2      comparec_pct modelo_UE2022 -0.0387 0.0508 0.4460 0.806 499178
+16:     2 brancos_nulos_pct modelo_UE2013  0.0563 0.0698 0.4200 0.806 499178
+17:     2 brancos_nulos_pct modelo_UE2015  0.0463 0.0675 0.4930 0.806 499178
+18:     2 brancos_nulos_pct modelo_UE2022 -0.0082 0.0134 0.5370 0.806 499178
+Processados 20934 grupos de 37931. 55% concluído. Tempo decorrido: 3s. Estimado: 2s.Processados 28478 grupos de 37931. 75% concluído. Tempo decorrido: 4s. Estimado: 1s.Processados 36357 grupos de 37931. 96% concluído. Tempo decorrido: 5s. Estimado: 0s.Processados 37931 grupos de 37931. 100% concluído. Tempo decorrido: 5s. Estimado: 0s.
+Processados 21570 grupos de 25639. 84% concluído. Tempo decorrido: 3s. Estimado: 0s.Processados 25639 grupos de 25639. 100% concluído. Tempo decorrido: 3s. Estimado: 0s.
+Processados 21630 grupos de 54179. 40% concluído. Tempo decorrido: 3s. Estimado: 4s.Processados 28478 grupos de 54179. 53% concluído. Tempo decorrido: 4s. Estimado: 3s.Processados 36275 grupos de 54179. 67% concluído. Tempo decorrido: 5s. Estimado: 2s.Processados 44062 grupos de 54179. 81% concluído. Tempo decorrido: 6s. Estimado: 1s.Processados 51710 grupos de 54179. 95% concluído. Tempo decorrido: 7s. Estimado: 0s.Processados 54179 grupos de 54179. 100% concluído. Tempo decorrido: 7s. Estimado: 0s.
+Processados 20155 grupos de 22049. 91% concluído. Tempo decorrido: 3s. Estimado: 0s.Processados 22049 grupos de 22049. 100% concluído. Tempo decorrido: 3s. Estimado: 0s.
+Processados 21925 grupos de 27333. 80% concluído. Tempo decorrido: 3s. Estimado: 0s.Processados 27333 grupos de 27333. 100% concluído. Tempo decorrido: 3s. Estimado: 0s.
+Processados 20088 grupos de 38738. 52% concluído. Tempo decorrido: 3s. Estimado: 2s.Processados 27103 grupos de 38738. 70% concluído. Tempo decorrido: 4s. Estimado: 1s.Processados 34302 grupos de 38738. 89% concluído. Tempo decorrido: 5s. Estimado: 0s.Processados 38738 grupos de 38738. 100% concluído. Tempo decorrido: 5s. Estimado: 0s.
+Processados 21298 grupos de 27708. 77% concluído. Tempo decorrido: 3s. Estimado: 0s.Processados 27708 grupos de 27708. 100% concluído. Tempo decorrido: 3s. Estimado: 0s.
+Processados 21336 grupos de 103841. 21% concluído. Tempo decorrido: 3s. Estimado: 11s.Processados 27951 grupos de 103841. 27% concluído. Tempo decorrido: 4s. Estimado: 10s.Processados 35661 grupos de 103841. 34% concluído. Tempo decorrido: 5s. Estimado: 9s.Processados 43562 grupos de 103841. 42% concluído. Tempo decorrido: 6s. Estimado: 8s.Processados 47053 grupos de 103841. 45% concluído. Tempo decorrido: 7s. Estimado: 8s.Processados 54640 grupos de 103841. 53% concluído. Tempo decorrido: 8s. Estimado: 7s.Processados 62445 grupos de 103841. 60% concluído. Tempo decorrido: 9s. Estimado: 5s.Processados 69769 grupos de 103841. 67% concluído. Tempo decorrido: 10s. Estimado: 4s.Processados 77768 grupos de 103841. 75% concluído. Tempo decorrido: 11s. Estimado: 3s.Processados 85858 grupos de 103841. 83% concluído. Tempo decorrido: 12s. Estimado: 2s.Processados 93941 grupos de 103841. 90% concluído. Tempo decorrido: 13s. Estimado: 1s.Processados 102783 grupos de 103841. 99% concluído. Tempo decorrido: 14s. Estimado: 0s.Processados 103841 grupos de 103841. 100% concluído. Tempo decorrido: 14s. Estimado: 0s.
+                                   alvo       termo   coef    ep    rho
+                                 <char>      <char>  <num> <num>  <num>
+ 1: Lula (2º turno, % dos 2 finalistas)       p_fem  0.495 0.033 0.0134
+ 2: Lula (2º turno, % dos 2 finalistas)     p_16_24  0.661 0.018 0.0134
+ 3: Lula (2º turno, % dos 2 finalistas)     p_45_59 -0.523 0.046 0.0134
+ 4: Lula (2º turno, % dos 2 finalistas)       p_60m -0.607 0.076 0.0134
+ 5: Lula (2º turno, % dos 2 finalistas) p_esc_baixa  2.006 0.083 0.0134
+ 6: Lula (2º turno, % dos 2 finalistas)   p_esc_sup  0.258 0.124 0.0134
+ 7: Lula (2º turno, % dos 2 finalistas)       p_bio  0.415 0.064 0.0134
+ 8:      Lula (1º turno, % dos válidos)       p_fem  0.382 0.034 0.0135
+ 9:      Lula (1º turno, % dos válidos)     p_16_24  0.545 0.019 0.0135
+10:      Lula (1º turno, % dos válidos)     p_45_59 -0.434 0.046 0.0135
+11:      Lula (1º turno, % dos válidos)       p_60m -0.482 0.076 0.0135
+12:      Lula (1º turno, % dos válidos) p_esc_baixa  2.002 0.084 0.0135
+13:      Lula (1º turno, % dos válidos)   p_esc_sup  0.344 0.124 0.0135
+14:      Lula (1º turno, % dos válidos)       p_bio  0.391 0.059 0.0135
+15:    Flávio (1º turno, % dos válidos)       p_fem -0.373 0.034 0.0129
+16:    Flávio (1º turno, % dos válidos)     p_16_24 -0.666 0.017 0.0129
+17:    Flávio (1º turno, % dos válidos)     p_45_59  0.464 0.045 0.0129
+18:    Flávio (1º turno, % dos válidos)       p_60m  0.547 0.073 0.0129
+19:    Flávio (1º turno, % dos válidos) p_esc_baixa -1.902 0.085 0.0129
+20:    Flávio (1º turno, % dos válidos)   p_esc_sup -0.492 0.122 0.0129
+21:    Flávio (1º turno, % dos válidos)       p_bio -0.408 0.058 0.0129
+                                   alvo       termo   coef    ep    rho
+                                 <char>      <char>  <num> <num>  <num>
+                                   alvo         estatistica    observado simulado_media p_preditivo
+                                 <char>              <char>        <num>          <num>       <num>
+ 1: Lula (2º turno, % dos 2 finalistas)     secoes_com_zero 3.000000e+00            0.0        0.00
+ 2: Lula (2º turno, % dos 2 finalistas)  secoes_acima_90pct 6.714000e+03         4734.4        0.00
+ 3: Lula (2º turno, % dos 2 finalistas) secoes_abaixo_10pct 3.670000e+02          272.3        0.00
+ 4: Lula (2º turno, % dos 2 finalistas) dp_dentro_municipio 7.338970e-02            0.1        0.00
+ 5:      Lula (1º turno, % dos válidos)     secoes_com_zero 5.000000e+00            0.1        0.00
+ 6:      Lula (1º turno, % dos válidos)  secoes_acima_90pct 3.564000e+03         1531.5        0.00
+ 7:      Lula (1º turno, % dos válidos) secoes_abaixo_10pct 8.690000e+02         1193.3        0.00
+ 8:      Lula (1º turno, % dos válidos) dp_dentro_municipio 7.291169e-02            0.1        0.52
+ 9:    Flávio (1º turno, % dos válidos)     secoes_com_zero 6.500000e+01            1.0        0.00
+10:    Flávio (1º turno, % dos válidos)  secoes_acima_90pct 1.770000e+02           89.9        0.00
+11:    Flávio (1º turno, % dos válidos) secoes_abaixo_10pct 6.322000e+03         4105.1        0.00
+12:    Flávio (1º turno, % dos válidos) dp_dentro_municipio 6.954379e-02            0.1        0.00
+     SG_UF secoes cor_pearson mudanca_media_pp sinalizadas
+    <char>  <int>       <num>            <num>       <int>
+ 1: BRASIL 443458   0.9727968        0.2893228         822
+ 2:     AC   1950   0.8803638        3.2419869           8
+ 3:     AL   6013   0.9723782        1.5537305           0
+ 4:     AM   7081   0.9666097        1.9667421          98
+ 5:     AP   1268   0.9239899        3.1289148           3
+ 6:     BA  31313   0.9412519       -1.1402242         119
+ 7:     CE  20976   0.9483939       -1.4340325          73
+ 8:     DF   6459   0.8915231        4.3300137           1
+ 9:     ES   8908   0.9451728        1.1804208           9
+10:     GO  13870   0.9155906       -1.3527330           2
+11:     MA  15023   0.9588156       -1.7968476         114
+12:     MG  47985   0.9540330       -0.2123504          78
+13:     MS   6621   0.9482138       -0.5082628          13
+14:     MT   7055   0.9608654       -1.2347142          24
+15:     PA  16864   0.9572871       -0.4866360          91
+16:     PB   8680   0.9690339        0.4521962           7
+17:     PE  19222   0.9629809        1.8580297          23
+18:     PI   8486   0.9388242       -1.2084853          39
+19:     PR  24599   0.9351180       -0.5348454          21
+20:     RJ  32501   0.9376029        3.1962449           0
+21:     RN   7105   0.9643082        0.2333528           1
+22:     RO   4077   0.9255326        0.8009886           4
+23:     RR   1111   0.9253278        2.3762308           6
+24:     RS  25953   0.9412094       -1.7093634          47
+25:     SC  15369   0.9428472       -0.5666719           5
+26:     SE   5203   0.9355196        1.9869996           1
+27:     SP  95052   0.9608560        1.2880789          21
+28:     TO   3820   0.9630098       -3.0056068          13
+29:     ZZ    894   0.9289620        2.6646138           1
+     SG_UF secoes cor_pearson mudanca_media_pp sinalizadas
+    <char>  <int>       <num>            <num>       <int>

@@ -1,0 +1,93 @@
+   NR_TURNO   UFs secoes
+      <int> <int>  <int>
+1:        1    28 499207
+2:        2    28 499207
+   NR_TURNO   UFs secoes     votos
+      <int> <int>  <int>     <num>
+1:        1    28 499206 125275835
+2:        2    28 499205 128236074
+Processados 498485 grupos de 998411. 50% concluído. Tempo decorrido: 3s. Estimado: 3s.Processados 687204 grupos de 998411. 69% concluído. Tempo decorrido: 4s. Estimado: 1s.Processados 884901 grupos de 998411. 89% concluído. Tempo decorrido: 5s. Estimado: 0s.Processados 998411 grupos de 998411. 100% concluído. Tempo decorrido: 5s. Estimado: 0s.
+Chave: <NR_TURNO>
+   NR_TURNO secoes_oficiais secoes_com_arquivos bu_urna bu_sistema_apuracao erro_leitura sem_rdv rdv_confere rdv_diverge
+      <int>           <int>               <int>   <int>               <int>        <int>   <int>       <int>       <int>
+1:        1          499206              499207  499176                  31            0       1      499206           0
+2:        2          499205              499207  499178                  29            0       0      499207           0
+    NR_TURNO              cargo secao_cargo confere diverge
+       <int>             <char>       <int>   <int>   <int>
+ 1:        1         Presidente      499206  499206       0
+ 2:        1   Deputado Federal      497896  497896       0
+ 3:        1  Deputado Estadual      490927  490927       0
+ 4:        1            Senador      497896  497896       0
+ 5:        1         Governador      497896  497896       0
+ 6:        1 Deputado Distrital        6969    6969       0
+ 7:        1           Cargo 25          10      10       0
+ 8:        2         Presidente      499207  499207       0
+ 9:        2         Governador       39739   39739       0
+10:        2           Cargo 26          97      97       0
+11:        2           Cargo 27         212     212       0
+12:        2           Cargo 25          86      86       0
+13:        2           Prefeito         476     476       0
+    NR_TURNO NR_VOTAVEL votos_bu votos_oficial diferenca
+       <int>      <int>    <num>         <num>     <num>
+ 1:        1         22 56104503      56104503         0
+ 2:        1         13 53879538      53879538         0
+ 3:        1         96  3669003       3669003         0
+ 4:        1         70  3448569       3448569         0
+ 5:        1         14  2675887       2675887         0
+ 6:        1         55  2605148       2605148         0
+ 7:        1         95  2300798       2300798         0
+ 8:        1         30   326488        326488         0
+ 9:        1         80   122911        122911         0
+10:        1         16    43103         43103         0
+11:        1         27    40043         40043         0
+12:        1         21    22693         22693         0
+13:        1         35    16881         16881         0
+14:        1         29    15024         15024         0
+15:        1         28     5246          5246         0
+16:        2         13 64256232      64256232         0
+17:        2         22 59826041      59826041         0
+18:        2         96  2723305       2723305         0
+19:        2         95  1430496       1430496         0
+   NR_TURNO modelo   assinatura_algoritmo secoes hash_bu_ok hash_bu_falha hash_rdv_ok hash_rdv_falha hash_log_ok hash_log_falha assinatura_valida
+      <int> <char>                 <char>  <int>      <int>         <int>       <int>          <int>       <int>          <int>             <int>
+1:        1 UE2013 ECDSA-secp521r1-SHA512  11921      11921             0       11921              0       11921              0             11921
+2:        1 UE2015 ECDSA-secp521r1-SHA512  88064      88064             0       88064              0       88064              0             88064
+3:        1 UE2020                  Ed521 200463     200463             0      200462              0      200463              0            200463
+4:        1 UE2022                  Ed521 198759     198759             0      198759              0      198759              0            198759
+5:        2 UE2013 ECDSA-secp521r1-SHA512  12455      12455             0       12455              0       12455              0             12455
+6:        2 UE2015 ECDSA-secp521r1-SHA512  87502      87502             0       87502              0       87501              0             87502
+7:        2 UE2020                  Ed521 200504     200504             0      200504              0      200504              0            200504
+8:        2 UE2022                  Ed521 198746     198746             0      198746              0      198746              0            198746
+   assinatura_invalida nao_verificada
+                 <int>          <int>
+1:                   0              0
+2:                   0              0
+3:                   0              0
+4:                   0              0
+5:                   0              0
+6:                   0              0
+7:                   0              0
+8:                   0              0
+   NR_TURNO secoes_com_log log_diferente_do_bu com_voto_antes_abertura com_voto_apos_encerramento com_voto_antes_8h votos_apos_17h_pct com_intervalo_lt_5s
+      <int>          <int>               <int>                   <int>                      <int>             <int>              <num>               <int>
+1:        1         499176                   9                       0                          0               153               2.97                   0
+2:        2         499177                   7                       0                          0               153               0.03                   0
+   max_votos_em_1_minuto
+                   <num>
+1:                     3
+2:                     4
+          termo        coef           ep         z            p      n grupos_fe clusters NR_TURNO
+         <char>       <num>        <num>     <num>        <num>  <int>     <int>    <int>    <int>
+1: pct_apos_17h 0.009194217 0.0007995659 11.499011 1.334361e-30 498984      5686     5686        1
+2: pct_apos_17h 0.048687586 0.0319903713  1.521945 1.280229e-01 499004      5687     5687        2
+Chave: <NR_TURNO>
+   NR_TURNO secoes tx_biografia_mediana_pct tx_sem_digital_mediana_pct p99_biografia_pct sinalizadas
+      <int>  <int>                    <num>                      <num>             <num>       <int>
+1:        1 499176                     6.09                      10.65             19.12         589
+2:        2 499178                     6.12                      10.75             19.34         517
+                     termo         coef           ep         z          p      n grupos_fe clusters NR_TURNO
+                    <char>        <num>        <num>     <num>      <num>  <int>     <int>    <int>    <int>
+1:         tx_biografia_pp 0.0033496550 0.0015656602 2.1394521 0.03239907 498722      5686     5686        1
+2: biometria_cadastrada_pp 0.0011565508 0.0005994709 1.9292861 0.05369536 498722      5686     5686        1
+3:         tx_biografia_pp 0.0016757536 0.0016790114 0.9980597 0.31825039 498739      5687     5687        2
+4: biometria_cadastrada_pp 0.0009976181 0.0006416858 1.5546833 0.12002152 498739      5687     5687        2

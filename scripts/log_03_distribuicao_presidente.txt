@@ -1,0 +1,38 @@
+   NR_TURNO   UFs secoes     votos
+      <int> <int>  <int>     <num>
+1:        1    28 499206 125275835
+2:        2    28 499205 128236074
+    NR_VOTAVEL                        NM_VOTAVEL
+         <int>                            <char>
+ 1:         13         LUIZ INÁCIO LULA DA SILVA
+ 2:         14 RENAN ANTONIO FERREIRA DOS SANTOS
+ 3:         16           HERTZ DA CONCEICAO DIAS
+ 4:         21              EDMILSON SILVA COSTA
+ 5:         22           FLAVIO NANTES BOLSONARO
+ 6:         27           CLARIANA ZACARKIM BARAO
+ 7:         28          LEONARDO ALVES DE ARAUJO
+ 8:         29                 RUI COSTA PIMENTA
+ 9:         30                   ROMEU ZEMA NETO
+10:         35              WILSON GRASSI JUNIOR
+11:         55              RONALDO RAMOS CAIADO
+12:         70                AUGUSTO JORGE CURY
+13:         80   SAMARA MARTINS DA SILVA FEITOSA
+14:         95                       VOTO BRANCO
+15:         96                         VOTO NULO
+    NR_TURNO                        NM_VOTAVEL secoes minimo    q1 mediana media    q3 maximo
+       <int>                            <char>  <int>  <num> <num>   <num> <num> <num>  <num>
+ 1:        1           FLAVIO NANTES BOLSONARO 499206      0 35.37   48.22 46.64 58.66 100.00
+ 2:        1         LUIZ INÁCIO LULA DA SILVA 499206      0 32.23   42.67 45.70 57.65 100.00
+ 3:        1                AUGUSTO JORGE CURY 499206      0  1.74    2.70  2.84  3.78  25.58
+ 4:        1 RENAN ANTONIO FERREIRA DOS SANTOS 499206      0  1.06    1.94  2.19  3.04  27.27
+ 5:        1              RONALDO RAMOS CAIADO 499206      0  0.87    1.68  2.16  2.68  59.38
+ 6:        1           HERTZ DA CONCEICAO DIAS 499206      0  0.00    0.00  0.03  0.00   3.85
+ 7:        1              EDMILSON SILVA COSTA 499206      0  0.00    0.00  0.02  0.00   5.13
+ 8:        1           CLARIANA ZACARKIM BARAO 499206      0  0.00    0.00  0.03  0.00   9.09
+ 9:        1          LEONARDO ALVES DE ARAUJO 499206      0  0.00    0.00  0.00  0.00   2.70
+10:        1                 RUI COSTA PIMENTA 499206      0  0.00    0.00  0.01  0.00   3.70
+11:        1                   ROMEU ZEMA NETO 499206      0  0.00    0.00  0.27  0.41  11.26
+12:        1              WILSON GRASSI JUNIOR 499206      0  0.00    0.00  0.01  0.00   3.23
+13:        1   SAMARA MARTINS DA SILVA FEITOSA 499206      0  0.00    0.00  0.10  0.00   5.88
+14:        2         LUIZ INÁCIO LULA DA SILVA 499205      0 39.26   50.21 52.12 64.34 100.00
+15:        2           FLAVIO NANTES BOLSONARO 499205      0 35.66   49.79 47.88 60.74 100.00
