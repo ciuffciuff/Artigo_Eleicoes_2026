@@ -8,7 +8,8 @@
 #
 # O que este script faz, sozinho:
 #   1. instala o pacote R 'reticulate' (se faltar);
-#   2. encontra um Python >= 3.11 no computador ou INSTALA um (só na 1ª vez);
+#   2. encontra um Python >= 3.11 no computador ou instala o Miniconda
+#      (só na 1ª vez; não precisa de git nem de administrador);
 #   3. cria um ambiente Python isolado "eleicoes2026" com asn1tools,
 #      cryptography e py7zr (só na 1ª vez);
 #   4. roda 09_arquivos_urna.py com esse Python, mostrando o progresso aqui
@@ -64,16 +65,35 @@ if (utils::packageVersion("reticulate") < "1.34")
 
 # ---- 2 e 3. Python e ambiente isolado -------------------------------------------
 pacotes_py <- c("asn1tools", "cryptography", "py7zr")
-if (!reticulate::virtualenv_exists(ambiente)) {
+# Ordem de tentativa:
+#   a) ambiente já criado em execução anterior (virtualenv ou conda);
+#   b) Python >= 3.11 já instalado no computador -> cria um virtualenv;
+#   c) nenhum Python: instala o Miniconda (não precisa de git nem de
+#      permissão de administrador) e cria um ambiente conda com Python 3.12.
+#      O install_python() do reticulate exige git no Windows, por isso não é usado.
+py <- NULL
+if (reticulate::virtualenv_exists(ambiente)) {
+  py <- reticulate::virtualenv_python(ambiente)
+} else if (!is.null(tryCatch(reticulate::conda_binary(), error = function(e) NULL)) &&
+           reticulate::condaenv_exists(ambiente)) {
+  py <- reticulate::conda_python(ambiente)
+} else {
   inicial <- reticulate::virtualenv_starter(">=3.11")
-  if (is.null(inicial)) {
-    message("Nenhum Python >= 3.11 encontrado. Instalando o Python 3.12 (só desta vez)...")
-    inicial <- reticulate::install_python("3.12:latest")
+  if (!is.null(inicial)) {
+    message("Criando o ambiente '", ambiente, "' com ", paste(pacotes_py, collapse = ", "), " ...")
+    reticulate::virtualenv_create(ambiente, python = inicial, packages = pacotes_py)
+    py <- reticulate::virtualenv_python(ambiente)
+  } else {
+    if (is.null(tryCatch(reticulate::conda_binary(), error = function(e) NULL))) {
+      message("Nenhum Python >= 3.11 encontrado. Instalando o Miniconda (só desta vez, ~100 MB) ...")
+      reticulate::install_miniconda()
+    }
+    message("Criando o ambiente conda '", ambiente, "' com Python 3.12 e ", paste(pacotes_py, collapse = ", "), " ...")
+    reticulate::conda_create(ambiente, packages = "python=3.12")
+    reticulate::conda_install(ambiente, pacotes_py, pip = TRUE)
+    py <- reticulate::conda_python(ambiente)
   }
-  message("Criando o ambiente '", ambiente, "' com ", paste(pacotes_py, collapse = ", "), " ...")
-  reticulate::virtualenv_create(ambiente, python = inicial, packages = pacotes_py)
 }
-py <- reticulate::virtualenv_python(ambiente)
 message("Python: ", py)
 
 # teste de carga do ambiente: os pacotes importam?
@@ -81,7 +101,10 @@ teste <- suppressWarnings(system2(py, c("-c", shQuote("import asn1tools, cryptog
                                   stdout = TRUE, stderr = TRUE))
 if (!any(teste == "ok")) {
   message("Reinstalando pacotes Python ...")
-  reticulate::virtualenv_install(ambiente, pacotes_py, ignore_installed = TRUE)
+  system2(py, c("-m", "pip", "install", "--upgrade", pacotes_py))
+  teste <- suppressWarnings(system2(py, c("-c", shQuote("import asn1tools, cryptography, py7zr; print('ok')")),
+                                    stdout = TRUE, stderr = TRUE))
+  if (!any(teste == "ok")) stop("Pacotes Python não instalaram: ", paste(teste, collapse = " "))
 }
 
 # ---- 4. Executar o .py ------------------------------------------------------------
