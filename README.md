@@ -47,9 +47,12 @@ como diretório de trabalho antes de rodar. Os resultados novos vão para `scrip
 - N1, N2, N4-N12: executados nos dados reais dos dois turnos (resultados `resultados/N*`).
   O processamento dos arquivos de urna (script 09) levou 143 min com 15 processos.
   N3 (boletins impressos x publicados) depende de amostra de campo e não foi executado.
-- N13 (`scripts/11_teste_liberacao_biografica.R`): pronto e testado em dados simulados
-  (`testes/teste_11_simulado.R`); falta rodar nos dados reais. Usa só a saída do 09
-  (`tse_2026/urna/saida/secoes_*.csv` e `horas_*.csv`), sem baixar os ZIPs de novo.
+- N13 (`scripts/11_teste_liberacao_biografica.R`): executado nos dados reais
+  (`resultados/N13_*.csv`), usando só a saída do 09, sem baixar os ZIPs de novo.
+  Painel: 0,126 eleitor a mais por liberação biográfica a mais (EP 0,004); 192 seções
+  extremas, simétricas entre os finalistas (93 x 98; p = 0,77). Teste sintético em
+  `testes/teste_11_simulado.R`.
+  - Pendência: reler os logs das seções sinalizadas para ver a hora das liberações biográficas.
 - Pendências conhecidas:
   - N10: refazer com mais permutações (com 199, o menor p possível é 0,005 e não sobrevive à correção BH).
   - N11: reajustar o modelo sem a variável do último dígito (provável causa da segunda moda em ~0,75).

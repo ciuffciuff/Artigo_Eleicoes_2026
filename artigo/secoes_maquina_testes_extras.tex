@@ -167,8 +167,97 @@ this hypothesis was not tested directly. Biographic releases also matter for
 another reason: since the poll worker can disable biometric identification,
 a release could be used to let someone vote in the name of an absent voter
 \cite{vandegraaf2017}. A high share of releases alone does not separate this
-from a failing reader; test N13 (Section~\ref{sec:n13}) is designed to do
-so.
+from a failing reader; test N13 (Section~\ref{sec:n13}) does so.
+
+\subsection{Biographic impersonation (N13)}
+\label{sec:n13}
+
+Impersonation of an absent voter through a biographic release would leave
+three marks in the \emph{same} section: one more biographic release, one more
+voter and, usually, one more vote late in the day, when absences are known;
+a failing fingerprint reader leaves only the first. N13 uses the files
+already extracted for N4 and N5, without reprocessing the machine files, and
+covers the 499,176 (first round) and 499,177 (runoff) sections whose BU and
+log were both read. Its panel part compares the two rounds of each of the
+499,018 sections whose eligible voters changed by at most 5\%, so that the
+fixed profile of the section cancels out: with $\mathrm{d}V$, $\mathrm{d}B$
+and $\mathrm{d}L$ the changes in voters and in biographic releases (as
+percentages of the eligible voters) and in the share of votes cast from 15:00
+on, it regresses $\mathrm{d}V$ and $\mathrm{d}L$ on $\mathrm{d}B$ with
+municipality fixed effects and clustered errors (\ref{eq:sandwich}). Its cross-sectional part regresses,
+in each round, turnout and the share of late votes on the share of
+biographic releases, also within the municipality. Each section is scored by
+$S=(z_{1}+z_{2}+z_{3})/\sqrt3$, with the robust scores (\ref{eq:zrob}) of
+the three marks computed within the municipality; sections with $S>4$ and
+each mark above its municipal median are listed and tested for symmetry
+between the finalists, as in T8. In the panel the symmetry uses the change
+in Lula's share among the two finalists minus its municipal median, since
+his share rose everywhere in the runoff.
+
+Table~\ref{tab:n13} gives the results. Between rounds, one more biographic
+release per 100 eligible voters came with 0.13 more voters, far from the
+value of one that impersonation implies, and with \emph{fewer} late votes
+($-0.10$). Within the municipality, sections with more biographic releases
+had \emph{lower} turnout in both rounds ($-0.17$ and $-0.12$ points per
+point), the opposite of what impersonation produces; this level comparison
+also covers impersonation repeated in both rounds, which the panel cancels.
+The share of late votes rose with releases in the first round ($+0.04$) and
+fell in the runoff ($-0.11$).
+
+\begin{table}[ht]
+\caption{Biographic impersonation test (N13)}
+\label{tab:n13}
+\centering\scriptsize
+\begin{tabular}{@{}L{3.4cm} r r@{}}
+\toprule
+\textbf{Regression (municipality FE)} & \textbf{Coef.} & \textbf{SE} \\
+\midrule
+Panel: $\mathrm{d}V$ on $\mathrm{d}B$ & 0.126 & 0.004 \\
+Panel: $\mathrm{d}L$ on $\mathrm{d}B$ & $-0.095$ & 0.011 \\
+1st round: turnout on releases & $-0.165$ & 0.018 \\
+1st round: late votes on releases & 0.044 & 0.015 \\
+Runoff: turnout on releases & $-0.116$ & 0.020 \\
+Runoff: late votes on releases & $-0.112$ & 0.008 \\
+\midrule
+\textbf{Sections with $S>4$} & \textbf{Lula/F.B.} & \textbf{$p$} \\
+\midrule
+1st round, levels: 291 & 177/114 & $2.6\times10^{-4}$ \\
+Runoff, levels: 250 & 163/87 & $1.8\times10^{-6}$ \\
+Panel, changes: 192 & 93/98 & 0.77 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The score flagged 192 sections in the panel (0.04\%) and 291 and 250 in the
+levels of each round (0.06\% and 0.05\%). The panel list is symmetric
+between the finalists (93 vs.\ 98, one tie). The level lists are not: 61\%
+and 65\% of the flagged sections lean toward Lula relative to their
+municipality. The level comparison sets sections with different electorates
+against each other, and N5 had already found that the share of biographic
+releases goes with Lula's vote, consistent with reader failures among older
+voters and manual workers; once each section is compared with itself, the
+asymmetry disappears. This explanation was not tested directly. An
+impersonation repeated in both rounds would also vanish from the panel, but
+its size is bounded: the 250 sections flagged in the runoff had 7,530
+biographic releases in total, so even if every one of them had been an
+impersonation for the same candidate it would amount to 0.006\% of the
+128.2 million runoff votes. In the panel list, the increase in voters was at
+least as large as the increase in releases in 126 of the 192 sections, so
+these cannot be cleared by the counts alone, but late voting dominated the
+score in only 13 of them, and the highest-scoring one (PE 25836/26/153) had
+95 more releases and only 12 more voters, the pattern of a failing reader.
+
+The script repeats the validation on a copy of the real data, inserting
+impersonations in 300 runoff sections. With 10--40\% of the absent voters
+impersonated, the panel list found 100 of them (33\%) and the runoff level
+list 55 (18\%); with 40--80\%, they found 273 (91\%) and 267 (89\%). The
+slope rose only from 0.126 to 0.130 and 0.148: in half a million sections,
+300 altered ones barely move a regression, so the slope rules out
+impersonation spread over a large share of sections, while the lists are
+the tool for local cases. The 192 panel sections and the 541 level
+sections are listed for checking against the minutes and, where the logs
+record the time of each biographic release, for releases concentrated at the
+end of the day, which requires re-reading only those sections' logs.
 
 %======================================================================
 \section{Further Statistical Tests (N6--N12)}
@@ -375,34 +464,6 @@ Campin\'apolis (MT), Tocant\'inia (TO), Ipua\c{c}u (SC) and Amambai (MS),
 which were not multimodal, or had too few sections to be tested, in 2022.
 All eight contain indigenous lands, where sections in villages vote very
 differently from urban sections.
-
-\subsection{Biographic impersonation (N13): designed, not yet run}
-\label{sec:n13}
-
-Impersonation of an absent voter through a biographic release would leave
-three marks in the \emph{same} section: one more biographic release, one more
-voter and, usually, one more vote late in the day, when absences are known;
-a failing fingerprint reader leaves only the first. N13 uses the files
-already extracted for N4 and N5, without reprocessing the machine files.
-Its main statistic compares the two rounds of each section, so that the
-fixed profile of the section cancels out: with $\mathrm{d}V$ and
-$\mathrm{d}B$ the changes in voters and in biographic releases as
-percentages of the eligible voters, the slope of $\mathrm{d}V$ on
-$\mathrm{d}B$ with municipality fixed effects estimates the number of extra
-voters per extra release, close to zero if releases come from reader
-failures and close to one if they come from impersonation. Each section is
-also scored by $S=(z_{\mathrm dB}+z_{\mathrm dV}+z_{\mathrm dL})/\sqrt3$,
-with the robust scores (\ref{eq:zrob}) computed within the municipality and
-$\mathrm{d}L$ the change in the share of votes cast from 15:00 on; sections
-with $S>4$ are listed and tested for symmetry between the finalists, as in
-T8. In a simulation with 6,000 sections that included 150 failing readers
-per round, the score flagged 14 clean sections (0.23\%); after impersonation
-was inserted in 300 of them, it found 54--63 (depending on the random draw)
-when 10--40\% of the absent voters were impersonated and 239--242 when
-40--80\% were, and the slope rose from 0.009 to 0.023 and to 0.08--0.09. The section score is therefore a screen for large-scale
-impersonation, and the slope the more sensitive aggregate test. The script
-(\texttt{11\_teste\_liberacao\_biografica.R}) repeats this validation on a
-copy of the real data; it has not yet been run on the 2026 files.
 
 \subsection{Remaining checks}
 

@@ -1,0 +1,3 @@
+﻿fracao_ausentes;secoes_com_fraude;encontradas_painel;sinalizadas_painel;encontradas_corte_t2;sinalizadas_corte_t2;coef_painel_dados_reais;coef_painel_com_fraude;ep_painel_com_fraude
+10-40%;300;100;291;55;305;0.126220948377992;0.130200530006836;0.00372246890443389
+40-80%;300;273;464;267;515;0.126220948377992;0.147516558818074;0.00417664795137515

@@ -90,19 +90,17 @@ Urna eletr\^onica --- Lei de Benford --- Integridade eleitoral}
 %----------------------------------------------------------------------------------------
 %	ABSTRACT
 %----------------------------------------------------------------------------------------
-\Abstract{Brazil publishes the vote count and the files of every voting
-machine, which allows anyone to check whether the 2026 presidential result
-is consistent with what the machines recorded. We audited both rounds (4 and 25~October; 499,206 and 499,205
-polling sections) with the Superior Electoral Court (TSE) open data, in
-CRISP-DM phases, using eight statistical forensic tests (T1--T8), validated
-beforehand on synthetic data with inserted frauds, and eleven further tests
-(N1--N12, except N3) that include the machines' own files. Recounting every vote in the
+\Abstract{We audited both rounds of the 2026 Brazilian presidential election
+(4 and 25~October; 499,206 and 499,205 polling sections) with the Superior
+Electoral Court (TSE) open data, in CRISP-DM phases, using eight statistical
+forensic tests (T1--T8), validated beforehand on synthetic frauds, and twelve
+further tests (N1--N13, except N3) that include the files of every voting
+machine. Recounting every vote in the
 digital vote records (RDV) reproduced the tally sheet (BU) in all
 3,030,617 section--office comparisons, and the BUs reproduced the official
 totals without a single vote of difference; the SHA-512 hashes and the
-hardware signatures of all 998,414 section files were valid. Machine logs
-showed no votes before opening or after closing and at most four votes per
-minute. Digit, integer-percentage, local-homogeneity and fingerprint tests
+hardware signatures of all 998,414 section files were valid. Logs showed no
+votes outside voting hours. Digit, integer-percentage, local-homogeneity and fingerprint tests
 were within the expected range; the first round explained 93\% of the
 within-municipality variance of the runoff; the machine model had no effect
 within the same polling place; turnout change between rounds was linked to
@@ -114,25 +112,22 @@ from its false-positive rate. Remaining outliers (at most about 0.2\% of
 sections, depending on the test) include a disproportionate number of
 indigenous villages, prisons and sections abroad, and municipalities with
 bimodal vote distributions all contain indigenous lands. We list the sections for manual
-verification, report the limits of each test and release the code. Because
-the digital vote record and the tally sheet are produced by the same machine
-software, these checks establish consistency and post-recording integrity,
-not that each vote was recorded as cast.}
+verification, report the limits of each test and release the code. As the RDV
+and the BU come from the same machine software, this shows integrity after
+recording, not that each vote was recorded as cast.}
 
-\Resumo{O Brasil publica a contagem de votos e os arquivos de cada urna
-eletr\^onica, o que permite conferir se o resultado presidencial de 2026 \'e
-consistente com o que as urnas registraram. Auditamos os dois turnos (4 e 25 de outubro; 499.206 e
-499.205 se\c{c}\~oes) com os dados abertos do Tribunal Superior Eleitoral
-(TSE), seguindo as fases do CRISP-DM, com oito testes forenses estat\'isticos
-(T1--T8), validados antes em dados sint\'eticos com fraudes inseridas, e onze
-testes adicionais (N1--N12, exceto N3), que incluem os arquivos das pr\'oprias urnas. A
+\Resumo{Auditamos os dois turnos da elei\c{c}\~ao presidencial brasileira de
+2026 (4 e 25 de outubro; 499.206 e 499.205 se\c{c}\~oes) com os dados abertos
+do Tribunal Superior Eleitoral (TSE), seguindo o CRISP-DM, com oito testes
+forenses estat\'isticos (T1--T8), validados antes com fraudes sint\'eticas, e
+doze testes adicionais (N1--N13, exceto N3), que incluem os arquivos de cada
+urna. A
 recontagem de todos os votos do Registro Digital do Voto (RDV) reproduziu o
 Boletim de Urna (BU) nas 3.030.617 compara\c{c}\~oes se\c{c}\~ao--cargo, e os
 BUs reproduziram os totais oficiais sem um \'unico voto de diferen\c{c}a; os
 \emph{hashes} SHA-512 e as assinaturas de \emph{hardware} dos arquivos das
 998.414 se\c{c}\~oes foram v\'alidos. Os \emph{logs} n\~ao mostraram votos
-antes da abertura nem depois do encerramento, e no m\'aximo quatro votos por
-minuto. Os testes de d\'igitos, percentuais inteiros, homogeneidade local e
+fora do hor\'ario. Os testes de d\'igitos, percentuais inteiros, homogeneidade local e
 impress\~ao digital ficaram dentro do esperado; o 1\textordmasculine{} turno
 explicou 93\% da vari\^ancia do 2\textordmasculine{} dentro do
 munic\'ipio; o modelo da urna n\~ao teve efeito dentro do mesmo local de
@@ -147,10 +142,9 @@ taxa de falso positivo. Os casos extremos restantes (no m\'aximo cerca de
 aldeias ind\'igenas, pres\'idios e se\c{c}\~oes no exterior, e todos os
 munic\'ipios com distribui\c{c}\~ao bimodal de votos t\^em terras
 ind\'igenas. Listamos as se\c{c}\~oes para confer\^encia, relatamos os
-limites de cada teste e publicamos o c\'odigo. Como o Registro Digital do
-Voto e o Boletim de Urna s\~ao produzidos pelo mesmo software da urna, essas
-verifica\c{c}\~oes atestam consist\^encia e integridade ap\'os a grava\c{c}\~ao,
-e n\~ao que cada voto foi gravado como digitado.}
+limites de cada teste e publicamos o c\'odigo. Como RDV e BU v\^em do mesmo
+software da urna, isso atesta a integridade ap\'os a grava\c{c}\~ao, e n\~ao
+que cada voto foi gravado como digitado.}
 
 %----------------------------------------------------------------------------------------
 \begin{document}
@@ -203,7 +197,8 @@ test between the two finalists; (iv) a full recount of every digital vote
 record of both rounds, carried out with code independent of the electoral
 court's tallying system, with verification of the hashes and
 hardware signatures of every machine file, and an analysis of the timing of
-votes in the machine logs; (v) seven further statistical tests (machine
+votes in the machine logs, and a test for the impersonation of absent voters
+through biographic releases (N13); (v) seven further statistical tests (machine
 model, electorate profile, 2022--2026 panel, round-number spikes, spatial
 clustering, machine learning and local multimodality); and (vi) lists of
 flagged sections, classified by the name of the polling place, ready for
@@ -375,7 +370,7 @@ Cant\'u \cite{cantu2019} & Mexico 1988 & CNN on tally-sheet images & Alterations
 Figueiredo Filho et al.\ \cite{figueiredo2022} & Brazil 2018 & Five tests (digits, turnout, kernel) & No evidence of fraud \\
 Klimek and Thurner \cite{csh2022} & Brazil 2022, runoff & Fingerprint, ballot stuffing and rigging & No signs of fraud \\
 Klimek et al.\ \cite{klimek2023} & Turkey 2023, two rounds & Fingerprint, cross-round swings & Extreme swings in remote areas \\
-\textbf{This study} & \textbf{Brazil 2026, two rounds} & \textbf{T1--T8 with synthetic validation; full RDV recount and signature check; N4--N12} & \textbf{See Sections~\ref{sec:results}--\ref{sec:extended}} \\
+\textbf{This study} & \textbf{Brazil 2026, two rounds} & \textbf{T1--T8 with synthetic validation; full RDV recount and signature check; N4--N13} & \textbf{See Sections~\ref{sec:results}--\ref{sec:extended}} \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -444,8 +439,8 @@ lists 43 further sections abroad (42 in the first round and 43 in the
 runoff) with eligible voters but zero turnout, and therefore no votes.
 
 \paragraph{Modelling} Eight statistical tests, T1 to T8, described in
-Sections~\ref{sec:results} and \ref{sec:cross}, and eleven further tests,
-N1 to N12, described in Sections~\ref{sec:machine} and \ref{sec:extended}
+Sections~\ref{sec:results} and \ref{sec:cross}, and twelve further tests,
+N1 to N13, described in Sections~\ref{sec:machine} and \ref{sec:extended}
 (N3, the comparison of printed and published tally sheets, needs field
 samples and was not run). References are local: the
 other sections of the same polling place or municipality, not the national
@@ -508,7 +503,7 @@ took 143 minutes on a desktop computer with 15 parallel processes.
 \texttt{08\_testes\_padroes\_espaciais\_ml.R} & N9--N12 \\
 \texttt{09\_arquivos\_urna.py} & Decode BU, RDV, log, signatures (N1, N2, N4, N5) \\
 \texttt{10\_testes\_arquivos\_urna.R} & Summaries and tests N1, N2, N4, N5 \\
-\texttt{11\_teste\_liberacao\_biografica.R} & N13, from the files extracted by script 09 (not yet run) \\
+\texttt{11\_teste\_liberacao\_biografica.R} & N13, from the files extracted by script 09 (no reprocessing) \\
 \texttt{99\_executar\_tudo.R} & Runs the whole sequence \\
 \bottomrule
 \end{tabular}
@@ -846,7 +841,9 @@ symmetric between the finalists; among sections that \emph{lost} voters the
 shift favoured Lula (263 vs.\ 173), a pattern that added ballots cannot
 produce. Regarding \textbf{RQ4}, the recount of every RDV reproduced every
 BU, every BU reproduced the official result, and every file carried a valid
-hardware signature; the logs show the rhythm of human voting.
+hardware signature; the logs show the rhythm of human voting; and biographic
+releases were not accompanied by the extra voters that impersonation of
+absent voters would add.
 
 The recount changes the meaning of the statistical results, but only up to
 a point. Statistical forensics can only show that the counts look honest; it
@@ -882,7 +879,9 @@ manipulation --- invented numbers, rounding and inflated or swapped
 sections --- and the machine-file tests verify integrity after recording,
 not the correctness of recording, because the RDV and the BU come from the
 same software; the machine signatures were verified up to the embedded
-certificate but not to the root authority.
+certificate but not to the root authority; and the panel part of N13 cancels
+any impersonation repeated equally in both rounds, which only its
+cross-sectional part, confounded by the electorate profile, can bound.
 \emph{Internal validity}: binomial references assume similar voters within a
 polling place, which underestimates unanimity in isolated communities (T1,
 N7); the ecological regression of T8 does not fit in 9 units; the
@@ -910,21 +909,23 @@ data do not show the typical patterns of count manipulation either: digit
 and integer-percentage tests are within the expected range; sections of the
 same polling place are homogeneous; the runoff of each section is predicted
 by its first round and by the 2022 result; the fingerprint has no smear
-toward full turnout and full support; the machine model has no effect; and
+toward full turnout and full support; the machine model has no effect;
+biographic releases do not come with extra voters; and
 the sections that gained voters between rounds do not favour one finalist.
 The deviations found are rare; the most extreme ones are often in sections
 whose electorate is homogeneous or changes between rounds, and all of them
 are listed for individual checking.
 
 We recommend: (i) checking the flagged sections --- the 14 of T6, the 16
-log--BU divergences of N4 and the most extreme biographic releases of N5
---- against the minutes and tally sheets, and verifying whether the four
+log--BU divergences of N4, the most extreme biographic releases of N5 and
+the 192 panel sections of N13 --- against the minutes and tally sheets, and verifying whether the four
 S\~ao Paulo sections that appear in T6 and T8 (two of them also in N11) are transit-voting
 sections; (ii) confirming the type of the flagged polling places with the
 official register; (iii) rerunning N10 with adequate inference and N11
 without the last-digit feature; (iv) running N3 on a field sample of printed
 tally sheets and asking the TSE to publish the root certificates of the
-machines; (v) running N13, already coded, on the extracted machine files;
+machines; (v) re-reading the logs of the sections flagged by N13 to check
+when their biographic releases occurred;
 (vi) publishing code, data version and results openly; and (vii)
 communicating the findings as statistical: a flagged section is a point to
 check, not evidence of fraud.
