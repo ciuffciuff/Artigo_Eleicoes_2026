@@ -32,11 +32,10 @@ testes/         simulador de dados no layout do TSE e arquivos reais de urna de 
 Os dados brutos do TSE **não** estão no repositório (vários GB); os scripts baixam tudo do
 [Portal de Dados Abertos do TSE](https://dadosabertos.tse.jus.br/) e conferem a integridade.
 
-## Scripts 01 a 05
+## Onde rodar
 
-Os scripts 01 a 05 (download, teste de carga, distribuição e testes T1-T8) foram gerados numa
-sessão anterior e estão no computador do autor; adicione-os à pasta `scripts/` com
-`git add scripts/0[1-5]_*.R` antes de publicar.
+Os scripts usam caminhos relativos (`tse_2026/`, `resultados/`): defina a pasta `scripts/`
+como diretório de trabalho antes de rodar. Os resultados novos vão para `scripts/resultados/`.
 
 ## Situação
 
