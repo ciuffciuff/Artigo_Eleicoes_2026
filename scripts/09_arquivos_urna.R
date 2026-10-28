@@ -72,13 +72,16 @@ pacotes_py <- c("asn1tools", "cryptography", "py7zr")
 #      permissão de administrador) e cria um ambiente conda com Python 3.12.
 #      O install_python() do reticulate exige git no Windows, por isso não é usado.
 py <- NULL
-if (reticulate::virtualenv_exists(ambiente)) {
-  py <- reticulate::virtualenv_python(ambiente)
+if (suppressWarnings(reticulate::virtualenv_exists(ambiente))) {
+  py <- suppressWarnings(reticulate::virtualenv_python(ambiente))
 } else if (!is.null(tryCatch(reticulate::conda_binary(), error = function(e) NULL)) &&
            reticulate::condaenv_exists(ambiente)) {
   py <- reticulate::conda_python(ambiente)
 } else {
-  inicial <- reticulate::virtualenv_starter(">=3.11")
+  # No Windows, "WindowsApps\python3.exe" é só um atalho da Microsoft Store (não é um
+  # Python de verdade) e gera o aviso "não é possível abrir o arquivo". É ignorado.
+  inicial <- suppressWarnings(tryCatch(reticulate::virtualenv_starter(">=3.11"), error = function(e) NULL))
+  if (!is.null(inicial) && grepl("WindowsApps", inicial, fixed = TRUE)) inicial <- NULL
   if (!is.null(inicial)) {
     message("Criando o ambiente '", ambiente, "' com ", paste(pacotes_py, collapse = ", "), " ...")
     reticulate::virtualenv_create(ambiente, python = inicial, packages = pacotes_py)
