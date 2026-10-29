@@ -1,0 +1,9 @@
+﻿conjunto;acima_lula;acima_flavio;part_lula_obs;part_lula_esp;esp_p2.5;esp_p97.5;simulacoes_validas;p_bilateral
+todas;418;18;0.9587;0.954;0.9386;0.968;200;0.557213930348259
+comuns;395;15;0.9634;0.9555;0.9406;0.9696;200;0.358208955223881
+comuns, decis 9-10 de esquerda;160;12;0.9302;0.9403;0.9184;0.9643;200;0.527363184079602
+comuns, decis 1-2 de esquerda;21;1;0.9545;0.8675;0.7406;1;200;0.208955223880597
+presidio/socioeducativo;0;0;;0.3511;0;1;89;
+aldeia indigena;23;3;0.8846;0.9662;0.8571;1;200;0.149253731343284
+hospital/abrigo;0;0;;1;1;1;55;
+exterior;0;0;;0.6014;0;1;175;

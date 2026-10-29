@@ -93,8 +93,8 @@ Urna eletr\^onica --- Lei de Benford --- Integridade eleitoral}
 \Abstract{We audited both rounds of the 2026 Brazilian presidential election
 (4 and 25~October; 499,206 and 499,205 polling sections) with the Superior
 Electoral Court (TSE) open data, in CRISP-DM phases, using eight statistical
-forensic tests (T1--T8), validated beforehand on synthetic frauds, and twelve
-further tests (N1--N13, except N3) that include the files of every voting
+forensic tests (T1--T8), validated beforehand on synthetic frauds, and thirteen
+further tests (N1--N14, except N3) that include the files of every voting
 machine. Recounting every vote in the
 digital vote records (RDV) reproduced the tally sheet (BU) in all
 3,030,617 section--office comparisons, and the BUs reproduced the official
@@ -105,8 +105,10 @@ were within the expected range; the first round explained 93\% of the
 within-municipality variance of the runoff; the machine model had no effect
 within the same polling place; turnout change between rounds was linked to
 the unexplained vote shift by a gradient of at most 0.22 percentage points
-whose sign varied across states; and sections that gained voters shifted
-symmetrically between finalists (88 vs.\ 70; $p=0.18$). A random forest
+whose sign varied across states; sections that gained voters shifted
+symmetrically between finalists (88 vs.\ 70; $p=0.18$); and Lula's gain
+between rounds matched each section's first round within 0.15 points in
+every decile of left-wing strength. A random forest
 trained on synthetic frauds flagged 2 real sections, against 499 expected
 from its false-positive rate. Remaining outliers (at most about 0.2\% of
 sections, depending on the test) include a disproportionate number of
@@ -120,7 +122,7 @@ recording, not that each vote was recorded as cast.}
 2026 (4 e 25 de outubro; 499.206 e 499.205 se\c{c}\~oes) com os dados abertos
 do Tribunal Superior Eleitoral (TSE), seguindo o CRISP-DM, com oito testes
 forenses estat\'isticos (T1--T8), validados antes com fraudes sint\'eticas, e
-doze testes adicionais (N1--N13, exceto N3), que incluem os arquivos de cada
+treze testes adicionais (N1--N14, exceto N3), que incluem os arquivos de cada
 urna. A
 recontagem de todos os votos do Registro Digital do Voto (RDV) reproduziu o
 Boletim de Urna (BU) nas 3.030.617 compara\c{c}\~oes se\c{c}\~ao--cargo, e os
@@ -135,7 +137,9 @@ vota\c{c}\~ao; a varia\c{c}\~ao de comparecimento entre turnos se associou
 \`a mudan\c{c}a n\~ao explicada de voto por um gradiente de no m\'aximo 0,22
 ponto percentual, com sinal vari\'avel entre UFs; e as se\c{c}\~oes que
 ganharam eleitores se deslocaram de forma sim\'etrica entre os finalistas
-(88 contra 70; $p=0,18$). Uma floresta aleat\'oria treinada com fraudes
+(88 contra 70; $p=0,18$); e o ganho de Lula entre os turnos seguiu o
+1\textordmasculine{} turno de cada se\c{c}\~ao, com diferen\c{c}a de no
+m\'aximo 0,15 ponto em todos os decis de for\c{c}a da esquerda. Uma floresta aleat\'oria treinada com fraudes
 sint\'eticas sinalizou 2 se\c{c}\~oes reais, contra 499 esperadas pela sua
 taxa de falso positivo. Os casos extremos restantes (no m\'aximo cerca de
 0,2\% das se\c{c}\~oes, conforme o teste) incluem n\'umero desproporcional de
@@ -198,9 +202,10 @@ record of both rounds, carried out with code independent of the electoral
 court's tallying system, with verification of the hashes and
 hardware signatures of every machine file, and an analysis of the timing of
 votes in the machine logs, and a test for the impersonation of absent voters
-through biographic releases (N13); (v) seven further statistical tests (machine
+through biographic releases (N13); (v) eight further statistical tests (machine
 model, electorate profile, 2022--2026 panel, round-number spikes, spatial
-clustering, machine learning and local multimodality); and (vi) lists of
+clustering, machine learning, local multimodality and the origin of the
+winner's runoff gain); and (vi) lists of
 flagged sections, classified by the name of the polling place, ready for
 manual verification.
 
@@ -370,7 +375,7 @@ Cant\'u \cite{cantu2019} & Mexico 1988 & CNN on tally-sheet images & Alterations
 Figueiredo Filho et al.\ \cite{figueiredo2022} & Brazil 2018 & Five tests (digits, turnout, kernel) & No evidence of fraud \\
 Klimek and Thurner \cite{csh2022} & Brazil 2022, runoff & Fingerprint, ballot stuffing and rigging & No signs of fraud \\
 Klimek et al.\ \cite{klimek2023} & Turkey 2023, two rounds & Fingerprint, cross-round swings & Extreme swings in remote areas \\
-\textbf{This study} & \textbf{Brazil 2026, two rounds} & \textbf{T1--T8 with synthetic validation; full RDV recount and signature check; N4--N13} & \textbf{See Sections~\ref{sec:results}--\ref{sec:extended}} \\
+\textbf{This study} & \textbf{Brazil 2026, two rounds} & \textbf{T1--T8 with synthetic validation; full RDV recount and signature check; N4--N14} & \textbf{See Sections~\ref{sec:results}--\ref{sec:extended}} \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -439,8 +444,8 @@ lists 43 further sections abroad (42 in the first round and 43 in the
 runoff) with eligible voters but zero turnout, and therefore no votes.
 
 \paragraph{Modelling} Eight statistical tests, T1 to T8, described in
-Sections~\ref{sec:results} and \ref{sec:cross}, and twelve further tests,
-N1 to N13, described in Sections~\ref{sec:machine} and \ref{sec:extended}
+Sections~\ref{sec:results} and \ref{sec:cross}, and thirteen further tests,
+N1 to N14, described in Sections~\ref{sec:machine} and \ref{sec:extended}
 (N3, the comparison of printed and published tally sheets, needs field
 samples and was not run). References are local: the
 other sections of the same polling place or municipality, not the national
@@ -504,6 +509,8 @@ took 143 minutes on a desktop computer with 15 parallel processes.
 \texttt{09\_arquivos\_urna.py} & Decode BU, RDV, log, signatures (N1, N2, N4, N5) \\
 \texttt{10\_testes\_arquivos\_urna.R} & Summaries and tests N1, N2, N4, N5 \\
 \texttt{11\_teste\_liberacao\_biografica.R} & N13, from the files extracted by script 09 (no reprocessing) \\
+\texttt{12\_variacao\_lula\_esquerda.R} & N14, Lula's runoff gain vs.\ the first-round vote \\
+\texttt{classificar\_locais\_t6.R} & Keyword classification of polling places (T6, N14) \\
 \texttt{99\_executar\_tudo.R} & Runs the whole sequence \\
 \bottomrule
 \end{tabular}
@@ -674,10 +681,11 @@ runoff. The corrected version compares each section with its own
 municipality. It flagged 730 sections (0.15\%) with robust $|z|\geq6$ on
 the log-ratio of votes between rounds: 574 had \emph{fewer} votes in the
 runoff and 156 more. A keyword classification of the polling-place names
-(approximate) found 54 prisons or juvenile detention units, 53 of them
-losing voters, consistent with releases and transfers of inmates between
-rounds; 53 indigenous villages, 40 of them gaining voters; and 18 sections
-abroad. The remaining 80\% are ordinary polling places. The flagged sections concentrate in PA
+(approximate, with whole-word keywords) found 55 prisons or juvenile
+detention units, 54 of them losing voters, consistent with releases and transfers of inmates between
+rounds; 53 indigenous villages, 40 of them gaining voters; 18 sections
+abroad and 3 hospitals or shelters. The remaining 601 sections (82\%) are
+ordinary polling places. The flagged sections concentrate in PA
 (128), AC (85), AM (68), MA (67) and AP (64). The largest increases occurred
 in indigenous schools in PA and MS (e.g.\ PA 4111/18/519, from 21 to 35
 votes; PA 5835/106/330, from 128 to 212) and in the embassy in Canberra
@@ -786,7 +794,10 @@ null voters went mostly to Lula (0.63), and the extra runoff voters split
 coefficient fell outside $[0,1]$ by more than 0.05, mostly Lula retention
 rates of 1.05--1.08 in SP, the South and the Centre-West. This indicates
 that the constant-transfer assumption of Goodman's regression does not fit
-there, a known limitation of ecological inference, not an impossible count.
+there, a known limitation of ecological inference, not an impossible count;
+N14 (Section~\ref{sec:extended}) shows the same context effect for blank and
+null voters, whose transfer to Lula falls from 0.61 nationally to 0.25 within
+municipalities.
 
 \paragraph{Flagged sections and symmetry} 594 sections had $|z|\geq4$ in
 $\Delta C$ and $|z|\geq2$ in $\Delta P$ (Figure~\ref{fig:t8scatter}). The
@@ -839,7 +850,9 @@ change and profile change are linked by a small, broadly increasing gradient who
 sign varies across states, and extreme cases that gained voters are
 symmetric between the finalists; among sections that \emph{lost} voters the
 shift favoured Lula (263 vs.\ 173), a pattern that added ballots cannot
-produce. Regarding \textbf{RQ4}, the recount of every RDV reproduced every
+produce. Lula's runoff gain came from centre and right-wing, blank and null,
+and new voters in the proportions that each section's first round predicts,
+with extreme sections split 13 to 9 between the finalists. Regarding \textbf{RQ4}, the recount of every RDV reproduced every
 BU, every BU reproduced the official result, and every file carried a valid
 hardware signature; the logs show the rhythm of human voting; and biographic
 releases were not accompanied by the extra voters that impersonation of
@@ -884,7 +897,8 @@ any impersonation repeated equally in both rounds, which only its
 cross-sectional part, confounded by the electorate profile, can bound.
 \emph{Internal validity}: binomial references assume similar voters within a
 polling place, which underestimates unanimity in isolated communities (T1,
-N7); the ecological regression of T8 does not fit in 9 units; the
+N7); the ecological regressions of T8 and N14 estimate average transfers and
+are biased by regional context, and the ceiling of N14 uses net turnout; the
 profile model is an approximation of the hierarchical model and does not
 reproduce the tails; the spatial test N10 lacked power; the classifier N11
 has low sensitivity at its threshold and depends on the fraud scenarios
@@ -910,7 +924,8 @@ and integer-percentage tests are within the expected range; sections of the
 same polling place are homogeneous; the runoff of each section is predicted
 by its first round and by the 2022 result; the fingerprint has no smear
 toward full turnout and full support; the machine model has no effect;
-biographic releases do not come with extra voters; and
+biographic releases do not come with extra voters; Lula's runoff gain is
+what each section's first round predicts; and
 the sections that gained voters between rounds do not favour one finalist.
 The deviations found are rare; the most extreme ones are often in sections
 whose electorate is homogeneous or changes between rounds, and all of them
@@ -918,7 +933,8 @@ are listed for individual checking.
 
 We recommend: (i) checking the flagged sections --- the 14 of T6, the 16
 log--BU divergences of N4, the most extreme biographic releases of N5 and
-the 192 panel sections of N13 --- against the minutes and tally sheets, and verifying whether the four
+the 192 panel sections of N13 and the 12 sections of N14 not already in T6 ---
+against the minutes and tally sheets, and verifying whether the four
 S\~ao Paulo sections that appear in T6 and T8 (two of them also in N11) are transit-voting
 sections; (ii) confirming the type of the flagged polling places with the
 official register; (iii) rerunning N10 with adequate inference and N11
@@ -953,8 +969,8 @@ editing it for clarity; formatting it in the journal's \LaTeX{} template;
 searching the literature and checking the bibliographic data and DOIs of the
 references; helping to write and debug the R and Python analysis scripts;
 and writing the plotting code for Figures~\ref{fig:t8dec}, \ref{fig:t8uf},
-\ref{fig:n4}, \ref{fig:n6n7}, \ref{fig:n8uf}, \ref{fig:n9}, \ref{fig:n10}
-and~\ref{fig:n11imp}, which draws the charts deterministically from the
+\ref{fig:n4}, \ref{fig:n6n7}, \ref{fig:n8uf}, \ref{fig:n9}, \ref{fig:n10},
+\ref{fig:n11imp} and~\ref{fig:n14}, which draws the charts deterministically from the
 result files produced by the scripts. No research data, result, image or
 chart was generated or altered by AI: all data come from the TSE Open Data
 Portal, all analyses were run by the author with the published scripts, and

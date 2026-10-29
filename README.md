@@ -53,10 +53,14 @@ como diretório de trabalho antes de rodar. Os resultados novos vão para `scrip
   extremas, simétricas entre os finalistas (93 x 98; p = 0,77). Teste sintético em
   `testes/teste_11_simulado.R`.
   - Pendência: reler os logs das seções sinalizadas para ver a hora das liberações biográficas.
+- N14 (`scripts/12_variacao_lula_esquerda.R`): executado nos dados reais (`resultados/N14_*.csv`).
+  Ganho de Lula entre turnos x voto da esquerda no 1º turno: coeficiente da reserva de esquerda
+  0,82 (< 1); 22 seções extremas, 13 x 9 (p = 0,52); ganho observado a até 0,15 p.p. do previsto
+  em todos os decis. Figura: `scripts/gerar_figura_n14.py`.
+- `classificar_locais_t6.R` corrigido (palavras inteiras: "LAR" não pega mais "ESCOLAR").
 - Pendências conhecidas:
   - N10: refazer com mais permutações (com 199, o menor p possível é 0,005 e não sobrevive à correção BH).
   - N11: reajustar o modelo sem a variável do último dígito (provável causa da segunda moda em ~0,75).
-  - `classificar_locais_t6.R`: o padrão `"LAR "` também casa com "ESCOLAR ".
   - Figuras geradas pelos scripts R estão com rótulos em português.
 - `artigo/Figures/fig_t8_*.pdf`: geradas por `scripts/gerar_figuras_t8.R` a partir de `resultados/T8_*.csv`.
 - `artigo/Figures/fig_n4_hourly.pdf`: gerada a partir de `resultados/N4_votos_por_hora.csv`.

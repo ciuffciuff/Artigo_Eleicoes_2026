@@ -6,6 +6,7 @@
 #   -> 08 novos testes 9, 10, 11, 12
 #   -> 09 arquivos de urna (Python, chamado pelo R) -> 10 novos testes 1, 2, 4, 5
 #   -> 11 novo teste 13 (liberação biográfica; usa o que o 09 já extraiu)
+#   -> 12 novo teste 14 (ganho de Lula entre turnos x esquerda; só precisa do 01)
 # Cada etapa grava seu log em resultados/log_<script>.txt
 # =============================================================================
 pular_download      <- FALSE  # TRUE se 01 já rodou e os dados estão íntegros
@@ -13,6 +14,7 @@ rodar_originais     <- TRUE   # 02 a 05 (FALSE se já rodaram e nada mudou)
 rodar_novos_abertos <- TRUE   # 06 a 08
 rodar_arquivos_urna <- TRUE   # 09 e 10 (download de ~95 GB por turno; horas de execução)
 rodar_n13           <- TRUE   # 11 (minutos; só precisa da saída do 09, sem novo download)
+rodar_n14           <- TRUE   # 12 (minutos; só precisa do 01) e classificação dos locais do T6
 
 scripts <- c(if (!pular_download) "01_baixar_dados.R",
              if (rodar_originais) c("02_verificar_carga.R", "03_distribuicao_presidente.R",
@@ -20,7 +22,8 @@ scripts <- c(if (!pular_download) "01_baixar_dados.R",
              if (rodar_novos_abertos) c("06_baixar_dados_abertos_extra.R", "07_testes_modelo_perfil_painel.R",
                                         "08_testes_padroes_espaciais_ml.R"),
              if (rodar_arquivos_urna) c("09_arquivos_urna.R", "10_testes_arquivos_urna.R"),
-             if (rodar_n13) "11_teste_liberacao_biografica.R")
+             if (rodar_n13) "11_teste_liberacao_biografica.R",
+             if (rodar_n14) c("classificar_locais_t6.R", "12_variacao_lula_esquerda.R"))
 
 dir.create("resultados", showWarnings = FALSE)
 for (s in scripts) {
