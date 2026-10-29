@@ -91,66 +91,49 @@ Urna eletr\^onica --- Lei de Benford --- Integridade eleitoral}
 %	ABSTRACT
 %----------------------------------------------------------------------------------------
 \Abstract{We audited both rounds of the 2026 Brazilian presidential election
-(4 and 25~October; 499,206 and 499,205 polling sections) with the Superior
-Electoral Court (TSE) open data, in CRISP-DM phases, using eight statistical
-forensic tests (T1--T8), validated beforehand on synthetic frauds, and thirteen
-further tests (N1--N14, except N3) that include the files of every voting
-machine. Recounting every vote in the
-digital vote records (RDV) reproduced the tally sheet (BU) in all
-3,030,617 section--office comparisons, and the BUs reproduced the official
-totals without a single vote of difference; the SHA-512 hashes and the
-hardware signatures of all 998,414 section files were valid. Logs showed no
-votes outside voting hours. Digit, integer-percentage, local-homogeneity and fingerprint tests
-were within the expected range; the first round explained 93\% of the
-within-municipality variance of the runoff; the machine model had no effect
-within the same polling place; turnout change between rounds was linked to
-the unexplained vote shift by a gradient of at most 0.22 percentage points
-whose sign varied across states; sections that gained voters shifted
-symmetrically between finalists (88 vs.\ 70; $p=0.18$); and Lula's gain of
-6.6 points between rounds, of which the other left-wing candidates could
-supply only 0.17, was predicted by each section's first round without
-asymmetry between finalists. A random forest
-trained on synthetic frauds flagged 2 real sections, against 499 expected
-from its false-positive rate. Remaining outliers (at most about 0.2\% of
-sections, depending on the test) include a disproportionate number of
-indigenous villages, prisons and sections abroad, and municipalities with
-bimodal vote distributions all contain indigenous lands. We list the sections for manual
-verification, report the limits of each test and release the code. As the RDV
-and the BU come from the same machine software, this shows integrity after
-recording, not that each vote was recorded as cast.}
+(499,206 and 499,205 polling sections) with the Superior Electoral Court
+(TSE) open data, in CRISP-DM phases, using eight statistical forensic tests
+(T1--T8) validated on synthetic frauds and thirteen further tests (N1--N14,
+except N3) that include the files of every voting machine. Recounting every
+digital vote record (RDV) reproduced the tally sheet (BU) in all 3,030,617
+section--office comparisons, the BUs reproduced the official totals
+exactly, and all 998,414 SHA-512 hashes and hardware signatures were valid.
+Digit, integer-percentage, homogeneity and fingerprint tests were within the
+expected range; the first round explained 93\% of the within-municipality
+variance of the runoff; the machine model had no effect; sections that
+gained voters shifted symmetrically between finalists (88 vs.\ 70;
+$p=0.18$); and Lula's 6.6-point gain between rounds was predicted by each
+section's first round without asymmetry between finalists. A random forest
+trained on synthetic frauds flagged 2 real sections, against 499 expected by
+chance. The remaining outliers (at most about 0.2\% of sections)
+concentrate in indigenous villages, prisons and sections abroad. We list the
+sections for verification and release the code. As the RDV and the BU come
+from the same machine software, this shows integrity after recording, not
+that each vote was recorded as cast.}
 
 \Resumo{Auditamos os dois turnos da elei\c{c}\~ao presidencial brasileira de
-2026 (4 e 25 de outubro; 499.206 e 499.205 se\c{c}\~oes) com os dados abertos
-do Tribunal Superior Eleitoral (TSE), seguindo o CRISP-DM, com oito testes
-forenses estat\'isticos (T1--T8), validados antes com fraudes sint\'eticas, e
-treze testes adicionais (N1--N14, exceto N3), que incluem os arquivos de cada
-urna. A
-recontagem de todos os votos do Registro Digital do Voto (RDV) reproduziu o
-Boletim de Urna (BU) nas 3.030.617 compara\c{c}\~oes se\c{c}\~ao--cargo, e os
-BUs reproduziram os totais oficiais sem um \'unico voto de diferen\c{c}a; os
-\emph{hashes} SHA-512 e as assinaturas de \emph{hardware} dos arquivos das
-998.414 se\c{c}\~oes foram v\'alidos. Os \emph{logs} n\~ao mostraram votos
-fora do hor\'ario. Os testes de d\'igitos, percentuais inteiros, homogeneidade local e
-impress\~ao digital ficaram dentro do esperado; o 1\textordmasculine{} turno
-explicou 93\% da vari\^ancia do 2\textordmasculine{} dentro do
-munic\'ipio; o modelo da urna n\~ao teve efeito dentro do mesmo local de
-vota\c{c}\~ao; a varia\c{c}\~ao de comparecimento entre turnos se associou
-\`a mudan\c{c}a n\~ao explicada de voto por um gradiente de no m\'aximo 0,22
-ponto percentual, com sinal vari\'avel entre UFs; as se\c{c}\~oes que
-ganharam eleitores se deslocaram de forma sim\'etrica entre os finalistas
-(88 contra 70; $p=0,18$); e o ganho de 6,6 pontos de Lula entre os turnos,
-para o qual os demais candidatos de esquerda podiam contribuir com apenas
-0,17, foi previsto pelo 1\textordmasculine{} turno de cada se\c{c}\~ao, sem
-assimetria entre os finalistas. Uma floresta aleat\'oria treinada com fraudes
-sint\'eticas sinalizou 2 se\c{c}\~oes reais, contra 499 esperadas pela sua
-taxa de falso positivo. Os casos extremos restantes (no m\'aximo cerca de
-0,2\% das se\c{c}\~oes, conforme o teste) incluem n\'umero desproporcional de
-aldeias ind\'igenas, pres\'idios e se\c{c}\~oes no exterior, e todos os
-munic\'ipios com distribui\c{c}\~ao bimodal de votos t\^em terras
-ind\'igenas. Listamos as se\c{c}\~oes para confer\^encia, relatamos os
-limites de cada teste e publicamos o c\'odigo. Como RDV e BU v\^em do mesmo
-software da urna, isso atesta a integridade ap\'os a grava\c{c}\~ao, e n\~ao
-que cada voto foi gravado como digitado.}
+2026 (499.206 e 499.205 se\c{c}\~oes) com os dados abertos do Tribunal
+Superior Eleitoral (TSE), seguindo o CRISP-DM, com oito testes forenses
+estat\'isticos (T1--T8) validados com fraudes sint\'eticas e treze testes
+adicionais (N1--N14, exceto N3), que incluem os arquivos de cada urna. A
+recontagem de todo Registro Digital do Voto (RDV) reproduziu o Boletim de
+Urna (BU) nas 3.030.617 compara\c{c}\~oes se\c{c}\~ao--cargo, os BUs
+reproduziram exatamente os totais oficiais, e os 998.414 \emph{hashes}
+SHA-512 e assinaturas de \emph{hardware} foram v\'alidos. Os testes de
+d\'igitos, percentuais inteiros, homogeneidade e impress\~ao digital ficaram
+dentro do esperado; o 1\textordmasculine{} turno explicou 93\% da
+vari\^ancia do 2\textordmasculine{} dentro do munic\'ipio; o modelo da urna
+n\~ao teve efeito; as se\c{c}\~oes que ganharam eleitores se deslocaram de
+forma sim\'etrica entre os finalistas (88 contra 70; $p=0,18$); e o ganho de
+6,6 pontos de Lula entre os turnos foi previsto pelo 1\textordmasculine{}
+turno de cada se\c{c}\~ao, sem assimetria entre os finalistas. Uma floresta
+aleat\'oria treinada com fraudes sint\'eticas sinalizou 2 se\c{c}\~oes
+reais, contra 499 esperadas ao acaso. Os casos extremos restantes (no
+m\'aximo cerca de 0,2\% das se\c{c}\~oes) concentram-se em aldeias
+ind\'igenas, pres\'idios e se\c{c}\~oes no exterior. Listamos as
+se\c{c}\~oes para confer\^encia e publicamos o c\'odigo. Como RDV e BU v\^em
+do mesmo software da urna, isso atesta a integridade ap\'os a
+grava\c{c}\~ao, e n\~ao que cada voto foi gravado como digitado.}
 
 %----------------------------------------------------------------------------------------
 \begin{document}
