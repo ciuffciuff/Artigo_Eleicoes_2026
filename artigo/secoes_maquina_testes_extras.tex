@@ -285,7 +285,7 @@ N9 & Round-number spikes & Resampled kernel idea \cite{rozenas2017}: binomial re
 N10 & Spatial clustering & Local Moran \cite{anselin1995}, 8 nearest polling places, permutations, BH & No significant cluster of extreme residuals; test under-powered (see text) \\
 N11 & Machine learning & Random forest \cite{breiman2001,wright2017} trained on 300,000 synthetic sections & 2 real sections flagged vs.\ 499 expected at 0.1\% false-positive rate \\
 N12 & Local multimodality & Dip test \cite{hartigan1985} per municipality, BH; 2022 as control & 8 of 3,932 municipalities in 2026 vs.\ 4 of 3,774 in 2022; all contain indigenous lands \\
-N14 & Lula's gain vs.\ left-wing vote & Goodman transfer with turnout in/out flows; gain on left-wing reserve with municipality FE; section residual, BH; ceiling by simulation & Left-wing reserve coefficient 0.82 ($<1$); 22 sections flagged, 13 vs.\ 9 ($p=0.52$); gain within 0.15 p.p.\ of prediction in every decile \\
+N14 & Runoff gain vs.\ left vote & Transfer regression by state with abstention split by the section's own first round; municipality fixed effect; robust $z$, BH; simulated ceiling & Gain predicted in every decile of first-round left vote; 22 sections flagged, 6 vs.\ 7 in ordinary polling places ($p=1$); no excess above the ceiling \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -467,79 +467,87 @@ which were not multimodal, or had too few sections to be tested, in 2022.
 All eight contain indigenous lands, where sections in villages vote very
 differently from urban sections.
 
-\paragraph{Lula's gain and the left-wing vote (N14)} Lula's share rose from
-45.16\% of the valid votes in the first round to 51.78\% of the two finalists
-in the runoff, a gain of 6.62 percentage points. The four other left-wing
-candidates (PSTU, PCB, PCO and UP) had only 0.17\% in the first round, so
-almost all of the gain had to come from voters of other candidates, from
-blank and null voters or from people who did not vote in the first round.
-N14 checks, section by section, whether the gain fits what each section had
-available. It covers the 499,031 sections with at least 30 votes in both
-rounds; 2,905 of them are set apart by the name of the polling place (1,287
-abroad, 824 in indigenous villages, 518 in hospitals or shelters and 276 in
-prisons or juvenile units), with the corrected keywords also used for T6.
+\paragraph{Runoff gain and the left vote (N14)} Lula rose from 45.16\% of
+the valid votes in the first round to 51.78\% of the votes for the two
+finalists in the runoff (+6.62 percentage points). The other left-wing
+candidates --- those of PSTU (16), PCB (21), PCO (29) and UP (80), a
+classification made by the author --- had only 0.17\% of the valid votes,
+so 6.45 points of the gain had to come from other sources. N14 tests,
+section by section, whether those sources explain it. It covers the 499,031
+sections with at least 30 votes in both rounds; 2,905 of them are set apart
+by the name of the polling place (1,287 abroad, 824 in indigenous villages,
+518 in hospitals or shelters and 276 in prisons or juvenile units), with the
+corrected keywords also used for T6.
 
-A Goodman regression (\ref{eq:goodman}) with the turnout change split into
-new voters and absentees, the latter in proportion to each section's first
-round, estimates that each finalist kept his voters (1.04 and 1.01), that
-voters of the other left-wing candidates went 0.84 to Lula, centre and
-right-wing voters split evenly (0.43 and 0.45), blank and null voters went
-0.61 to Lula and none to Fl\'avio Bolsonaro, and new voters split 0.57 to
-0.39. Lula's runoff vote thus came 87\% from his own voters, 6.1\% from
-centre and right-wing voters, 5.7\% from blank and null voters, 3.2\% from
-new voters and 0.3\% from the other left-wing candidates. Within
-municipalities (ordinary sections, clustered errors (\ref{eq:sandwich})),
-one point of other left-wing vote added 0.82 points to Lula's gain (SE
-0.013), below the ceiling of one; a point of centre and right-wing vote
-added 0.49 and a point of blank and null votes only 0.25. The gap between
-0.61 nationally and 0.25 within municipalities is ecological bias: blank and
-null votes are more common where Lula is strong, the same context effect
-that produces retention rates above one in T8.
+A transfer regression by state (\ref{eq:goodman}), in which the voters who
+did not return in the runoff are removed in proportion to the first-round
+vote of their own section, attributes 86.9\% of Lula's runoff votes to his
+first-round voters, 6.1\% to voters of centre and right-wing candidates,
+5.7\% to blank and null voters, 3.2\% to extra runoff voters and 0.3\% to
+the other left-wing candidates. Within municipalities (ordinary sections,
+clustered errors (\ref{eq:sandwich})), Lula's gain rose by 0.82 points per
+point of other-left vote (SE 0.013), below the value of one that would
+indicate left votes counted more than once, and by 0.49 per point of
+centre-right vote. Blank and null voters, with 0.25 within the municipality
+against 0.61 in the national regression, show how much of the national
+estimate reflects regional context, the same effect that produces retention
+rates above one in T8. The same context effect appears among the voters who
+did not return: where a section lost voters, its majority candidate lost
+more than his share (rates of 1.25 for Lula and 1.28 for Fl\'avio
+Bolsonaro), equally on both sides.
 
 \begin{figure*}[ht]
 \centering
 \includegraphics[width=\linewidth]{Figures/fig_n14_deciles.pdf}
 \caption{Lula's gain between rounds (N14) by decile of left-wing strength in
-the first round (Lula plus the other left-wing candidates). (a) Observed
-gain, gain predicted from each section's own first round, and the vote of
-the other left-wing candidates. (b) Mean residual (observed minus
-predicted share, centred on the municipality) with 95\% intervals.}
+the first round (Lula plus the other left-wing candidates; 499,031
+sections). (a) Observed gain, gain predicted from each section's own first
+round, and the vote of the other left-wing candidates. (b) Mean residual
+(observed minus predicted share, centred on the municipality) with 95\%
+intervals.}
 \label{fig:n14}
 \end{figure*}
 
-Each section's runoff share was then predicted from its own first round
-with the coefficients of its state; observed and predicted gains correlate
-at 0.70. With the residual centred on the municipality, a robust score
-(\ref{eq:zrob}), BH at $q<0.001$ (\ref{eq:bh}) and a minimum deviation of 10
-points, 22 of 498,952 sections were flagged: 13 toward Lula and 9 toward
-Fl\'avio Bolsonaro ($p=0.52$), and 6 and 7 among ordinary sections. Seven
-are in indigenous villages and two abroad, and ten were already flagged by
-T6 (for instance AC 1554/3/160 and the S\~ao Paulo polling place
-71072/2). By decile of left-wing strength (Figure~\ref{fig:n14}), observed
-and predicted gains never differ by more than 0.15 points; in the top
-decile, where an inflation in favour of Lula would be easiest to hide, he
-gained 0.15 points \emph{less} than predicted.
+The runoff share predicted from each section's own first round tracks the
+observed one in every decile of first-round left vote
+(Figure~\ref{fig:n14}; correlation of 0.70 between observed and predicted
+gains across sections). The mean residual stays between $-0.02$ and $+0.05$
+points in deciles 1--9; in the decile where the left was strongest (about
+80\% of the valid votes), Lula received 0.15 points less than predicted
+(95\% CI 0.13--0.16), the opposite of what inflation in his strongholds
+would produce. With robust $z$-scores (\ref{eq:zrob}) centred on the
+municipality, BH correction ($q<0.001$) and a minimum deviation of 10
+points, 22 of 498,952 sections were flagged. The 13 in ordinary polling
+places split 6 toward Lula and 7 toward Fl\'avio Bolsonaro ($p=1$); 7 are
+indigenous villages (6 toward Lula), as in T6; three belong to the S\~ao
+Paulo polling place of T6 and T8; and two sections of the same school in
+Barcelos (AM 2097/18/37 and 39) moved in opposite directions, which
+suggests voters reassigned between them. A first version split the voters
+who did not return by a single national rate; on synthetic data with no
+fraud it produced residuals of up to 13 points in favour of the local
+minority, and it was replaced before the real data were analysed again.
 
-A ceiling check counts sections where a finalist's runoff vote exceeded his
-first-round vote plus every vote not cast for his opponent and every new
-voter, by at least five votes or 3\% of the finalists' votes, whichever is
-larger: 418 for Lula and 18 for Fl\'avio
-Bolsonaro. The asymmetry is what the transfer model implies, because Lula
-drew far more from the blank and null reserve and therefore runs closer to
-the ceiling. A simulation that resamples the residuals within state and
-band of predicted share expected 511 and 25 such sections, and Lula's share
-of them (0.959) matched the simulated one (0.954; $p=0.56$). These
-sections exceed the ceiling by a median of 8 votes, 3,800 in total, and
-cluster in some municipalities of the North-East and North (10 in Rafael
-Godeiro, RN); since only the net turnout change is known, voters who
-abstained in one round and others who voted only in the runoff cancel out,
-so the ceiling is soft. Because its reference is estimated from the same
-data, the ceiling check cannot detect manipulation spread over many
-sections; it explains the counts rather than tests for fraud. In the
-validation, swapping 5--15\% of the losing side's votes in 300 ordinary
-sections, the section score found 16 of them (5\%); swapping 15--30\%, it
-found 153 (51\%). N14 therefore rules out large local swaps and a
-systematic gain beyond the first-round composition, not small ones.
+A last check counts the sections where a finalist's runoff vote exceeded
+everything that was not his opponent's in the first round (his own vote,
+the other candidates, blank and null votes and the extra voters) by at least
+five votes or 3\% of the finalists' votes. This happened in 418 sections for
+Lula and 18 for Fl\'avio Bolsonaro, an imbalance the model predicts, because
+Lula drew more from the available pool. In 200 simulations with the
+estimated transfers and the observed dispersion, Lula's share among such
+ordinary sections was 95.6\% (95\% interval 94.1--97.0\%), against 96.3\%
+observed ($p=0.36$), and both counts were below expectation (395 vs.\ 491
+for Lula; 15 vs.\ 23 for Fl\'avio Bolsonaro). These sections exceed the
+ceiling by a median of 8 votes and cluster in some municipalities (10 in
+Rafael Godeiro, RN, and 9 in Caucaia, CE, toward Lula; 5 in Santo Ant\^onio
+de Lisboa, PI, toward Fl\'avio Bolsonaro), which suggests local political
+shifts between rounds; since only the net turnout change is known, the
+ceiling is soft. Because the simulation is calibrated on the data
+themselves, it does not detect fraud spread over many sections: on
+synthetic data it missed a one-sided swap in 150--300 sections that the
+section-level test found. It shows that the imbalance is expected;
+detection rests on the section-level test, which, when 15--30\% of the
+votes of one finalist were moved to the other in 300 real sections, found
+153 of them (51\%), and 16 with 5--15\%.
 
 \subsection{Remaining checks}
 

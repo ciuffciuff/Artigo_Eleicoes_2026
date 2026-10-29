@@ -5,7 +5,7 @@
 
 \documentclass[fleqn,10pt]{SelfArx}
 \usepackage[english]{babel}
-\usepackage{url}
+\usepackage[hyphens]{url}
 \usepackage{balance}
 \usepackage{hyperref}
 \usepackage{mathptmx}
@@ -106,9 +106,10 @@ within-municipality variance of the runoff; the machine model had no effect
 within the same polling place; turnout change between rounds was linked to
 the unexplained vote shift by a gradient of at most 0.22 percentage points
 whose sign varied across states; sections that gained voters shifted
-symmetrically between finalists (88 vs.\ 70; $p=0.18$); and Lula's gain
-between rounds matched each section's first round within 0.15 points in
-every decile of left-wing strength. A random forest
+symmetrically between finalists (88 vs.\ 70; $p=0.18$); and Lula's gain of
+6.6 points between rounds, of which the other left-wing candidates could
+supply only 0.17, was predicted by each section's first round without
+asymmetry between finalists. A random forest
 trained on synthetic frauds flagged 2 real sections, against 499 expected
 from its false-positive rate. Remaining outliers (at most about 0.2\% of
 sections, depending on the test) include a disproportionate number of
@@ -137,9 +138,10 @@ vota\c{c}\~ao; a varia\c{c}\~ao de comparecimento entre turnos se associou
 \`a mudan\c{c}a n\~ao explicada de voto por um gradiente de no m\'aximo 0,22
 ponto percentual, com sinal vari\'avel entre UFs; as se\c{c}\~oes que
 ganharam eleitores se deslocaram de forma sim\'etrica entre os finalistas
-(88 contra 70; $p=0,18$); e o ganho de Lula entre os turnos seguiu o
-1\textordmasculine{} turno de cada se\c{c}\~ao, com diferen\c{c}a de no
-m\'aximo 0,15 ponto em todos os decis de for\c{c}a da esquerda. Uma floresta aleat\'oria treinada com fraudes
+(88 contra 70; $p=0,18$); e o ganho de 6,6 pontos de Lula entre os turnos,
+para o qual os demais candidatos de esquerda podiam contribuir com apenas
+0,17, foi previsto pelo 1\textordmasculine{} turno de cada se\c{c}\~ao, sem
+assimetria entre os finalistas. Uma floresta aleat\'oria treinada com fraudes
 sint\'eticas sinalizou 2 se\c{c}\~oes reais, contra 499 esperadas pela sua
 taxa de falso positivo. Os casos extremos restantes (no m\'aximo cerca de
 0,2\% das se\c{c}\~oes, conforme o teste) incluem n\'umero desproporcional de
@@ -329,14 +331,44 @@ Senate elections from 1994 to 2018 with a change of numerical base
 \cite{gueron2022}.
 
 \paragraph{Security of the Brazilian voting machine} A separate line of work
-examines the machine itself. Rivest \cite{rivest2008} defines a voting
+examines the machine itself, mostly through the Public Security Tests (TPS)
+that the Electoral Court has held since 2009, in which external
+investigators attack the machine and its software with some of the
+production safeguards removed. The findings can be grouped by the property
+at stake. \emph{Ballot secrecy} has been the most frequent target. In the
+first edition an investigator tried to recover keystrokes from the
+electromagnetic emanations of the keypad \cite{tse2022tpshist}; in 2012
+Aranha et al.\ recovered the order of the votes from the digital vote
+record, whose shuffling was seeded by the machine clock, and found that the
+cryptographic keys were shared by all machines \cite{aranha2014}; and in
+2021 investigators placed a sleeve over the keypad to log keystrokes and
+tapped the audio output intended for blind voters, attacks that the
+evaluating committee considered contained by changes in the booths and in
+poll-worker training \cite{tse2021tps}. Beneath these attacks lies a design
+choice: the poll worker's terminal, where the voter is identified, is
+connected by cable to the voter's terminal, so that only software keeps
+identity and vote apart \cite{aranha2018}. \emph{Software integrity} was
+breached once in a public test: in 2017 a chain of vulnerabilities, starting
+from a decryption key found in the source code, allowed Aranha et al.\ to
+inject code of their own into the machine programs at the loading stage
+and run it on the machine \cite{aranha2018}. Later tests reached the
+periphery rather than the count --- a tally sheet transmitted unencrypted
+and accepted because only its signature was checked, and credentials of the
+transmission network extracted from the polling-station kit
+\cite{tse2021tps} --- and in the 2025 edition six of 29 attack plans
+produced findings that the committees judged mitigable and unable to affect
+integrity, secrecy or the result \cite{tse2025tps}. Outside the TPS, the
+armed forces' inspection of the 2022 election reported no fraud, but stated
+that, with restricted access to more than 17 million lines of source code
+and third-party libraries, it could not exclude the influence of malicious
+code, and asked for an analysis of the compilation and of the binaries
+actually run \cite{md2022,md2022nota}. \emph{Auditability} is the issue
+common to all of these. Rivest \cite{rivest2008} defines a voting
 system as \emph{software independent} if an undetected change or error in
 its software cannot cause an undetectable change in the outcome; paperless
-direct-recording machines such as the Brazilian one are software dependent.
-In the Public Security Tests of the Electoral Court, Aranha et al.\ recovered
-the order of the votes from the digital vote record, whose shuffling was
-seeded by the machine clock \cite{aranha2014}, and later executed arbitrary
-code on the machine \cite{aranha2018}. Van de Graaf \cite{vandegraaf2017}
+direct-recording machines such as the Brazilian one are software dependent,
+so an audit must ask whether an attack of the kinds shown above would leave
+any trace outside the software. Van de Graaf \cite{vandegraaf2017}
 summarizes the consequences for non-specialists: the digital vote record is
 a second copy written by the same software, not a physical record verified
 by the voter, so it cannot reveal a fault in how votes were captured; and
@@ -852,7 +884,7 @@ symmetric between the finalists; among sections that \emph{lost} voters the
 shift favoured Lula (263 vs.\ 173), a pattern that added ballots cannot
 produce. Lula's runoff gain came from centre and right-wing, blank and null,
 and new voters in the proportions that each section's first round predicts,
-with extreme sections split 13 to 9 between the finalists. Regarding \textbf{RQ4}, the recount of every RDV reproduced every
+with extreme ordinary sections split 6 to 7 between the finalists. Regarding \textbf{RQ4}, the recount of every RDV reproduced every
 BU, every BU reproduced the official result, and every file carried a valid
 hardware signature; the logs show the rhythm of human voting; and biographic
 releases were not accompanied by the extra voters that impersonation of
