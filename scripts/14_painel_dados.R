@@ -85,7 +85,7 @@ etapa("Perfil TSE e Censo")
 arq_perf <- file.path(pasta_extra, "perfil_agregado_secao_n15.csv")
 if (!file.exists(arq_perf)) arq_perf <- sub("\\.csv$", "_teste.csv", arq_perf)   # modo de teste do 13
 perfil <- fread(arq_perf)
-censo <- fread(file.path(pasta_extra, "n15_secoes_censo.csv.gz"), colClasses = list(character = "CD_SETOR"))
+censo <- fread(file.path(pasta_extra, "n15_secoes_censo.csv"), colClasses = list(character = "CD_SETOR"))
 d <- merge(v, perfil, by = sec, all.x = TRUE)
 d <- merge(d, censo, by = sec, all.x = TRUE)
 d <- merge(d, flags, by = sec, all.x = TRUE)

@@ -467,7 +467,7 @@ sec_censo <- merge(loc[NR_TURNO == 2, c(sec, "NR_LOCAL_VOTACAO", "NM_LOCAL_VOTAC
                                         "territorio", "r_log_renda", "r_preta_parda", "r_indigena", "r_analf",
                                         "r_esgoto", "r_log_dens", "r_pop"), with = FALSE],
                    merge(z1, z3, by = sec, all = TRUE), by = sec, all.x = TRUE)
-fwrite(sec_censo, file.path(pasta_extra, "n15_secoes_censo.csv.gz"))
+fwrite(sec_censo, file.path(pasta_extra, "n15_secoes_censo.csv"))
 message("  Tabela por seção para o painel: ", nrow(sec_censo), " seções")
 
 # =============================================================================
