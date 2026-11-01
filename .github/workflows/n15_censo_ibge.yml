@@ -7,6 +7,7 @@ name: N15 - Enriquecimento com o Censo 2022 (IBGE)
 # Para rodar: aba Actions > "N15 - Enriquecimento..." > Run workflow.
 #   modo = teste     -> só AC, RR e SE (uns 15 minutos)
 #   modo = completo  -> Brasil inteiro (1 a 3 horas)
+# Num push para o branch ibge-actions, o modo vem de .github/n15_modo.txt.
 on:
   workflow_dispatch:
     inputs:
@@ -18,7 +19,7 @@ on:
         options: [teste, completo]
   push:
     branches: [ibge-actions]
-    paths: ["scripts/13_enriquecimento_ibge.R", ".github/workflows/n15_censo_ibge.yml"]
+    paths: ["scripts/13_enriquecimento_ibge.R", ".github/workflows/n15_censo_ibge.yml", ".github/n15_modo.txt"]
 
 jobs:
   n15:
@@ -26,9 +27,17 @@ jobs:
     timeout-minutes: 340
     env:
       CI: "true"
-      UFS_TESTE: ${{ (github.event_name == 'workflow_dispatch' && inputs.modo == 'completo') && '' || 'AC,RR,SE' }}
     steps:
       - uses: actions/checkout@v4
+
+      # modo: escolhido no botão "Run workflow"; num push, lido de .github/n15_modo.txt
+      - name: Modo (teste ou completo)
+        run: |
+          modo="${{ inputs.modo }}"
+          [ -z "$modo" ] && modo=$(tr -d '[:space:]' < .github/n15_modo.txt 2>/dev/null || echo teste)
+          if [ "$modo" = "completo" ]; then echo "UFS_TESTE=" >> $GITHUB_ENV; echo "ROTULO=completo" >> $GITHUB_ENV
+          else echo "UFS_TESTE=AC,RR,SE" >> $GITHUB_ENV; echo "ROTULO=teste" >> $GITHUB_ENV; fi
+          echo "modo: $modo"
 
       - name: Liberar espaço em disco
         run: |
@@ -63,7 +72,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: N15_resultados_${{ env.UFS_TESTE == '' && 'completo' || 'teste' }}
+          name: N15_resultados_${{ env.ROTULO }}
           path: |
             scripts/resultados/N15_*.csv
             scripts/resultados/log_13_enriquecimento_ibge.txt
