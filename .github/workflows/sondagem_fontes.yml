@@ -4,9 +4,6 @@ name: Sondagem das fontes (TSE e IBGE)
 # GitHub Actions e mostra as colunas dos arquivos usados no script 13.
 on:
   workflow_dispatch:
-  push:
-    branches: [ibge-actions]
-    paths: [".github/workflows/sondagem_fontes.yml"]
 
 jobs:
   sondagem:
