@@ -78,13 +78,13 @@ jobs:
           exit ${PIPESTATUS[0]}
 
       - name: Gravar dados do painel no branch painel-dados
-        if: env.ROTULO == 'completo'
         run: |
           cp scripts/resultados/N15_*.csv scripts/resultados/log_1[34]_*.txt painel/dados/ 2>/dev/null || true
           cd painel/dados && ls -la && du -sh .
-          git init -q -b painel-dados && git add -A
+          RAMO=painel-dados; [ "$ROTULO" = "teste" ] && RAMO=painel-dados-teste
+          git init -q -b $RAMO && git add -A
           git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" commit -q -m "Dados do painel ($ROTULO, ${GITHUB_SHA::7})"
-          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" painel-dados
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" $RAMO
 
       - name: Guardar resultados
         if: always()
