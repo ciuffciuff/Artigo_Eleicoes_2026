@@ -341,7 +341,8 @@ if (file.exists(arq_perf_ag)) {
   }
   perfil <- rbindlist(perfil)
   for (cc in c("CD_MUNICIPIO", "NR_ZONA", "NR_SECAO")) set(perfil, j = cc, value = as.integer(perfil[[cc]]))
-  if (identical(ufs_uso, setdiff(ufs_esperadas, "ZZ"))) fwrite(perfil, arq_perf_ag)  # só guarda a versão completa
+  # guarda a versão completa; no modo de teste, num arquivo à parte
+  fwrite(perfil, if (identical(ufs_uso, setdiff(ufs_esperadas, "ZZ"))) arq_perf_ag else sub("\\.csv$", "_teste.csv", arq_perf_ag))
 }
 vars_tse <- c("p_fem", "p_16_24", "p_45_59", "p_60m", "p_esc_baixa", "p_esc_sup", "p_bio")
 for (v in vars_tse) set(perfil, j = v, value = perfil[[v]] / perfil$aptos_perfil)

@@ -82,7 +82,9 @@ nomes <- unique(lg[, .(SG_UF, CD_MUNICIPIO, NM_MUNICIPIO)], by = c("SG_UF", "CD_
 
 # ---- Perfil TSE e Censo por seção ------------------------------------------------
 etapa("Perfil TSE e Censo")
-perfil <- fread(file.path(pasta_extra, "perfil_agregado_secao_n15.csv"))
+arq_perf <- file.path(pasta_extra, "perfil_agregado_secao_n15.csv")
+if (!file.exists(arq_perf)) arq_perf <- sub("\\.csv$", "_teste.csv", arq_perf)   # modo de teste do 13
+perfil <- fread(arq_perf)
 censo <- fread(file.path(pasta_extra, "n15_secoes_censo.csv.gz"), colClasses = list(character = "CD_SETOR"))
 d <- merge(v, perfil, by = sec, all.x = TRUE)
 d <- merge(d, censo, by = sec, all.x = TRUE)
@@ -120,9 +122,10 @@ resumir <- function(x) {
     sinalizadas_qualquer = sum(x$flags > 0))
   out
 }
-ufs <- sort(setdiff(unique(d$SG_UF), "ZZ"))
+ufs <- sort(setdiff(unique(perfil$SG_UF), "ZZ"))
+d <- d[SG_UF %in% ufs]
 por_uf <- lapply(ufs, function(u) resumir(d[SG_UF == u])); names(por_uf) <- ufs
-brasil <- resumir(d[SG_UF != "ZZ"])
+brasil <- resumir(d)
 
 ler_res <- function(f) { a <- achar(f); if (is.na(a)) NULL else fread(a) }
 el_mun <- ler_res("N15_eleitorado_x_populacao_municipios.csv")
