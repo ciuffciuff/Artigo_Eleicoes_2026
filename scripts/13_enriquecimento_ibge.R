@@ -83,7 +83,8 @@ razao <- function(a, b) ifelse(b > 0, a / b, NA_real_)
 # (o IBGE troca a data no nome quando atualiza), baixa e extrai o CSV.
 obter_ibge <- function(pasta_url, prefixo) {
   html <- paste(readLines(pasta_url, warn = FALSE), collapse = " ")
-  hrefs <- gsub('^href="|"$', "", regmatches(html, gregexpr('href="[^"]+"', html))[[1]])
+  html <- iconv(html, "latin1", "ASCII", sub = "")    # a página vem em Latin-1
+  hrefs <- gsub('^href="|"$', "", regmatches(html, gregexpr('href="[^"]+"', html, useBytes = TRUE))[[1]])
   alvo <- hrefs[startsWith(hrefs, prefixo) & grepl("\\.zip$", hrefs) & !grepl("xlsx", hrefs)]
   if (!length(alvo)) stop("Não achei '", prefixo, "' em ", pasta_url)
   alvo <- sort(alvo, decreasing = TRUE)[1]
