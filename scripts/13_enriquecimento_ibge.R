@@ -407,7 +407,7 @@ ajustar <- function(x, vars, modelo, alvo) {
   message(sprintf("    %-28s R² dentro = %.3f | rho = %.4f | |z|>3: %.2f%% | sinalizadas: %d | >90%%: obs %d x sim %.0f",
                   modelo, r2w, rho, resumo$pct_absz_maior_3, resumo$sinalizadas, obs[["secoes_acima_90pct"]],
                   ppc[estatistica == "secoes_acima_90pct", simulado_media]))
-  list(coefs = coefs, ppc = ppc, resumo = resumo,
+  list(coefs = coefs, ppc = ppc, resumo = resumo, z = x[, c(sec, "z", "p_hat"), with = FALSE],
        flag = x[q < alfa_fdr, c("NR_TURNO", sec, "z", "q", "territorio"), with = FALSE][, `:=`(alvo = alvo, modelo = modelo)])
 }
 
@@ -457,6 +457,17 @@ persist[, pct_continuam := round(100 * continuam / sinalizadas_so_tse, 1)]
 print(persist)
 salvar(persist, "N15_modelo_persistencia_sinalizadas.csv")
 salvar(flag_a[order(modelo, -abs(z))], "N15_modelo_secoes_sinalizadas.csv")
+
+# por seção (usado pelo painel, script 14): z do 2º turno (Lula) sem e com o Censo,
+# e o perfil do Censo em volta do local de votação
+z1 <- setnames(copy(res_a[[1]]$z), c("z", "p_hat"), c("z_tse", "p_tse"))
+z3 <- setnames(copy(res_a[[3]]$z), c("z", "p_hat"), c("z_censo", "p_censo"))
+sec_censo <- merge(loc[NR_TURNO == 2, c(sec, "NR_LOCAL_VOTACAO", "NM_LOCAL_VOTACAO", "lat", "lon", "CD_SETOR",
+                                        "territorio", "r_log_renda", "r_preta_parda", "r_indigena", "r_analf",
+                                        "r_esgoto", "r_log_dens", "r_pop"), with = FALSE],
+                   merge(z1, z3, by = sec, all = TRUE), by = sec, all.x = TRUE)
+fwrite(sec_censo, file.path(pasta_extra, "n15_secoes_censo.csv.gz"))
+message("  Tabela por seção para o painel: ", nrow(sec_censo), " seções")
 
 # =============================================================================
 # 6. B - Território das seções sinalizadas em testes anteriores

@@ -19,11 +19,13 @@ on:
         options: [teste, completo]
   push:
     branches: [ibge-actions]
-    paths: ["scripts/13_enriquecimento_ibge.R", ".github/workflows/n15_censo_ibge.yml", ".github/n15_modo.txt"]
+    paths: ["scripts/13_enriquecimento_ibge.R", "scripts/14_painel_dados.R", ".github/workflows/n15_censo_ibge.yml", ".github/n15_modo.txt"]
 
 jobs:
   n15:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write   # para gravar os dados do painel no branch painel-dados
     timeout-minutes: 340
     env:
       CI: "true"
@@ -68,6 +70,21 @@ jobs:
           Rscript 13_enriquecimento_ibge.R 2>&1 | tee resultados/log_13_enriquecimento_ibge.txt
           exit ${PIPESTATUS[0]}
 
+      - name: Dados do painel (14_painel_dados.R)
+        working-directory: scripts
+        run: |
+          Rscript -e 'if (!requireNamespace("jsonlite", quietly = TRUE)) install.packages("jsonlite")'
+          Rscript 14_painel_dados.R 2>&1 | tee resultados/log_14_painel_dados.txt
+          exit ${PIPESTATUS[0]}
+
+      - name: Gravar dados do painel no branch painel-dados
+        run: |
+          cp scripts/resultados/N15_*.csv scripts/resultados/log_1[34]_*.txt painel/dados/ 2>/dev/null || true
+          cd painel/dados && ls -la && du -sh .
+          git init -q -b painel-dados && git add -A
+          git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" commit -q -m "Dados do painel ($ROTULO, ${GITHUB_SHA::7})"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" painel-dados
+
       - name: Guardar resultados
         if: always()
         uses: actions/upload-artifact@v4
@@ -75,4 +92,4 @@ jobs:
           name: N15_resultados_${{ env.ROTULO }}
           path: |
             scripts/resultados/N15_*.csv
-            scripts/resultados/log_13_enriquecimento_ibge.txt
+            scripts/resultados/log_1*.txt
