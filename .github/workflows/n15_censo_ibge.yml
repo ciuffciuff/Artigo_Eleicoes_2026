@@ -49,7 +49,7 @@ jobs:
           key: r-${{ runner.os }}-n15-v1
 
       - name: Pacotes R
-        run: Rscript -e 'for (p in c("data.table", "zip", "sf")) if (!requireNamespace(p, quietly = TRUE)) install.packages(p); library(sf)'
+        run: Rscript -e 'for (p in c("data.table", "zip", "sf", "bit64")) if (!requireNamespace(p, quietly = TRUE)) install.packages(p); library(sf)'
 
       - name: Rodar 13_enriquecimento_ibge.R
         working-directory: scripts

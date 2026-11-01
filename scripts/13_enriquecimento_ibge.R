@@ -98,11 +98,14 @@ obter_ibge <- function(pasta_url, prefixo) {
 # Lê só as colunas pedidas de um CSV do IBGE (nomes sem diferença de maiúsculas)
 ler_ibge <- function(arq, cols, texto = c("CD_SETOR", "SITUACAO")) {
   cab <- names(fread(arq, sep = ";", nrows = 0, encoding = "Latin-1"))
-  falta <- setdiff(cols, toupper(cab))
-  if (length(falta)) stop(basename(arq), " sem as colunas: ", paste(falta, collapse = ", "))
-  dt <- fread(arq, sep = ";", select = cab[toupper(cab) %in% cols], colClasses = "character",
+  cab_n <- toupper(gsub('^\ufeff|^\xef\xbb\xbf|"', "", cab, useBytes = TRUE))
+  if (!"CD_SETOR" %in% cab_n && length(grep("SETOR", cab_n))) cab_n[grep("SETOR", cab_n)[1]] <- "CD_SETOR"
+  falta <- setdiff(cols, cab_n)
+  if (length(falta)) stop(basename(arq), " sem as colunas: ", paste(falta, collapse = ", "),
+                          "\n  Colunas do arquivo (início): ", paste(head(cab, 15), collapse = ", "))
+  dt <- fread(arq, sep = ";", select = which(cab_n %in% cols), colClasses = "character",
               encoding = "Latin-1", na.strings = c("X", "x", ".", ""), showProgress = FALSE)
-  setnames(dt, toupper(names(dt)))
+  setnames(dt, cab_n[cab_n %in% cols])
   for (cc in setdiff(names(dt), texto)) set(dt, j = cc, value = num_br(dt[[cc]]))
   dt
 }
@@ -136,14 +139,20 @@ if (file.exists(arq_setor)) {
     apagar(a$csv, a$zip)
   }
   setor <- Reduce(function(a, b) merge(a, b, by = "CD_SETOR", all.x = TRUE), partes)
+  # "X" = célula com sigilo (contagem pequena). Nas somas por categoria vira 0;
+  # o setor só fica sem valor se todas as categorias estiverem com sigilo.
+  soma <- function(...) { m <- cbind(...); r <- rowSums(m, na.rm = TRUE); r[rowSums(!is.na(m)) == 0] <- NA; r }
   setor[, `:=`(
     pop = V0001,
-    cor_tot = V01317 + V01318 + V01319 + V01320 + V01321,
-    preta_parda = V01318 + V01320, indigena = V01321,
-    alf15 = V00900 + V00901, analf15 = V00901,
-    esg_tot = V00309 + V00310 + V00311 + V00312 + V00313 + V00314 + V00315 + V00316,
-    esg_rede = V00309,
+    cor_tot = soma(V01317, V01318, V01319, V01320, V01321),
+    preta_parda = soma(V01318, V01320), indigena = fcoalesce(V01321, 0),
+    alf15 = soma(V00900, V00901), analf15 = fcoalesce(V00901, 0),
+    esg_tot = soma(V00309, V00310, V00311, V00312, V00313, V00314, V00315, V00316),
+    esg_rede = fcoalesce(V00309, 0),
     resp = V06001, renda_soma = V06001 * V06004)]   # soma aproximada: média x responsáveis
+  setor[is.na(cor_tot), c("preta_parda", "indigena") := NA_real_]
+  setor[is.na(alf15), analf15 := NA_real_]
+  setor[is.na(esg_tot), esg_rede := NA_real_]
   setor <- setor[, .(CD_SETOR, SITUACAO, CD_SIT, CD_TIPO, AREA_KM2, CD_MUN, CD_RGI, pop, cor_tot,
                      preta_parda, indigena, alf15, analf15, esg_tot, esg_rede, resp, renda_soma)]
   fwrite(setor, arq_setor)
