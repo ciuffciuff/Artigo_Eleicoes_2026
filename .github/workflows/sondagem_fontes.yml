@@ -1,0 +1,69 @@
+name: Sondagem das fontes (TSE e IBGE)
+
+# Verifica, em poucos minutos, se os servidores do TSE e do IBGE respondem ao
+# GitHub Actions e mostra as colunas dos arquivos usados no script 13.
+on:
+  workflow_dispatch:
+  push:
+    branches: [ibge-actions]
+    paths: [".github/workflows/sondagem_fontes.yml"]
+
+jobs:
+  sondagem:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Acesso aos servidores
+        run: |
+          for u in \
+            https://cdn.tse.jus.br/estatistica/sead/odsele/municipio_tse_ibge/municipio_tse_ibge.zip \
+            https://cdn.tse.jus.br/estatistica/sead/odsele/perfil_eleitor_secao/perfil_eleitor_secao_2026_AC.zip \
+            https://cdn.tse.jus.br/estatistica/sead/odsele/eleitorado_locais_votacao/eleitorado_local_votacao_2026.zip \
+            https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/ \
+            https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/ ; do
+            echo "$u -> $(curl -s -o /dev/null -w '%{http_code} %{size_download}' -m 60 -L "$u")"
+          done
+
+      - name: Perfil por seção (AC) - colunas e cor/raça
+        run: |
+          mkdir -p p && cd p
+          curl -sSL -o ac.zip https://cdn.tse.jus.br/estatistica/sead/odsele/perfil_eleitor_secao/perfil_eleitor_secao_2026_AC.zip
+          unzip -o -q ac.zip && ls -la
+          f=$(ls *.csv | head -1)
+          python3 - "$f" <<'EOF'
+          import csv, sys, collections
+          f = sys.argv[1]
+          with open(f, encoding="latin-1") as h:
+              r = csv.reader(h, delimiter=";")
+              cab = next(r)
+              print("COLUNAS:", cab)
+              cont = {c: collections.Counter() for c in cab if c.startswith(("DS_", "CD_COR", "CD_RACA", "CD_ETNIA"))}
+              qt = cab.index("QT_ELEITORES") if "QT_ELEITORES" in cab else None
+              for i, l in enumerate(r):
+                  for c in cont:
+                      v = l[cab.index(c)]
+                      cont[c][v] += int(l[qt]) if qt is not None else 1
+              print("linhas:", i + 1)
+              for c, k in cont.items():
+                  if len(k) <= 40:
+                      print(c, dict(k.most_common()))
+                  else:
+                      print(c, len(k), "valores distintos")
+          EOF
+          ls *.pdf *.txt 2>/dev/null && head -c 4000 leiame* 2>/dev/null || true
+
+      - name: Locais de votação e correspondência TSE x IBGE - colunas
+        run: |
+          mkdir -p l && cd l
+          curl -sSL -o loc.zip https://cdn.tse.jus.br/estatistica/sead/odsele/eleitorado_locais_votacao/eleitorado_local_votacao_2026.zip
+          curl -sSL -o mun.zip https://cdn.tse.jus.br/estatistica/sead/odsele/municipio_tse_ibge/municipio_tse_ibge.zip
+          unzip -o -q loc.zip; unzip -o -q mun.zip; ls -la
+          for f in *.csv; do echo "== $f"; head -3 "$f" | iconv -f latin1 -t utf-8; wc -l "$f"; done
+
+      - name: IBGE - pastas do Censo 2022 (setores e malha)
+        run: |
+          curl -s -m 60 https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/ | grep -o 'href="[^"]*"' | head -60
+          echo "---- agregados por setores"
+          curl -s -m 60 "https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/" | grep -o 'href="[^"]*"' | head -60
+          echo "---- malha de setores 2022"
+          curl -s -m 60 "https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_de_setores_censitarios__divisoes_intramunicipais/censo_2022/" | grep -o 'href="[^"]*"' | head -60
