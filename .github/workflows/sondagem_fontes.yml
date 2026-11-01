@@ -13,57 +13,29 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Acesso aos servidores
+      - name: IBGE - listas de arquivos e dicionário
         run: |
-          for u in \
-            https://cdn.tse.jus.br/estatistica/sead/odsele/municipio_tse_ibge/municipio_tse_ibge.zip \
-            https://cdn.tse.jus.br/estatistica/sead/odsele/perfil_eleitor_secao/perfil_eleitor_secao_2026_AC.zip \
-            https://cdn.tse.jus.br/estatistica/sead/odsele/eleitorado_locais_votacao/eleitorado_local_votacao_2026.zip \
-            https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/ \
-            https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/ ; do
-            echo "$u -> $(curl -s -o /dev/null -w '%{http_code} %{size_download}' -m 60 -L "$u")"
-          done
-
-      - name: Perfil por seção (AC) - colunas e cor/raça
-        run: |
-          mkdir -p p && cd p
-          curl -sSL -o ac.zip https://cdn.tse.jus.br/estatistica/sead/odsele/perfil_eleitor_secao/perfil_eleitor_secao_2026_AC.zip
-          unzip -o -q ac.zip && ls -la
-          f=$(ls *.csv | head -1)
-          python3 - "$f" <<'EOF'
-          import csv, sys, collections
-          f = sys.argv[1]
-          with open(f, encoding="latin-1") as h:
-              r = csv.reader(h, delimiter=";")
-              cab = next(r)
-              print("COLUNAS:", cab)
-              cont = {c: collections.Counter() for c in cab if c.startswith(("DS_", "CD_COR", "CD_RACA", "CD_ETNIA"))}
-              qt = cab.index("QT_ELEITORES") if "QT_ELEITORES" in cab else None
-              for i, l in enumerate(r):
-                  for c in cont:
-                      v = l[cab.index(c)]
-                      cont[c][v] += int(l[qt]) if qt is not None else 1
-              print("linhas:", i + 1)
-              for c, k in cont.items():
-                  if len(k) <= 40:
-                      print(c, dict(k.most_common()))
-                  else:
-                      print(c, len(k), "valores distintos")
-          EOF
-          ls *.pdf *.txt 2>/dev/null && head -c 4000 leiame* 2>/dev/null || true
-
-      - name: Locais de votação e correspondência TSE x IBGE - colunas
-        run: |
-          mkdir -p l && cd l
-          curl -sSL -o loc.zip https://cdn.tse.jus.br/estatistica/sead/odsele/eleitorado_locais_votacao/eleitorado_local_votacao_2026.zip
-          curl -sSL -o mun.zip https://cdn.tse.jus.br/estatistica/sead/odsele/municipio_tse_ibge/municipio_tse_ibge.zip
-          unzip -o -q loc.zip; unzip -o -q mun.zip; ls -la
-          for f in *.csv; do echo "== $f"; head -3 "$f" | iconv -f latin1 -t utf-8; wc -l "$f"; done
-
-      - name: IBGE - pastas do Censo 2022 (setores e malha)
-        run: |
-          curl -s -m 60 https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/ | grep -o 'href="[^"]*"' | head -60
-          echo "---- agregados por setores"
-          curl -s -m 60 "https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/Agregados_por_Setores_Censitarios/" | grep -o 'href="[^"]*"' | head -60
-          echo "---- malha de setores 2022"
-          curl -s -m 60 "https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_de_setores_censitarios__divisoes_intramunicipais/censo_2022/" | grep -o 'href="[^"]*"' | head -60
+          B=https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022
+          M=https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_de_setores_censitarios__divisoes_intramunicipais/censo_2022
+          lista() { echo "---- $1"; curl -s -m 60 "$1" | grep -oE 'href="[^"?][^"]*"[^<]*</a></td><td[^>]*>[^<]*</td><td[^>]*>[^<]*' | sed 's/<[^>]*>/ /g' | head -80; }
+          lista $B/Agregados_por_Setores_Censitarios/Agregados_por_Setor_csv/
+          lista $B/Agregados_por_Setores_Censitarios/malha_com_atributos/
+          lista $B/Agregados_por_Setores_Censitarios_Rendimento_do_Responsavel/
+          lista $B/Favelas_e_comunidades_urbanas_Resultados_do_universo/
+          lista $M/setores/
+          lista $M/setores/gpkg/ || true
+          pip install -q openpyxl
+          curl -sSL -o dic.xlsx $B/Agregados_por_Setores_Censitarios/dicionario_de_dados_agregados_por_setores_censitarios_20260520.xlsx
+          python3 - <<'PY'
+          import openpyxl
+          wb = openpyxl.load_workbook("dic.xlsx", read_only=True)
+          print("ABAS:", wb.sheetnames)
+          for ws in wb.worksheets:
+              rows = list(ws.iter_rows(values_only=True))
+              print("=== ABA", ws.title, len(rows))
+              for r in rows[:4]: print(r)
+              for r in rows:
+                  t = " | ".join(str(x) for x in r if x is not None)
+                  if any(k in t for k in ["V0001", "V0002", "V0003", "V0004", "V0005", "V0006", "V0007", "V01317", "V01318", "V01319", "V01320", "V01321", "V00644", "V00748", "lfabetiz", "Rendimento", "rendimento", "esgot", "Arquivo", "arquivo"]):
+                      print(t[:300])
+          PY
