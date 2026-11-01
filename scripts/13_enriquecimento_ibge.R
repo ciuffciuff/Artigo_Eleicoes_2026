@@ -98,7 +98,7 @@ obter_ibge <- function(pasta_url, prefixo) {
 # Lê só as colunas pedidas de um CSV do IBGE (nomes sem diferença de maiúsculas)
 ler_ibge <- function(arq, cols, texto = c("CD_SETOR", "SITUACAO")) {
   cab <- names(fread(arq, sep = ";", nrows = 0, encoding = "Latin-1"))
-  cab_n <- toupper(gsub('^\ufeff|^\xef\xbb\xbf|"', "", cab, useBytes = TRUE))
+  cab_n <- toupper(gsub("[^A-Za-z0-9_]", "", cab))   # tira BOM e aspas
   if (!"CD_SETOR" %in% cab_n && length(grep("SETOR", cab_n))) cab_n[grep("SETOR", cab_n)[1]] <- "CD_SETOR"
   falta <- setdiff(cols, cab_n)
   if (length(falta)) stop(basename(arq), " sem as colunas: ", paste(falta, collapse = ", "),
