@@ -18,7 +18,7 @@ on:
         type: choice
         options: [teste, completo]
   push:
-    branches: [ibge-actions]
+    branches: [ibge-actions, ibge-teste]
     paths: ["scripts/13_enriquecimento_ibge.R", "scripts/14_painel_dados.R", ".github/workflows/n15_censo_ibge.yml", ".github/n15_modo.txt"]
 
 jobs:
@@ -78,6 +78,7 @@ jobs:
           exit ${PIPESTATUS[0]}
 
       - name: Gravar dados do painel no branch painel-dados
+        if: env.ROTULO == 'completo'
         run: |
           cp scripts/resultados/N15_*.csv scripts/resultados/log_1[34]_*.txt painel/dados/ 2>/dev/null || true
           cd painel/dados && ls -la && du -sh .
