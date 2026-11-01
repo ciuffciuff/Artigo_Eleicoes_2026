@@ -68,6 +68,19 @@ como diretório de trabalho antes de rodar. Os resultados novos vão para `scrip
   geradas por `scripts/gerar_figuras_n6_n11.py` (Python, pandas e matplotlib) a partir de `resultados/N*.csv`.
 - Para compilar o artigo: `pdflatex`, `bibtex`, `pdflatex`, `pdflatex` (requer os pacotes `abntex2cite` e `multibib`).
 
+## Painel HTML
+
+`painel/index.html` mostra Brasil > UF > município > local de votação > seção, com a votação dos dois
+turnos (todos os candidatos, brancos, nulos e abstenção), o perfil do eleitorado (TSE), o Censo 2022
+em volta do local de votação (IBGE) e os testes em que cada seção foi sinalizada.
+
+- Dados: `scripts/14_painel_dados.R` (seções, perfil, Censo, testes) e `scripts/15_painel_candidatos.R`
+  (votos de todos os candidatos, aptos e comparecimento, população do IBGE por município).
+- Os dois rodam no GitHub Actions (workflows `n15_censo_ibge.yml` e `painel_candidatos.yml`) e gravam
+  tudo, junto com o `index.html`, no branch `painel-dados`, publicado pelo GitHub Pages.
+- Para abrir no computador: baixe o branch `painel-dados` e sirva a pasta por um servidor web
+  (no R: `servr::httd("pasta")`); aberto direto do disco, o navegador bloqueia a leitura dos JSON.
+
 ## Licenças e créditos
 
 - `scripts/urna_vendor/`: [DataUrnas-BR](https://github.com/alissonlinneker/DataUrnas-BR), de Alisson Linneker,

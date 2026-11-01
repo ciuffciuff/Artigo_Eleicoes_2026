@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel – Eleição presidencial 2026 por seção eleitoral</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11,11,11,0.10); --wash: rgba(11,11,11,0.04);
+  --lula: #e34948; --flavio: #2a78d6; --outro: #a3a29b; --especial: #d6d5cf; --seq: #2a78d6;
+  --warn: #fab219; --crit: #d03b3b; --good: #006300; --link: #1c5cab;
+  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255,255,255,0.10); --wash: rgba(255,255,255,0.05);
+    --lula: #e66767; --flavio: #3987e5; --outro: #6b6a64; --especial: #45443f; --seq: #3987e5;
+    --good: #0ca30c; --link: #86b6ef;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 14px/1.45 var(--font); }
+a { color: var(--link); cursor: pointer; text-decoration: none; }
+a:hover { text-decoration: underline; }
+header { padding: 16px 24px 8px; }
+header h1 { font-size: 20px; margin: 0 0 2px; font-weight: 650; }
+header .sub { color: var(--ink2); font-size: 13px; }
+.barra { position: sticky; top: 0; z-index: 5; background: var(--page); border-bottom: 1px solid var(--grid);
+  padding: 8px 24px; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.barra label { color: var(--ink2); font-size: 12px; display: flex; flex-direction: column; gap: 2px; }
+select, input[type=search], input[list] { font: inherit; padding: 5px 8px; border: 1px solid var(--axis);
+  border-radius: 6px; background: var(--surface); color: var(--ink); min-width: 140px; }
+input[list] { min-width: 260px; }
+button { font: inherit; padding: 5px 10px; border: 1px solid var(--axis); border-radius: 6px;
+  background: var(--surface); color: var(--ink); cursor: pointer; }
+button:hover { background: var(--wash); }
+.trilha { padding: 10px 24px 0; font-size: 15px; }
+.trilha span.sep { color: var(--muted); margin: 0 6px; }
+main { padding: 8px 24px 40px; }
+.status { color: var(--ink2); padding: 24px 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; margin: 10px 0 14px; }
+.kpi { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 10px 12px; }
+.kpi .r { color: var(--ink2); font-size: 12px; }
+.kpi .v { font-size: 22px; font-weight: 600; }
+.kpi .n { color: var(--muted); font-size: 12px; }
+.grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 14px; }
+.cartao { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.cartao h2 { font-size: 15px; margin: 0 0 2px; font-weight: 650; }
+.cartao .nota { color: var(--ink2); font-size: 12px; margin: 0 0 10px; }
+.cheio { grid-column: 1 / -1; }
+/* barras horizontais */
+.hb { display: grid; grid-template-columns: minmax(170px, 44%) 1fr 84px; gap: 4px 10px; align-items: center; }
+.hb .rot { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hb .rot small { color: var(--muted); }
+.hb .trilho { position: relative; height: 14px; }
+.hb .bar { position: absolute; left: 0; top: 1px; height: 12px; border-radius: 0 4px 4px 0; min-width: 1px; }
+.hb .ref { position: absolute; top: -2px; width: 2px; height: 18px; background: var(--ink); opacity: .55; border-radius: 1px; }
+.hb .val { font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hb .val small { color: var(--muted); display: block; font-size: 11px; line-height: 1.1; }
+.hb .sep { grid-column: 1 / -1; border-top: 1px solid var(--grid); margin: 4px 0; }
+.legenda { display: flex; gap: 14px; flex-wrap: wrap; color: var(--ink2); font-size: 12px; margin-top: 8px; }
+.legenda i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.legenda i.tick { width: 2px; height: 12px; background: var(--ink); opacity: .55; }
+/* testes */
+.teste { display: grid; grid-template-columns: 56px 1fr auto; gap: 2px 10px; padding: 7px 6px; border-top: 1px solid var(--grid);
+  cursor: pointer; border-radius: 6px; }
+.teste:hover { background: var(--wash); }
+.teste.ativo { background: var(--wash); outline: 1px solid var(--axis); }
+.teste .cod { font-weight: 650; font-variant-numeric: tabular-nums; }
+.teste .desc { grid-column: 2 / 4; color: var(--ink2); font-size: 12px; }
+.teste .qt { font-variant-numeric: tabular-nums; text-align: right; }
+.teste.zero { opacity: .55; }
+.selo { display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px; border-radius: 999px; font-size: 12px;
+  background: color-mix(in srgb, var(--warn) 22%, transparent); border: 1px solid color-mix(in srgb, var(--warn) 70%, transparent); white-space: nowrap; }
+.selo.ok { background: transparent; border-color: var(--axis); color: var(--ink2); }
+/* tabela */
+.tabwrap { overflow: auto; max-height: 70vh; border: 1px solid var(--ring); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { padding: 5px 8px; border-bottom: 1px solid var(--grid); text-align: left; white-space: nowrap; }
+th { position: sticky; top: 0; background: var(--surface); font-weight: 600; cursor: pointer; user-select: none; z-index: 1; }
+th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+th .seta { color: var(--muted); font-size: 11px; }
+tbody tr:hover { background: var(--wash); }
+tbody tr.clic { cursor: pointer; }
+td.nome { max-width: 340px; overflow: hidden; text-overflow: ellipsis; }
+.ferr { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 0 0 8px; }
+.ferr .conta { color: var(--ink2); font-size: 12px; margin-left: auto; }
+.abas { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+.abas button.on { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+/* histograma */
+svg text { fill: var(--muted); font: 11px var(--font); }
+.dl { display: grid; grid-template-columns: minmax(0, 52%) 1fr; gap: 3px 14px; font-size: 13px; }
+.dl dt { color: var(--ink2); }
+.dl dd { margin: 0; font-variant-numeric: tabular-nums; }
+#tip { position: fixed; pointer-events: none; z-index: 20; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--ring); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 8px; padding: 7px 10px;
+  font-size: 12px; display: none; max-width: 320px; }
+footer { color: var(--ink2); font-size: 12px; padding: 0 24px 30px; max-width: 1100px; }
+footer p { margin: 6px 0; }
+.aviso { border-left: 3px solid var(--warn); padding: 6px 10px; background: var(--surface); color: var(--ink2);
+  font-size: 12px; margin: 8px 0 0; border-radius: 0 6px 6px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Eleição presidencial 2026 – painel por seção eleitoral</h1>
+  <div class="sub">Votação nos dois turnos (TSE), perfil do eleitorado (TSE), Censo 2022 (IBGE) em volta do local de votação e testes forenses do artigo.</div>
+</header>
+<div class="barra">
+  <label>Estado<select id="selUf"><option value="">Brasil</option></select></label>
+  <label>Município<input id="selMun" list="listaMun" placeholder="escolha a UF primeiro" disabled autocomplete="off"><datalist id="listaMun"></datalist></label>
+  <label>Destacar teste<select id="selTeste"><option value="">— nenhum —</option><option value="*">Qualquer teste</option></select></label>
+  <span id="carregando" style="color:var(--ink2);font-size:12px"></span>
+</div>
+<div class="trilha" id="trilha"></div>
+<main id="main"><div class="status">Carregando dados…</div></main>
+<footer id="rodape"></footer>
+<div id="tip"></div>
+
+<script>
+"use strict";
+// ============================================================================
+// Dados: resumo.json e uf_xx.json (script 14), candidatos.json, cand_uf_xx.json
+// e municipios.json (script 15). O painel funciona sem os arquivos do 15:
+// nesse caso o 1º turno mostra só os finalistas e "demais candidatos".
+// ============================================================================
+const NF = new Intl.NumberFormat("pt-BR");
+const fmt = x => x == null || isNaN(x) ? "–" : NF.format(Math.round(x));
+const pct = (x, d = 1) => x == null || !isFinite(x) ? "–" : (100 * x).toLocaleString("pt-BR", {minimumFractionDigits: d, maximumFractionDigits: d}) + "%";
+const dec = (x, d = 2) => x == null || !isFinite(x) ? "–" : x.toLocaleString("pt-BR", {minimumFractionDigits: d, maximumFractionDigits: d});
+const brl = x => x == null || !isFinite(x) ? "–" : "R$ " + NF.format(Math.round(x));
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const arr = x => x == null ? [] : Array.isArray(x) ? x : [x];
+const $ = id => document.getElementById(id);
+const cap = s => String(s).toLowerCase().replace(/(^|[\s\-\/(."])([a-zà-ú])/g, (m, a, b) => a + b.toUpperCase())
+  .replace(/ (De|Da|Do|Das|Dos|E|Ou|Em)(?= )/g, w => w.toLowerCase());
+
+const NUM_LULA = 13, NUM_FLAVIO = 22;
+const corCand = n => n === NUM_LULA ? "var(--lula)" : n === NUM_FLAVIO ? "var(--flavio)" : "var(--outro)";
+const nomeCurto = c => c.especial ? c.nome : cap(c.nome);
+
+const G = { base: "", resumo: null, cand: null, mun: null, ufs: {}, estado: {} };
+
+async function getJSON(nome, opcional) {
+  for (const b of [G.base, "", "dados/"]) {
+    try {
+      const r = await fetch(b + nome);
+      if (r.ok) { G.base = b; return await r.json(); }
+    } catch (e) { /* tenta o próximo */ }
+  }
+  if (opcional) return null;
+  throw new Error("não encontrei " + nome);
+}
+
+// ---------------------------------------------------------------------------
+// Carga de uma UF: junta as seções (14) com os votos de todos os candidatos (15)
+// ---------------------------------------------------------------------------
+async function carregarUf(uf) {
+  if (G.ufs[uf]) return G.ufs[uf];
+  $("carregando").textContent = "Carregando " + uf + "…";
+  const [d, c] = await Promise.all([getJSON("uf_" + uf.toLowerCase() + ".json"), getJSON("cand_uf_" + uf.toLowerCase() + ".json", true)]);
+  for (const g of ["municipios", "locais", "secoes"]) for (const k in d[g]) d[g][k] = arr(d[g][k]);
+  const S = d.secoes, n = S.mun.length;
+  const U = { uf, d, n, temCand: !!(c && G.cand) };
+  // índices
+  U.munCod = d.municipios.cod; U.munNome = d.municipios.nome.map(cap);
+  U.secDoMun = U.munCod.map(() => []); U.secDoLocal = d.locais.nome.map(() => []); U.locDoMun = U.munCod.map(() => []);
+  for (let i = 0; i < n; i++) { U.secDoMun[S.mun[i]].push(i); U.secDoLocal[S.local[i]].push(i); }
+  d.locais.mun.forEach((m, j) => U.locDoMun[m].push(j));
+  // votos: colunas V1[k][i], V2[k][i] na ordem de C1, C2
+  if (U.temCand) {
+    const pos = new Map(); arr(c.mun).forEach((m, j) => pos.set(m + "-" + c.zona[j] + "-" + c.secao[j], j));
+    const idx = new Int32Array(n);
+    for (let i = 0; i < n; i++) { const j = pos.get(U.munCod[S.mun[i]] + "-" + S.zona[i] + "-" + S.secao[i]); idx[i] = j == null ? -1 : j; }
+    const pega = col => { const v = new Float64Array(n); for (let i = 0; i < n; i++) v[i] = idx[i] < 0 || col[idx[i]] == null ? NaN : col[idx[i]]; return v; };
+    U.C1 = G.cand.candidatos["1"]; U.C2 = G.cand.candidatos["2"];
+    U.V1 = c.v1.map(col => pega(arr(col))); U.V2 = c.v2.map(col => pega(arr(col)));
+    U.apt = c.apt2 ? pega(arr(c.apt2)) : c.apt1 ? pega(arr(c.apt1)) : null;
+    U.cmp1 = c.cmp1 ? pega(arr(c.cmp1)) : null; U.cmp2 = c.cmp2 ? pega(arr(c.cmp2)) : null;
+    U.semCand = Array.from(idx).filter(v => v < 0).length;
+  } else {
+    const f = (a, b, s) => Float64Array.from(a, (x, i) => (x ?? NaN) - (b ? (b[i] ?? NaN) : 0) - (s ? (s[i] ?? NaN) : 0));
+    U.C1 = candFallback(1); U.C2 = candFallback(2);
+    const zero = new Float64Array(n);
+    U.V1 = [Float64Array.from(S.l1, x => x ?? NaN), Float64Array.from(S.f1, x => x ?? NaN),
+            Float64Array.from(S.v1, (x, i) => (x ?? NaN) - (S.l1[i] ?? NaN) - (S.f1[i] ?? NaN)), f(S.t1, S.v1)];
+    U.V2 = [Float64Array.from(S.l2, x => x ?? NaN), Float64Array.from(S.f2, x => x ?? NaN), f(S.t2, S.l2, S.f2)];
+    U.apt = null; U.cmp1 = Float64Array.from(S.t1, x => x ?? NaN); U.cmp2 = Float64Array.from(S.t2, x => x ?? NaN);
+  }
+  U.iL1 = U.C1.findIndex(x => x.num === NUM_LULA); U.iF1 = U.C1.findIndex(x => x.num === NUM_FLAVIO);
+  U.iL2 = U.C2.findIndex(x => x.num === NUM_LULA); U.iF2 = U.C2.findIndex(x => x.num === NUM_FLAVIO);
+  U.munIdx = new Map(U.munCod.map((m, j) => [m, j]));
+  G.ufs[uf] = U;
+  $("carregando").textContent = "";
+  return U;
+}
+
+function candFallback(t) {
+  return t === 1
+    ? [{num: 13, nome: "LUIZ INÁCIO LULA DA SILVA"}, {num: 22, nome: "FLAVIO NANTES BOLSONARO"},
+       {num: 0, nome: "Demais candidatos (somados)", especial: false, soma: true}, {num: 96, nome: "Brancos e nulos", especial: true}]
+    : [{num: 13, nome: "LUIZ INÁCIO LULA DA SILVA"}, {num: 22, nome: "FLAVIO NANTES BOLSONARO"}, {num: 96, nome: "Brancos e nulos", especial: true}];
+}
+
+// ---------------------------------------------------------------------------
+// Agregação de um conjunto de seções
+// ---------------------------------------------------------------------------
+const PERFIL = [
+  ["fem", "Mulheres"], ["i1624", "16 a 24 anos"], ["i60", "60 anos ou mais"],
+  ["sup", "Ensino superior (completo ou não)"], ["baixa", "Até fundamental incompleto"], ["bio", "Com biometria"],
+  ["rinf", "Informou cor ou raça"], ["rpp", "Preta ou parda (entre quem informou)"]];
+const CENSO = [
+  ["renda", "Renda média do responsável", brl], ["pp", "Preta ou parda", pct], ["ind", "Indígena", x => pct(x, 2)],
+  ["analf", "Analfabetismo (15 anos ou mais)", pct], ["esg", "Esgoto por rede geral", pct], ["dens", "Densidade (hab./km²)", fmt]];
+const MAP_RESUMO_TSE = {fem: "fem", i1624: "i16_24", i60: "i60", sup: "esc_sup", baixa: "esc_baixa", rinf: "raca_inf", rpp: "raca_pp"};
+const MAP_RESUMO_CENSO = {renda: "renda", pp: "preta_parda", ind: "indigena", analf: "analf", esg: "esgoto"};
+
+function agregar(U, ids) {
+  const S = U.d.secoes, L = U.d.locais, nb = G.resumo.testes.length;
+  const a = { n: ids.length, aptos: 0, apt: 0, cmp1: 0, cmp2: 0, v1: U.C1.map(() => 0), v2: U.C2.map(() => 0),
+    perfil: {}, censo: {}, terr: G.resumo.territorios.map(() => 0), flags: new Array(nb).fill(0), qualquer: 0, locais: new Set() };
+  const ps = {}, pw = {}; PERFIL.forEach(([k]) => { ps[k] = 0; pw[k] = 0; });
+  const cs = {}, cw = {}; CENSO.forEach(([k]) => { cs[k] = 0; cw[k] = 0; });
+  for (const i of ids) {
+    const ap = S.aptos[i];
+    if (ap) a.aptos += ap;
+    if (U.apt) { if (!isNaN(U.apt[i])) a.apt += U.apt[i]; }
+    if (!isNaN(U.cmp1[i])) a.cmp1 += U.cmp1[i];
+    if (!isNaN(U.cmp2[i])) a.cmp2 += U.cmp2[i];
+    for (let k = 0; k < U.V1.length; k++) { const v = U.V1[k][i]; if (!isNaN(v)) a.v1[k] += v; }
+    for (let k = 0; k < U.V2.length; k++) { const v = U.V2[k][i]; if (!isNaN(v)) a.v2[k] += v; }
+    if (ap) for (const [k] of PERFIL) {
+      const v = S[k][i]; if (v == null) continue;
+      if (k === "rpp") { const w = (S.rinf[i] ?? 0) * ap; ps[k] += v * w; pw[k] += w * 1000; }
+      else { ps[k] += v * ap; pw[k] += ap * 1000; }
+    }
+    const l = S.local[i]; a.locais.add(l);
+    const w = ap || (U.apt ? U.apt[i] : 0) || 1;
+    for (const [k] of CENSO) { const v = L[k][l]; if (v != null) { cs[k] += v * w; cw[k] += w; } }
+    a.terr[L.terr[l] ?? 5]++;
+    const f = S.flags[i];
+    if (f) { a.qualquer++; for (let b = 0; b < nb; b++) if (f & (1 << b)) a.flags[b]++; }
+  }
+  for (const [k] of PERFIL) a.perfil[k] = pw[k] ? ps[k] / pw[k] : null;
+  for (const [k] of CENSO) { const div = ["renda", "dens"].includes(k) ? 1 : 1000; a.censo[k] = cw[k] ? cs[k] / cw[k] / div : null; }
+  if (!U.apt) a.apt = a.aptos;
+  a.C1 = U.C1; a.C2 = U.C2;
+  return a;
+}
+
+// agregado no formato de agregar() a partir do resumo.json (Brasil ou UF)
+function agregadoResumo(r, totC) {
+  const a = { n: r.secoes, aptos: r.eleitores, apt: r.eleitores, cmp1: r.comparec_1, cmp2: r.comparec_2,
+    perfil: {}, censo: {}, terr: G.resumo.territorios.map(t => r.territorio[t] || 0),
+    flags: G.resumo.testes.map(t => r.sinalizadas[t.cod] || 0), qualquer: r.sinalizadas_qualquer, municipios: r.municipios };
+  for (const k in MAP_RESUMO_TSE) a.perfil[k] = r.tse[MAP_RESUMO_TSE[k]];
+  a.perfil.bio = null;
+  for (const k in MAP_RESUMO_CENSO) a.censo[k] = r.censo[MAP_RESUMO_CENSO[k]];
+  a.censo.dens = null;
+  if (G.cand && totC) {
+    a.C1 = G.cand.candidatos["1"]; a.C2 = G.cand.candidatos["2"]; a.v1 = totC["1"]; a.v2 = totC["2"];
+    if (totC.apt_2 || totC.apt_1) a.apt = totC.apt_2 || totC.apt_1;
+    if (totC.cmp_1) a.cmp1 = totC.cmp_1; if (totC.cmp_2) a.cmp2 = totC.cmp_2;
+  } else {
+    a.C1 = candFallback(1); a.C2 = candFallback(2);
+    a.v1 = [r.lula_1, r.flavio_1, r.validos_1 - r.lula_1 - r.flavio_1, r.comparec_1 - r.validos_1];
+    a.v2 = [r.lula_2, r.flavio_2, r.comparec_2 - r.lula_2 - r.flavio_2];
+  }
+  return a;
+}
+
+function validos(C, v) { let s = 0; C.forEach((c, k) => { if (!c.especial) s += v[k]; }); return s; }
+function pLula2(U, i) { const l = U.V2[U.iL2][i], f = U.V2[U.iF2][i]; return l + f > 0 ? l / (l + f) : NaN; }
+function pCand(C, v, num) { const k = C.findIndex(c => c.num === num); const val = validos(C, v); return k < 0 || !val ? null : v[k] / val; }
+
+// ---------------------------------------------------------------------------
+// Componentes visuais
+// ---------------------------------------------------------------------------
+const tip = $("tip");
+function mostraTip(ev, html) { tip.innerHTML = html; tip.style.display = "block";
+  const x = Math.min(ev.clientX + 14, innerWidth - tip.offsetWidth - 8), y = Math.min(ev.clientY + 14, innerHeight - tip.offsetHeight - 8);
+  tip.style.left = x + "px"; tip.style.top = y + "px"; }
+function escondeTip() { tip.style.display = "none"; }
+document.addEventListener("mouseover", ev => { const t = ev.target.closest("[data-tip]"); if (t) mostraTip(ev, t.dataset.tip); });
+document.addEventListener("mousemove", ev => { const t = ev.target.closest("[data-tip]"); if (t) mostraTip(ev, t.dataset.tip); else escondeTip(); });
+
+// barras horizontais: itens {rot, sub, valor (0-1 ou absoluto), max, ref, cor, txt, txt2, tip}
+function barras(itens, max) {
+  max = max || Math.max(...itens.filter(x => !x.sep).map(x => Math.max(x.valor || 0, x.ref || 0)), 1e-9);
+  return '<div class="hb">' + itens.map(x => x.sep ? '<div class="sep"></div>' :
+    `<div class="rot" title="${esc(x.rot)}">${x.rotHtml || esc(x.rot)}${x.sub ? ` <small>${esc(x.sub)}</small>` : ""}</div>
+     <div class="trilho" data-tip="${esc(x.tip || "")}">
+       <div class="bar" style="width:${x.valor == null ? 0 : Math.max(0, 100 * x.valor / max)}%;background:${x.cor || "var(--seq)"}"></div>
+       ${x.ref != null && isFinite(x.ref) ? `<div class="ref" style="left:calc(${Math.min(100, 100 * x.ref / max)}% - 1px)"></div>` : ""}
+     </div>
+     <div class="val">${x.txt ?? ""}${x.txt2 ? `<small>${x.txt2}</small>` : ""}</div>`).join("") + "</div>";
+}
+
+function cartaoVotos(t, a, ref, nomeRef) {
+  const C = t === 1 ? a.C1 : a.C2, v = t === 1 ? a.v1 : a.v2, cmp = t === 1 ? a.cmp1 : a.cmp2;
+  const Cr = ref && (t === 1 ? ref.C1 : ref.C2), vr = ref && (t === 1 ? ref.v1 : ref.v2);
+  const val = validos(C, v), valR = vr ? validos(Cr, vr) : null;
+  const refDe = c => { if (!vr) return null; const k = Cr.findIndex(x => x.num === c.num && x.nome === c.nome);
+    if (k < 0) return null; return c.especial ? vr[k] / (t === 1 ? ref.cmp1 : ref.cmp2) : vr[k] / valR; };
+  const itens = [];
+  C.forEach((c, k) => { if (c.especial) return;
+    const p = val ? v[k] / val : null, r = refDe(c);
+    itens.push({ rot: nomeCurto(c), sub: c.num ? String(c.num) : "", valor: p, ref: r, cor: corCand(c.num), txt: pct(p, p != null && p < 0.01 ? 2 : 1), txt2: fmt(v[k]) + (v[k] === 1 ? " voto" : " votos"),
+      tip: `<b>${esc(nomeCurto(c))}</b><br>${pct(p, 2)} dos válidos · ${fmt(v[k])} votos` + (r != null ? `<br>${esc(nomeRef)}: ${pct(r, 2)}` : "") }); });
+  const maxV = Math.max(...itens.map(x => Math.max(x.valor || 0, x.ref || 0)), 1e-9);
+  const esp = [];
+  C.forEach((c, k) => { if (!c.especial) return; const p = cmp ? v[k] / cmp : null, r = refDe(c);
+    esp.push({ rot: c.nome, sub: "% do comparecimento", valor: p, ref: r, cor: "var(--especial)", txt: pct(p, p != null && p < 0.01 ? 2 : 1), txt2: fmt(v[k]),
+      tip: `<b>${esc(c.nome)}</b><br>${pct(p, 2)} do comparecimento · ${fmt(v[k])}` + (r != null ? `<br>${esc(nomeRef)}: ${pct(r, 2)}` : "") }); });
+  const aptos = a.apt || a.aptos, abst = aptos ? 1 - cmp / aptos : null;
+  const refAbst = ref ? 1 - (t === 1 ? ref.cmp1 : ref.cmp2) / (ref.apt || ref.aptos) : null;
+  esp.push({ rot: "Abstenção", sub: "% dos aptos", valor: abst, ref: refAbst, cor: "var(--especial)", txt: pct(abst), txt2: fmt(aptos - cmp),
+    tip: `<b>Abstenção</b><br>${pct(abst, 2)} dos ${fmt(aptos)} aptos` + (refAbst != null ? `<br>${esc(nomeRef)}: ${pct(refAbst, 2)}` : "") });
+  const maxE = Math.max(...esp.map(x => Math.max(x.valor || 0, x.ref || 0)), 1e-9);
+  // barras de válidos e especiais em escalas próprias (são bases diferentes)
+  const fallback = C.some(c => c.soma) ? `<div class="aviso">Votos dos demais candidatos ainda não carregados (rode o script 15): mostrando só os finalistas e a soma dos outros.</div>` : "";
+  return `<div class="cartao"><h2>${t}º turno</h2>
+    <p class="nota">% dos votos válidos (${fmt(val)}) · comparecimento ${fmt(cmp)}${aptos ? " de " + fmt(aptos) + " aptos (" + pct(cmp / aptos) + ")" : ""}</p>
+    ${barras(itens, maxV)}<div style="height:10px"></div>${barras(esp, maxE)}
+    <div class="legenda"><span><i style="background:var(--lula)"></i>Lula</span><span><i style="background:var(--flavio)"></i>Flávio</span>
+    <span><i style="background:var(--outro)"></i>demais candidatos</span>${ref ? `<span><i class="tick"></i>${esc(nomeRef)}</span>` : ""}</div>${fallback}</div>`;
+}
+
+function cartaoPerfil(a, ref, nomeRef, titulo, nota) {
+  const itens = PERFIL.map(([k, r]) => ({ rot: r, valor: a.perfil[k], ref: ref ? ref.perfil[k] : null, txt: pct(a.perfil[k]),
+    tip: `<b>${esc(r)}</b><br>${pct(a.perfil[k], 2)}` + (ref && ref.perfil[k] != null ? `<br>${esc(nomeRef)}: ${pct(ref.perfil[k], 2)}` : "") }));
+  return `<div class="cartao"><h2>${titulo || "Perfil do eleitorado (TSE)"}</h2>
+    <p class="nota">${nota || "% dos eleitores aptos da seção, pelo cadastro do TSE de 2026. Cor ou raça só para quem informou (cerca de 20% dos eleitores)."}</p>
+    ${barras(itens, 1)}<div class="legenda"><span><i style="background:var(--seq)"></i>esta seleção</span>${ref ? `<span><i class="tick"></i>${esc(nomeRef)}</span>` : ""}</div></div>`;
+}
+
+function cartaoCenso(a, ref, nomeRef, extra) {
+  const linhas = CENSO.filter(([k]) => k !== "renda" && k !== "dens").map(([k, r, f]) => ({ rot: r, valor: a.censo[k], ref: ref ? ref.censo[k] : null, txt: f(a.censo[k]),
+    tip: `<b>${esc(r)}</b><br>${f(a.censo[k])}` + (ref && ref.censo[k] != null ? `<br>${esc(nomeRef)}: ${f(ref.censo[k])}` : "") }));
+  const T = G.resumo.territorios, tot = a.terr.reduce((s, x) => s + x, 0) || 1;
+  const terr = T.map((t, k) => ({ rot: cap(t), valor: a.terr[k] / tot, txt: pct(a.terr[k] / tot), txt2: fmt(a.terr[k]) + " seções",
+    ref: ref ? ref.terr[k] / (ref.terr.reduce((s, x) => s + x, 0) || 1) : null, cor: "var(--outro)",
+    tip: `<b>${esc(cap(t))}</b><br>${fmt(a.terr[k])} seções (${pct(a.terr[k] / tot)})` })).filter(x => x.valor > 0 || (x.ref || 0) > 0);
+  return `<div class="cartao"><h2>Censo 2022 (IBGE) em volta do local de votação</h2>
+    <p class="nota">Setores censitários num raio de 1 km do local de votação, ponderados pelos eleitores de cada seção. Território: o do setor onde fica o local.</p>
+    <dl class="dl" style="margin-bottom:10px">
+      <dt>Renda média do responsável pelo domicílio</dt><dd>${brl(a.censo.renda)}${ref && ref.censo.renda ? ` <span style="color:var(--muted)">(${esc(nomeRef)}: ${brl(ref.censo.renda)})</span>` : ""}</dd>
+      ${a.censo.dens != null ? `<dt>Densidade</dt><dd>${fmt(a.censo.dens)} hab./km²</dd>` : ""}
+      ${extra || ""}
+    </dl>
+    ${barras(linhas, Math.max(...linhas.map(x => Math.max(x.valor || 0, x.ref || 0)), 0.01))}
+    <div style="height:12px"></div><div class="nota" style="margin:0 0 4px">Território das seções</div>${barras(terr, 1)}
+    <div class="legenda"><span><i style="background:var(--seq)"></i>esta seleção</span>${ref ? `<span><i class="tick"></i>${esc(nomeRef)}</span>` : ""}</div></div>`;
+}
+
+function cartaoTestes(a) {
+  const T = G.resumo.testes, sel = G.estado.teste;
+  return `<div class="cartao"><h2>Testes forenses</h2>
+    <p class="nota">Seções sinalizadas em cada teste nesta seleção (${fmt(a.qualquer)} em pelo menos um, ${pct(a.qualquer / a.n, 2)} das ${fmt(a.n)} seções).
+    Clique num teste para destacá-lo nas tabelas. Sinalização é um alerta estatístico para verificação, não prova de irregularidade.</p>
+    ${T.map((t, b) => `<div class="teste ${a.flags[b] ? "" : "zero"} ${sel === t.cod ? "ativo" : ""}" data-teste="${t.cod}">
+      <span class="cod">${t.cod}</span><span>${esc(t.nome)}</span><span class="qt">${fmt(a.flags[b])}${a.flags[b] ? ` <small style="color:var(--muted)">(${pct(a.flags[b] / a.n, 2)})</small>` : ""}</span>
+      <span class="desc">${esc(t.descricao)}</span></div>`).join("")}</div>`;
+}
+
+function histograma(U, ids, titulo) {
+  const nb = 50, cont = new Array(nb).fill(0), contF = new Array(nb).fill(0), bit = bitTeste();
+  let sem = 0;
+  for (const i of ids) { const p = pLula2(U, i); if (isNaN(p)) { sem++; continue; } const b = Math.min(nb - 1, Math.floor(p * nb)); cont[b]++;
+    if (bit != null && marcado(U.d.secoes.flags[i], bit)) contF[b]++; }
+  const W = 640, H = 200, m = {l: 44, r: 10, t: 10, b: 28}, w = W - m.l - m.r, h = H - m.t - m.b, mx = Math.max(...cont, 1);
+  const bw = w / nb; let s = "";
+  const ticks = niceTicks(mx);
+  ticks.forEach(v => { const y = m.t + h - h * v / mx; s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y}" y2="${y}" stroke="var(--grid)"/><text x="${m.l - 6}" y="${y + 4}" text-anchor="end">${fmt(v)}</text>`; });
+  cont.forEach((c, b) => { const x = m.l + b * bw, bh = h * c / mx;
+    const tipTxt = `Lula entre ${b * 2}% e ${b * 2 + 2}% dos votos dos finalistas<br><b>${fmt(c)}</b> seções` + (bit != null ? `<br>${fmt(contF[b])} sinalizadas no teste destacado` : "");
+    s += `<g data-tip="${esc(tipTxt)}"><rect x="${x}" y="${m.t}" width="${bw}" height="${h}" fill="transparent"/>`;
+    if (c) s += `<rect x="${x + 1}" y="${m.t + h - bh}" width="${Math.max(bw - 2, 1)}" height="${bh}" rx="2" fill="var(--seq)"/>`;
+    if (contF[b]) { const fh = Math.max(2, h * contF[b] / mx); s += `<rect x="${x + 1}" y="${m.t + h - fh}" width="${Math.max(bw - 2, 1)}" height="${fh}" rx="2" fill="var(--warn)"/>`; }
+    s += "</g>"; });
+  s += `<line x1="${m.l}" x2="${W - m.r}" y1="${m.t + h}" y2="${m.t + h}" stroke="var(--axis)"/>`;
+  [0, 25, 50, 75, 100].forEach(v => { const x = m.l + w * v / 100; s += `<text x="${x}" y="${H - 8}" text-anchor="middle">${v}%</text>`; });
+  return `<div class="cartao"><h2>${titulo}</h2>
+    <p class="nota">Número de seções por faixa de 2 pontos de % de Lula entre os votos dos dois finalistas no 2º turno${sem ? ` (${fmt(sem)} seções sem votos)` : ""}.</p>
+    <svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Histograma do % de Lula por seção">${s}</svg>
+    ${bit != null ? `<div class="legenda"><span><i style="background:var(--seq)"></i>todas as seções</span><span><i style="background:var(--warn)"></i>sinalizadas no teste destacado</span></div>` : ""}</div>`;
+}
+function niceTicks(mx) { const st = Math.pow(10, Math.floor(Math.log10(mx / 4 || 1))); const k = [1, 2, 5, 10].find(k => mx / (k * st) <= 5) * st;
+  const out = []; for (let v = k; v <= mx; v += k) out.push(v); return out; }
+
+// ---------------------------------------------------------------------------
+// Tabela ordenável com busca e exportação
+// ---------------------------------------------------------------------------
+function tabela(id, cols, linhas, opc = {}) {
+  const T = { cols, linhas, ord: opc.ord ?? null, desc: opc.desc ?? true, busca: "", lim: 300, clique: opc.clique, nome: opc.nome || "tabela" };
+  linhas.forEach((r, k) => { r._k = k; });
+  TABS[id] = T;
+  return `<div class="ferr"><input type="search" placeholder="Buscar…" data-busca="${id}">
+    <button data-csv="${id}">Baixar CSV</button><span class="conta" id="conta_${id}"></span></div>
+    <div class="tabwrap"><table id="tab_${id}"></table></div>`;
+}
+const TABS = {};
+function desenhaTabela(id) {
+  const T = TABS[id], el = $("tab_" + id); if (!el) return;
+  let ls = T.linhas;
+  if (T.busca) { const b = T.busca.toLowerCase(); ls = ls.filter(r => T.cols.some(c => c.busca && String(c.v(r) ?? "").toLowerCase().includes(b))); }
+  if (T.ord != null) { const c = T.cols[T.ord]; const s = T.desc ? -1 : 1;
+    ls = ls.slice().sort((x, y) => { const a = c.s ? c.s(x) : c.v(x), b = c.s ? c.s(y) : c.v(y);
+      if (a == null || (typeof a === "number" && isNaN(a))) return 1; if (b == null || (typeof b === "number" && isNaN(b))) return -1;
+      return (a > b ? 1 : a < b ? -1 : 0) * s; }); }
+  const mostra = ls.slice(0, T.lim);
+  el.innerHTML = `<thead><tr>${T.cols.map((c, k) => `<th class="${c.num ? "num" : ""}" data-ord="${id}:${k}" title="${esc(c.dica || "")}">${esc(c.t)}${T.ord === k ? ` <span class="seta">${T.desc ? "▼" : "▲"}</span>` : ""}</th>`).join("")}</tr></thead>
+    <tbody>${mostra.map((r, j) => `<tr class="${T.clique ? "clic" : ""}" data-lin="${id}:${r._k}">${T.cols.map(c => `<td class="${c.num ? "num" : ""} ${c.nome ? "nome" : ""}">${c.h ? c.h(r) : esc(c.f ? c.f(c.v(r)) : c.v(r))}</td>`).join("")}</tr>`).join("")}</tbody>`;
+  $("conta_" + id).innerHTML = `${fmt(ls.length)} linhas` + (ls.length > T.lim ? ` · mostrando ${fmt(T.lim)} <a data-mais="${id}">mostrar mais</a>` : "");
+}
+function csv(id) {
+  const T = TABS[id], q = s => { s = String(s ?? ""); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const linhas = [T.cols.map(c => q(c.t)).join(";")].concat(T.linhas.map(r => T.cols.map(c => { const v = c.csv ? c.csv(r) : c.v(r);
+    return q(typeof v === "number" ? String(v).replace(".", ",") : v); }).join(";")));
+  const blob = new Blob(["﻿" + linhas.join("\n")], {type: "text/csv;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = T.nome + ".csv"; a.click();
+}
+
+// ---------------------------------------------------------------------------
+// Testes: filtro/destaque
+// ---------------------------------------------------------------------------
+function bitTeste() { const t = G.estado.teste; if (!t) return null; if (t === "*") return -1; const x = G.resumo.testes.find(x => x.cod === t); return x ? x.bit : null; }
+const marcado = (f, bit) => bit === -1 ? f > 0 : (f & (1 << bit)) !== 0;
+const codsTestes = f => G.resumo.testes.filter(t => f & (1 << t.bit)).map(t => t.cod);
+function selosTestes(f) { const c = codsTestes(f); return c.length ? c.map(x => `<span class="selo" data-tip="${esc(G.resumo.testes.find(t => t.cod === x).nome)}">⚑ ${x}</span>`).join(" ") : ""; }
+function contaFlag(U, ids) { const bit = bitTeste(); if (bit == null) return ids.reduce((s, i) => s + (U.d.secoes.flags[i] ? 1 : 0), 0);
+  return ids.reduce((s, i) => s + (marcado(U.d.secoes.flags[i], bit) ? 1 : 0), 0); }
+const rotFlag = () => { const t = G.estado.teste; return !t ? "Sinalizadas" : t === "*" ? "Sinalizadas" : "Sinal. " + t; };
+
+// ---------------------------------------------------------------------------
+// Navegação (estado no endereço: #uf=SP&m=71072&l=12&s=1-23)
+// ---------------------------------------------------------------------------
+function lerHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  return { uf: p.get("uf") || "", m: p.get("m") ? +p.get("m") : null, l: p.get("l") != null ? +p.get("l") : null, s: p.get("s") || null,
+           teste: p.get("t") || "", aba: p.get("a") || "" };
+}
+function irPara(e) {
+  const p = new URLSearchParams();
+  const x = Object.assign({}, G.estado, e);
+  if (x.uf) p.set("uf", x.uf); if (x.uf && x.m != null) p.set("m", x.m); if (x.m != null && x.l != null) p.set("l", x.l);
+  if (x.m != null && x.s) p.set("s", x.s); if (x.teste) p.set("t", x.teste); if (x.aba) p.set("a", x.aba);
+  location.hash = p.toString();
+}
+window.addEventListener("hashchange", render);
+
+document.addEventListener("click", ev => {
+  const t = ev.target;
+  const ir = t.closest("[data-ir]"); if (ir) { ev.preventDefault(); irPara(JSON.parse(ir.dataset.ir)); return; }
+  const th = t.closest("[data-ord]"); if (th) { const [id, k] = th.dataset.ord.split(":"); const T = TABS[id];
+    if (T.ord === +k) T.desc = !T.desc; else { T.ord = +k; T.desc = !!T.cols[k].num; } desenhaTabela(id); return; }
+  const tr = t.closest("[data-lin]"); if (tr) { const [id, k] = tr.dataset.lin.split(":"); const T = TABS[id]; if (T.clique) T.clique(T.linhas[+k]); return; }
+  const mais = t.closest("[data-mais]"); if (mais) { TABS[mais.dataset.mais].lim += 1000; desenhaTabela(mais.dataset.mais); return; }
+  const c = t.closest("[data-csv]"); if (c) { csv(c.dataset.csv); return; }
+  const te = t.closest("[data-teste]"); if (te) { const cod = te.dataset.teste; irPara({teste: G.estado.teste === cod ? "" : cod}); return; }
+  const ab = t.closest("[data-aba]"); if (ab) { irPara({aba: ab.dataset.aba}); return; }
+});
+document.addEventListener("input", ev => { const b = ev.target.dataset.busca; if (b) { TABS[b].busca = ev.target.value; TABS[b].lim = 300; desenhaTabela(b); } });
+
+$("selUf").addEventListener("change", e => irPara({uf: e.target.value, m: null, l: null, s: null, aba: ""}));
+$("selTeste").addEventListener("change", e => irPara({teste: e.target.value}));
+$("selMun").addEventListener("change", e => {
+  const U = G.ufs[G.estado.uf]; if (!U) return;
+  const v = e.target.value.trim().toLowerCase(); const j = U.munNome.findIndex(n => n.toLowerCase() === v);
+  if (j >= 0) irPara({m: U.munCod[j], l: null, s: null, aba: ""});
+});
+
+// ---------------------------------------------------------------------------
+// Telas
+// ---------------------------------------------------------------------------
+function kpis(a, secao) {
+  const aptos = a.apt || a.aptos;
+  let k = [["Seções", fmt(a.n), a.municipios ? fmt(a.municipios) + " municípios" : a.locais ? fmt(a.locais.size) + " locais de votação" : ""],
+    ["Eleitores aptos", fmt(aptos), ""],
+    ["Comparecimento 1º turno", pct(a.cmp1 / aptos), fmt(a.cmp1)], ["Comparecimento 2º turno", pct(a.cmp2 / aptos), fmt(a.cmp2)],
+    ["Lula no 2º turno", pct(pCand(a.C2, a.v2, NUM_LULA)), "dos válidos"], ["Flávio no 2º turno", pct(pCand(a.C2, a.v2, NUM_FLAVIO)), "dos válidos"],
+    ["Sinalizadas em algum teste", fmt(a.qualquer), pct(a.qualquer / a.n, 2) + " das seções"]];
+  if (secao) k = k.slice(1, -1);
+  return `<div class="kpis">${k.map(([r, v, n]) => `<div class="kpi"><div class="r">${r}</div><div class="v">${v}</div><div class="n">${n}</div></div>`).join("")}</div>`;
+}
+const irJ = o => esc(JSON.stringify(o));
+
+function trilha(partes) {
+  $("trilha").innerHTML = partes.map((p, k) => k === partes.length - 1 ? `<b>${esc(p[0])}</b>` : `<a data-ir="${irJ(p[1])}">${esc(p[0])}</a>`).join('<span class="sep">›</span>');
+}
+
+let brasilAg = null;
+function agBrasil() { if (!brasilAg) brasilAg = agregadoResumo(G.resumo.brasil, G.cand && G.cand.brasil); return brasilAg; }
+function agUfResumo(uf) { return agregadoResumo(G.resumo.ufs[uf], G.cand && G.cand.ufs[uf]); }
+
+async function render() {
+  const e = lerHash(); G.estado = e;
+  $("selUf").value = e.uf; $("selTeste").value = e.teste;
+  const main = $("main");
+  try {
+    if (!e.uf) { telaBrasil(main); return; }
+    const U = await carregarUf(e.uf);
+    if (G.estado !== e) return;            // o usuário já navegou para outro lugar
+    $("selMun").disabled = false; $("selMun").placeholder = "digite o nome";
+    const dl = $("listaMun"); if (dl.dataset.uf !== e.uf) { dl.innerHTML = U.munNome.map(n => `<option value="${esc(n)}">`).join(""); dl.dataset.uf = e.uf; }
+    const mj = e.m != null ? U.munIdx.get(e.m) : null;
+    $("selMun").value = mj != null ? U.munNome[mj] : "";
+    if (mj == null) telaUf(main, U);
+    else if (e.s) telaSecao(main, U, mj, e.s);
+    else if (e.l != null) telaLocal(main, U, mj, e.l);
+    else telaMunicipio(main, U, mj);
+  } catch (err) { main.innerHTML = `<div class="status">Erro: ${esc(err.message)}</div>`; console.error(err); }
+}
+
+function telaBrasil(main) {
+  $("selMun").disabled = true; $("selMun").value = ""; $("selMun").placeholder = "escolha a UF primeiro";
+  trilha([["Brasil"]]);
+  const a = agBrasil(), R = G.resumo, bit = bitTeste();
+  const ufs = Object.keys(R.ufs).sort();
+  const linhas = ufs.map(u => { const x = agUfResumo(u), r = R.ufs[u];
+    return { uf: u, x, r, sin: bit == null || bit === -1 ? r.sinalizadas_qualquer : (r.sinalizadas[G.estado.teste] || 0) }; });
+  const cols = [
+    {t: "UF", v: r => r.uf, busca: true},
+    {t: "Municípios", v: r => r.r.municipios, num: 1, f: fmt}, {t: "Seções", v: r => r.r.secoes, num: 1, f: fmt},
+    {t: "Aptos", v: r => r.x.apt, num: 1, f: fmt},
+    {t: "Comp. 2º t.", v: r => r.x.cmp2 / r.x.apt, num: 1, f: pct},
+    {t: "Lula 1º", v: r => pCand(r.x.C1, r.x.v1, NUM_LULA), num: 1, f: pct}, {t: "Flávio 1º", v: r => pCand(r.x.C1, r.x.v1, NUM_FLAVIO), num: 1, f: pct},
+    {t: "Lula 2º", v: r => pCand(r.x.C2, r.x.v2, NUM_LULA), num: 1, f: pct}, {t: "Flávio 2º", v: r => pCand(r.x.C2, r.x.v2, NUM_FLAVIO), num: 1, f: pct},
+    {t: "Renda (Censo)", v: r => r.r.censo.renda, num: 1, f: brl},
+    {t: rotFlag(), v: r => r.sin, num: 1, f: fmt}, {t: "% sinal.", v: r => r.sin / r.r.secoes, num: 1, f: x => pct(x, 2)},
+    {t: "Eleitorado/pop. 15+ (mediana)", v: r => r.r.eleitorado_pop15 ? r.r.eleitorado_pop15.mediana : null, num: 1, f: x => dec(x)}];
+  main.innerHTML = kpis(a) +
+    `<div class="grade">${cartaoVotos(1, a)}${cartaoVotos(2, a)}${cartaoPerfil(a)}${cartaoCenso(a, null, null,
+      R.brasil.eleitorado_pop15 ? `<dt>Eleitorado TSE / população 15+ (mediana dos municípios)</dt><dd>${dec(R.brasil.eleitorado_pop15.mediana)}</dd><dt>Municípios com razão acima de 1,2</dt><dd>${fmt(R.brasil.eleitorado_pop15.acima_1_2)}</dd>` : "")}
+     ${cartaoTestes(a)}
+     <div class="cartao cheio"><h2>Estados</h2><p class="nota">Clique numa UF para ver municípios, locais e seções.</p>${tabela("ufs", cols, linhas, {ord: 0, desc: false, clique: r => irPara({uf: r.uf, m: null, l: null, s: null}), nome: "estados"})}</div>
+    </div>`;
+  desenhaTabela("ufs");
+}
+
+function linhaMun(U, j, mun) {
+  const ids = U.secDoMun[j], a = agregar(U, ids);
+  const k = mun ? mun.CD_MUNICIPIO.indexOf(U.munCod[j]) : -1;
+  return { j, nome: U.munNome[j], a, sin: contaFlag(U, ids),
+    pop: k >= 0 ? mun.pop[k] : null, razao: k >= 0 ? mun.razao[k] : null, n12: k >= 0 ? mun.n12_dip[k] : null };
+}
+
+function telaUf(main, U) {
+  const uf = U.uf; trilha([["Brasil", {uf: "", m: null}], [uf]]);
+  const ids = Array.from({length: U.n}, (_, i) => i), a = agregar(U, ids), ref = agBrasil();
+  a.municipios = U.munCod.length;
+  const mun = G.mun && G.mun[uf];
+  const linhas = U.munCod.map((_, j) => linhaMun(U, j, mun));
+  const cols = [
+    {t: "Município", v: r => r.nome, busca: true, nome: 1},
+    {t: "Seções", v: r => r.a.n, num: 1, f: fmt}, {t: "Aptos", v: r => r.a.apt, num: 1, f: fmt},
+    {t: "Comp. 2º t.", v: r => r.a.cmp2 / r.a.apt, num: 1, f: pct},
+    {t: "Lula 1º", v: r => pCand(U.C1, r.a.v1, NUM_LULA), num: 1, f: pct}, {t: "Flávio 1º", v: r => pCand(U.C1, r.a.v1, NUM_FLAVIO), num: 1, f: pct},
+    {t: "Lula 2º", v: r => pCand(U.C2, r.a.v2, NUM_LULA), num: 1, f: pct}, {t: "Flávio 2º", v: r => pCand(U.C2, r.a.v2, NUM_FLAVIO), num: 1, f: pct},
+    {t: "Renda (Censo)", v: r => r.a.censo.renda, num: 1, f: brl},
+    {t: "População (IBGE)", v: r => r.pop, num: 1, f: fmt},
+    {t: "Eleitorado/pop. 15+", v: r => r.razao, num: 1, f: x => dec(x), dica: "Eleitores aptos (TSE 2026) / população de 15 anos ou mais (Censo 2022). Descritivo: o eleitor pode votar fora de onde mora."},
+    {t: rotFlag(), v: r => r.sin, num: 1, f: fmt},
+    {t: "N12", v: r => r.n12, num: 1, h: r => r.n12 != null ? `<span class="selo" data-tip="Distribuição multimodal (teste do dip de Hartigan), dip = ${dec(r.n12, 3)}">⚑ N12</span>` : "", csv: r => r.n12, dica: "Município com distribuição do voto multimodal (teste N12)"}];
+  const aba = G.estado.aba || "mun";
+  let corpo;
+  if (aba === "sin") {
+    const bit = bitTeste() ?? -1;
+    const sel = ids.filter(i => marcado(U.d.secoes.flags[i], bit));
+    corpo = tabelaSecoes(U, sel, "sinuf", "secoes_sinalizadas_" + uf, true);
+  } else corpo = tabela("muns", cols, linhas, {ord: 0, desc: false, clique: r => irPara({m: U.munCod[r.j], l: null, s: null, aba: ""}), nome: "municipios_" + uf});
+  main.innerHTML = kpis(a) +
+    `<div class="grade">${cartaoVotos(1, a, ref, "Brasil")}${cartaoVotos(2, a, ref, "Brasil")}${cartaoPerfil(a, ref, "Brasil")}${cartaoCenso(a, ref, "Brasil")}
+     ${histograma(U, ids, "Distribuição por seção – " + uf)}${cartaoTestes(a)}
+     <div class="cartao cheio"><div class="abas"><button data-aba="mun" class="${aba === "mun" ? "on" : ""}">Municípios</button>
+       <button data-aba="sin" class="${aba === "sin" ? "on" : ""}">Seções sinalizadas${G.estado.teste && G.estado.teste !== "*" ? " em " + G.estado.teste : ""}</button></div>${corpo}</div></div>`;
+  desenhaTabela(aba === "sin" ? "sinuf" : "muns");
+}
+
+function tabelaSecoes(U, ids, id, nome, comMun) {
+  const S = U.d.secoes, L = U.d.locais;
+  const linhas = ids.map(i => {
+    const v1 = U.V1.map(c => c[i]), v2 = U.V2.map(c => c[i]);
+    return { i, mun: U.munNome[S.mun[i]], local: L.nome[S.local[i]], z: S.zona[i], s: S.secao[i], ap: U.apt ? U.apt[i] : S.aptos[i],
+      c2: U.cmp2[i], l1: pCand(U.C1, v1, NUM_LULA), f1: pCand(U.C1, v1, NUM_FLAVIO), l2: pLula2(U, i), zc: S.zcen[i], fl: S.flags[i],
+      terr: G.resumo.territorios[L.terr[S.local[i]] ?? 5] };
+  });
+  const cols = [].concat(comMun ? [{t: "Município", v: r => r.mun, busca: true, nome: 1}] : [],
+    [{t: "Local de votação", v: r => cap(r.local), busca: true, nome: 1}, {t: "Zona", v: r => r.z, num: 1}, {t: "Seção", v: r => r.s, num: 1, busca: true},
+     {t: "Aptos", v: r => r.ap, num: 1, f: fmt}, {t: "Comp. 2º t.", v: r => r.c2 / r.ap, num: 1, f: pct},
+     {t: "Lula 1º", v: r => r.l1, num: 1, f: pct}, {t: "Flávio 1º", v: r => r.f1, num: 1, f: pct},
+     {t: "Lula 2º", v: r => r.l2, num: 1, f: pct, dica: "% de Lula entre os votos dos dois finalistas"},
+     {t: "z (TSE+Censo)", v: r => r.zc, num: 1, f: x => dec(x), dica: "Resíduo padronizado do % de Lula no 2º turno no modelo com perfil TSE + Censo (N15). |z| > 3 é incomum."},
+     {t: "Território", v: r => cap(r.terr)},
+     {t: "Testes", v: r => codsTestes(r.fl).join(" "), s: r => codsTestes(r.fl).length, h: r => selosTestes(r.fl), busca: true}]);
+  return tabela(id, cols, linhas, {ord: comMun ? 0 : 2, desc: false, nome,
+    clique: r => irPara({m: U.munCod[S.mun[r.i]], l: S.local[r.i], s: S.zona[r.i] + "-" + S.secao[r.i], aba: ""})});
+}
+
+function extraMun(U, j) {
+  const mun = G.mun && G.mun[U.uf]; if (!mun) return "";
+  const k = mun.CD_MUNICIPIO.indexOf(U.munCod[j]); if (k < 0) return "";
+  let s = "";
+  if (mun.pop[k] != null) s += `<dt>População (Censo 2022)</dt><dd>${fmt(mun.pop[k])} · ${fmt(mun.pop15[k])} com 15 anos ou mais</dd>
+     <dt>Eleitorado TSE / população 15+</dt><dd>${dec(mun.razao[k])}</dd>`;
+  if (mun.cod_ibge[k] != null) s += `<dt>Código IBGE</dt><dd>${mun.cod_ibge[k]}</dd>`;
+  return s;
+}
+
+function telaMunicipio(main, U, j) {
+  const uf = U.uf, nome = U.munNome[j];
+  trilha([["Brasil", {uf: "", m: null}], [uf, {uf, m: null, l: null, s: null}], [nome]]);
+  const ids = U.secDoMun[j], a = agregar(U, ids), ref = agregar(U, Array.from({length: U.n}, (_, i) => i));
+  const mun = G.mun && G.mun[uf], k = mun ? mun.CD_MUNICIPIO.indexOf(U.munCod[j]) : -1;
+  const n12 = k >= 0 && mun.n12_dip[k] != null ? `<div class="aviso">⚑ <b>N12</b> – a distribuição do voto entre as seções do município é multimodal (dip de Hartigan = ${dec(mun.n12_dip[k], 3)}${mun.n12_2022[k] ? "; também em 2022" : ""}).</div>` : "";
+  const L = U.d.locais;
+  const linhasL = U.locDoMun[j].map(l => { const s = U.secDoLocal[l]; const x = agregar(U, s);
+    return { l, nome: cap(L.nome[l]), a: x, sin: contaFlag(U, s), terr: G.resumo.territorios[L.terr[l] ?? 5] }; }).filter(r => r.a.n);
+  const colsL = [
+    {t: "Local de votação", v: r => r.nome, busca: true, nome: 1}, {t: "Seções", v: r => r.a.n, num: 1}, {t: "Aptos", v: r => r.a.apt, num: 1, f: fmt},
+    {t: "Comp. 2º t.", v: r => r.a.cmp2 / r.a.apt, num: 1, f: pct},
+    {t: "Lula 1º", v: r => pCand(U.C1, r.a.v1, NUM_LULA), num: 1, f: pct}, {t: "Flávio 1º", v: r => pCand(U.C1, r.a.v1, NUM_FLAVIO), num: 1, f: pct},
+    {t: "Lula 2º", v: r => pCand(U.C2, r.a.v2, NUM_LULA), num: 1, f: pct},
+    {t: "Renda (Censo)", v: r => r.a.censo.renda, num: 1, f: brl}, {t: "Preta/parda (Censo)", v: r => r.a.censo.pp, num: 1, f: pct},
+    {t: "Território", v: r => cap(r.terr), busca: true}, {t: rotFlag(), v: r => r.sin, num: 1, f: fmt}];
+  const aba = G.estado.aba || "loc";
+  const corpo = aba === "sec" ? tabelaSecoes(U, ids, "secs", "secoes_" + uf + "_" + U.munCod[j], false)
+    : tabela("locs", colsL, linhasL, {ord: 0, desc: false, clique: r => irPara({l: r.l, s: null, aba: ""}), nome: "locais_" + uf + "_" + U.munCod[j]});
+  main.innerHTML = kpis(a) + n12 +
+    `<div class="grade" style="margin-top:10px">${cartaoVotos(1, a, ref, uf)}${cartaoVotos(2, a, ref, uf)}${cartaoPerfil(a, ref, uf)}${cartaoCenso(a, ref, uf, extraMun(U, j))}
+     ${histograma(U, ids, "Distribuição por seção – " + nome)}${cartaoTestes(a)}
+     <div class="cartao cheio"><div class="abas"><button data-aba="loc" class="${aba === "loc" ? "on" : ""}">Locais de votação (${fmt(linhasL.length)})</button>
+     <button data-aba="sec" class="${aba === "sec" ? "on" : ""}">Seções (${fmt(ids.length)})</button></div>${corpo}</div></div>`;
+  desenhaTabela(aba === "sec" ? "secs" : "locs");
+}
+
+function telaLocal(main, U, j, l) {
+  const uf = U.uf, nomeM = U.munNome[j], L = U.d.locais, nome = cap(L.nome[l] ?? "?");
+  trilha([["Brasil", {uf: "", m: null}], [uf, {uf, m: null, l: null, s: null}], [nomeM, {m: U.munCod[j], l: null, s: null}], [nome]]);
+  const ids = U.secDoLocal[l] || [], a = agregar(U, ids), ref = agregar(U, U.secDoMun[j]);
+  const info = `<dt>Território (setor do local)</dt><dd>${esc(cap(G.resumo.territorios[L.terr[l] ?? 5]))}</dd>
+    ${L.setor[l] ? `<dt>Setor censitário</dt><dd>${esc(L.setor[l])}</dd>` : ""}`;
+  main.innerHTML = kpis(a) +
+    `<div class="grade">${cartaoVotos(1, a, ref, nomeM)}${cartaoVotos(2, a, ref, nomeM)}${cartaoPerfil(a, ref, nomeM)}${cartaoCenso(a, ref, nomeM, info)}
+     ${cartaoTestes(a)}<div class="cartao cheio"><h2>Seções deste local</h2>${tabelaSecoes(U, ids, "secl", "secoes_local", false)}</div></div>`;
+  desenhaTabela("secl");
+}
+
+function telaSecao(main, U, j, chave) {
+  const [z, s] = chave.split("-").map(Number), S = U.d.secoes, L = U.d.locais;
+  const i = U.secDoMun[j].find(i => S.zona[i] === z && S.secao[i] === s);
+  if (i == null) { main.innerHTML = `<div class="status">Seção ${esc(chave)} não encontrada.</div>`; return; }
+  const l = S.local[i], uf = U.uf, nomeM = U.munNome[j], nomeL = cap(L.nome[l] ?? "?");
+  trilha([["Brasil", {uf: "", m: null}], [uf, {uf, m: null, l: null, s: null}], [nomeM, {m: U.munCod[j], l: null, s: null}],
+    [nomeL, {m: U.munCod[j], l, s: null}], [`Zona ${z} · Seção ${s}`]]);
+  const a = agregar(U, [i]), outras = U.secDoLocal[l].filter(x => x !== i);
+  const ref = outras.length ? agregar(U, outras) : agregar(U, U.secDoMun[j]);
+  const nomeRef = outras.length ? "outras seções do local" : nomeM;
+  const f = S.flags[i], T = G.resumo.testes.filter(t => f & (1 << t.bit));
+  const lob = pLula2(U, i), pc = S.pcen[i] != null ? S.pcen[i] / 1000 : null;
+  const testes = `<div class="cartao"><h2>Testes forenses</h2>
+    ${T.length ? `<p class="nota">Esta seção foi sinalizada em ${T.length} teste(s). Sinalização é um alerta estatístico para verificação, não prova de irregularidade.</p>` +
+      T.map(t => `<div class="teste" style="cursor:default"><span class="cod">⚑ ${t.cod}</span><span>${esc(t.nome)}</span><span></span><span class="desc">${esc(t.descricao)}</span></div>`).join("")
+      : `<p class="nota"><span class="selo ok">✓ nenhum teste</span> Esta seção não foi sinalizada em nenhum dos ${G.resumo.testes.length} testes por seção.</p>`}
+    <h2 style="margin-top:14px">Modelo de perfil (N7 e N15)</h2>
+    <p class="nota">% de Lula no 2º turno (entre os dois finalistas) observado e o previsto pelo perfil dos eleitores e pelo Censo em volta do local.</p>
+    <dl class="dl"><dt>Observado</dt><dd>${pct(lob)}</dd>
+      <dt>Previsto (perfil TSE + Censo)</dt><dd>${pct(pc)}</dd>
+      <dt>z só com o perfil TSE</dt><dd>${dec(S.ztse[i])}</dd>
+      <dt>z com perfil TSE + Censo</dt><dd>${dec(S.zcen[i])}${S.zcen[i] != null && Math.abs(S.zcen[i]) > 3 ? ' <span class="selo">|z| &gt; 3</span>' : ""}</dd></dl></div>`;
+  const ident = `<dt>Município</dt><dd>${esc(nomeM)} (${uf}, código TSE ${U.munCod[j]})</dd><dt>Local</dt><dd>${esc(nomeL)}</dd>
+    <dt>Território</dt><dd>${esc(cap(G.resumo.territorios[L.terr[l] ?? 5]))}</dd>${L.setor[l] ? `<dt>Setor censitário</dt><dd>${esc(L.setor[l])}</dd>` : ""}`;
+  main.innerHTML = kpis(a, true) +
+    `<div class="grade">${cartaoVotos(1, a, ref, nomeRef)}${cartaoVotos(2, a, ref, nomeRef)}${testes}
+     ${cartaoPerfil(a, ref, nomeRef)}${cartaoCenso(a, null, null, ident)}
+     <div class="cartao cheio"><h2>Outras seções do mesmo local</h2>${tabelaSecoes(U, U.secDoLocal[l], "secir", "secoes_local", false)}</div></div>`;
+  desenhaTabela("secir");
+}
+
+// ---------------------------------------------------------------------------
+async function iniciar() {
+  try {
+    G.resumo = await getJSON("resumo.json");
+    [G.cand, G.mun] = await Promise.all([getJSON("candidatos.json", true), getJSON("municipios.json", true)]);
+  } catch (e) {
+    $("main").innerHTML = `<div class="status">Não consegui carregar os dados (${esc(e.message)}).<br>
+      Abra o painel por um servidor web (GitHub Pages ou, no R, <code>servr::httd("painel/dados")</code>), não direto do disco.</div>`;
+    return;
+  }
+  const R = G.resumo;
+  $("selUf").innerHTML = '<option value="">Brasil</option>' + Object.keys(R.ufs).sort().map(u => `<option>${u}</option>`).join("");
+  $("selTeste").innerHTML = '<option value="">— nenhum —</option><option value="*">Qualquer teste</option>' +
+    R.testes.map(t => `<option value="${t.cod}">${t.cod} – ${esc(t.nome)}</option>`).join("");
+  $("rodape").innerHTML = `<p><b>Fontes.</b> Votação por seção, detalhe da apuração e perfil do eleitorado: Portal de Dados Abertos do TSE.
+    Censo Demográfico 2022: agregados por setor censitário e malha de setores (IBGE). Testes: scripts 04 a 13 do repositório do artigo.
+    Exterior (ZZ) fora do painel.</p>
+    <p><b>Leitura.</b> As marcas (⚑) indicam seções com padrão estatístico incomum num dos testes, para verificação; não são prova de fraude.
+    Grande parte delas fica em territórios indígenas, quilombolas e rurais, onde o voto é muito homogêneo (ver N15).
+    A razão eleitorado / população de 15+ compara bases com 4 anos de diferença e não considera quem vota fora de onde mora.</p>
+    <p>Dados do painel gerados em ${esc(R.gerado_em)}${G.cand ? " · votos de todos os candidatos em " + esc(G.cand.gerado_em) : " · votos por candidato ainda não gerados (script 15)"}.</p>`;
+  render();
+}
+iniciar();
+</script>
+</body>
+</html>
