@@ -81,6 +81,28 @@ em volta do local de votação (IBGE) e os testes em que cada seção foi sinali
 - Para abrir no computador: baixe o branch `painel-dados` e sirva a pasta por um servidor web
   (no R: `servr::httd("pasta")`); aberto direto do disco, o navegador bloqueia a leitura dos JSON.
 
+## Painel por município e agrupamentos
+
+`painel/municipios/index.html` é uma página única, com os dados embutidos, que abre direto no navegador
+(sem servidor). Tem três abas:
+
+- **Painel**: Brasil > estado > município, com a votação dos dois turnos (todos os candidatos), perfil do
+  eleitorado, Censo 2022, testes e a lista das seções marcadas em cada município.
+- **Metodologia dos testes**: método, regra de marcação, resultado, bibliografia de base, municípios e
+  seções marcadas de cada teste.
+- **Agrupamentos de municípios**: K-means sobre 22 variáveis padronizadas (votação, perfil TSE, Censo,
+  território e porte). O número de grupos foi comparado de 2 a 10 por cotovelo, silhueta,
+  Calinski-Harabasz, Davies-Bouldin, gap, dendrograma de Ward e estabilidade; solução recomendada k = 3
+  e alternativa detalhada k = 8. Os testes forenses não entram no agrupamento.
+
+Para refazer: baixe o branch `painel-dados` numa pasta e rode, de `painel/municipios/`:
+
+```
+python3 montar_painel_municipios.py <pasta painel-dados> clusters.json index.html   # grava dados_municipios.json
+Rscript ../../scripts/16_clusters_municipios.R dados_municipios.json 3,8             # grava clusters.json (~8 min)
+python3 montar_painel_municipios.py <pasta painel-dados> clusters.json index.html   # monta a página
+```
+
 ## Licenças e créditos
 
 - `scripts/urna_vendor/`: [DataUrnas-BR](https://github.com/alissonlinneker/DataUrnas-BR), de Alisson Linneker,

@@ -1,0 +1,10 @@
+<p>Os critérios se dividiram: <b>k = 2</b> teve cinco indicações (Calinski-Harabasz, gap pelos dois métodos, salto no dendrograma e estabilidade)
+e <b>k = 3</b> teve três (cotovelo, silhueta e Davies-Bouldin).</p>
+<p>Os cinco votos em k = 2 vêm de critérios que, por construção, favorecem o menor k quando os grupos não são muito nítidos: Calinski-Harabasz cai sempre que se acrescenta um grupo pouco separado,
+a primeira fusão do dendrograma de Ward é quase sempre a maior e dois grupos são sempre os mais estáveis. A curva do gap sobe sem parar até k = 10, sem um máximo claro.</p>
+<p>O k = 3 é o único que melhora ao mesmo tempo a silhueta (0,275, a maior), o Davies-Bouldin (1,32, o menor) e o cotovelo. Ele mantém a divisão de k = 2 e separa um terceiro grupo,
+pequeno (154 municípios) e nítido: os municípios com terras indígenas, onde estão 10% das seções marcadas pelos testes, contra 0,6% a 1,7% nos outros grupos.
+Por isso o painel usa <b>k = 3 como solução recomendada</b>.</p>
+<p>Como alternativa, o painel mostra <b>k = 8</b>, uma segmentação mais fina: tem o segundo menor Davies-Bouldin (1,49), um dos maiores saltos no dendrograma (13,3), estabilidade de 0,98
+e concordância de 0,63 com Ward. A silhueta (0,21) indica grupos menos separados, como é de esperar com mais grupos.</p>
+<p>Em todos os k a silhueta ficou abaixo de 0,3: os municípios variam de forma contínua e os grupos resumem tendências, não fronteiras rígidas.</p>
