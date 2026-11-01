@@ -1,0 +1,65 @@
+       cod                                nome sinalizadas
+    <char>                              <char>       <int>
+ 1:     T1                        Zeros e 100%         164
+ 2:     T5              Homogeneidade no local         123
+ 3:     T6          Consistência 1º x 2º turno          14
+ 4:    T6c         Comparecimento entre turnos         730
+ 5:     T8    Comparecimento x mudança de voto         594
+ 6:     N4      Ritmo de votação (log da urna)          16
+ 7:     N5             Liberação sem biometria         895
+ 8:     N7       Perfil do eleitorado (só TSE)        1257
+ 9:     N8                  Painel 2022 → 2026         822
+10:    N11                  Floresta aleatória           2
+11:    N13      Liberação biográfica: 3 marcas         517
+12:   N13p        Liberação biográfica: painel         192
+13:   N14C Ganho de Lula x reserva de esquerda          22
+14:   N14D       Acima do teto de participação         436
+15:    N15             Perfil TSE + Censo 2022        1041
+
+==== Votação ====
+Lendo votacao_secao_2026_BR.csv ...
+Teste de carga (Presidente):
+   NR_TURNO   UFs secoes     votos
+      <int> <int>  <int>     <num>
+1:        1    28 499206 125275835
+2:        2    28 499205 128236074
+  OK: 28 UFs (27 + exterior) em todos os turnos.
+          used (Mb) gc trigger  (Mb)  max used   (Mb)
+Ncells  608996 32.6    2722960 145.5   5318278  284.1
+Vcells 9140740 69.8  110174797 840.6 136724884 1043.2
+
+==== Perfil TSE e Censo ====
+  Seções: 499206 | com perfil: 497508 | com Censo: 493735 | sinalizadas em algum teste: 5409
+
+==== Resumo por UF ====
+
+==== Arquivos por UF ====
+  AC: 2270 seções, 660 locais, 0.3 MB
+  AL: 7101 seções, 1076 locais, 0.7 MB
+  AM: 8157 seções, 1619 locais, 0.9 MB
+  AP: 1914 seções, 370 locais, 0.2 MB
+  BA: 35476 seções, 9196 locais, 4.1 MB
+  CE: 23765 seções, 6701 locais, 2.8 MB
+  DF: 6969 seções, 622 locais, 0.7 MB
+  ES: 9844 seções, 1765 locais, 1.0 MB
+  GO: 15686 seções, 2475 locais, 1.7 MB
+  MA: 18093 seções, 5779 locais, 2.2 MB
+  MG: 52062 seções, 10060 locais, 5.8 MB
+  MS: 7106 seções, 1021 locais, 0.7 MB
+  MT: 8287 seções, 1500 locais, 0.9 MB
+  PA: 20827 seções, 5786 locais, 2.4 MB
+  PB: 10712 seções, 1836 locais, 1.2 MB
+  PE: 21418 seções, 3388 locais, 2.3 MB
+  PI: 10225 seções, 3348 locais, 1.2 MB
+  PR: 27142 seções, 4789 locais, 3.0 MB
+  RJ: 37675 seções, 5044 locais, 3.9 MB
+  RN: 8115 seções, 1565 locais, 0.9 MB
+  RO: 4698 seções, 670 locais, 0.5 MB
+  RR: 1519 seções, 355 locais, 0.2 MB
+  RS: 27547 seções, 7773 locais, 3.2 MB
+  SC: 17326 seções, 3450 locais, 1.9 MB
+  SE: 5923 seções, 1208 locais, 0.6 MB
+  SP: 103656 seções, 11070 locais, 10.7 MB
+  TO: 4384 seções, 920 locais, 0.5 MB
+
+Concluído. Arquivos em /home/runner/work/Artigo_Eleicoes_2026/Artigo_Eleicoes_2026/painel/dados

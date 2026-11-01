@@ -1,0 +1,37 @@
+﻿alvo;modelo;estatistica;observado;simulado_media;simulado_p2.5;simulado_p97.5;p_preditivo
+Lula (2º turno, % dos 2 finalistas);1 perfil TSE;secoes_com_zero;3;0.02;0;0;0
+Lula (2º turno, % dos 2 finalistas);1 perfil TSE;secoes_acima_90pct;6382;4448.665;4348.875;4559.075;0
+Lula (2º turno, % dos 2 finalistas);1 perfil TSE;secoes_abaixo_10pct;347;244.42;215;272.075;0
+Lula (2º turno, % dos 2 finalistas);1 perfil TSE;dp_dentro_municipio;0.0729201385128344;0.0740392717496119;0.0738866031189169;0.0741857240983913;0
+Lula (2º turno, % dos 2 finalistas);2 TSE + setor do local;secoes_com_zero;3;0;0;0;0
+Lula (2º turno, % dos 2 finalistas);2 TSE + setor do local;secoes_acima_90pct;6382;5495.18;5365.925;5615;0
+Lula (2º turno, % dos 2 finalistas);2 TSE + setor do local;secoes_abaixo_10pct;347;213.74;188.975;239.025;0
+Lula (2º turno, % dos 2 finalistas);2 TSE + setor do local;dp_dentro_municipio;0.0729201385128344;0.0740586240915535;0.07391811220776;0.0742036909637504;0
+Lula (2º turno, % dos 2 finalistas);3 TSE + raio 1000 m;secoes_com_zero;3;0.025;0;0.0250000000000057;0
+Lula (2º turno, % dos 2 finalistas);3 TSE + raio 1000 m;secoes_acima_90pct;6382;5731.1;5619.85;5841.275;0
+Lula (2º turno, % dos 2 finalistas);3 TSE + raio 1000 m;secoes_abaixo_10pct;347;202.185;176.975;230.1;0
+Lula (2º turno, % dos 2 finalistas);3 TSE + raio 1000 m;dp_dentro_municipio;0.0729201385128344;0.073768491322367;0.0736422616982715;0.0739213093769049;0
+Lula (1º turno, % dos válidos);1 perfil TSE;secoes_com_zero;5;0.04;0;1;0
+Lula (1º turno, % dos válidos);1 perfil TSE;secoes_acima_90pct;3347;1419.105;1358.85;1482.15;0
+Lula (1º turno, % dos válidos);1 perfil TSE;secoes_abaixo_10pct;826;1107.65;1049.875;1164.075;0
+Lula (1º turno, % dos válidos);1 perfil TSE;dp_dentro_municipio;0.0724113259074144;0.0724329916987513;0.0723012376927822;0.0725651164672378;0.76
+Lula (1º turno, % dos válidos);2 TSE + setor do local;secoes_com_zero;5;0.02;0;0;0
+Lula (1º turno, % dos válidos);2 TSE + setor do local;secoes_acima_90pct;3347;2208.89;2136;2276.025;0
+Lula (1º turno, % dos válidos);2 TSE + setor do local;secoes_abaixo_10pct;826;983.95;930.975;1036;0
+Lula (1º turno, % dos válidos);2 TSE + setor do local;dp_dentro_municipio;0.0724113259074144;0.072746091794278;0.0726175964376336;0.0728893598427445;0
+Lula (1º turno, % dos válidos);3 TSE + raio 1000 m;secoes_com_zero;5;0.045;0;1;0
+Lula (1º turno, % dos válidos);3 TSE + raio 1000 m;secoes_acima_90pct;3347;2420.34;2349.95;2486.075;0
+Lula (1º turno, % dos válidos);3 TSE + raio 1000 m;secoes_abaixo_10pct;826;948.68;891.925;1001.15;0
+Lula (1º turno, % dos válidos);3 TSE + raio 1000 m;dp_dentro_municipio;0.0724113259074144;0.0725838108677738;0.0724603708132155;0.0727046641370065;0
+Flávio (1º turno, % dos válidos);1 perfil TSE;secoes_com_zero;60;1.22;0;4;0
+Flávio (1º turno, % dos válidos);1 perfil TSE;secoes_acima_90pct;164;78.345;64;99;0
+Flávio (1º turno, % dos válidos);1 perfil TSE;secoes_abaixo_10pct;6001;3860.46;3748.575;3958.05;0
+Flávio (1º turno, % dos válidos);1 perfil TSE;dp_dentro_municipio;0.0691009155093449;0.0703608529298615;0.0702367094199355;0.070483469333177;0
+Flávio (1º turno, % dos válidos);2 TSE + setor do local;secoes_com_zero;60;19.625;12;28.025;0
+Flávio (1º turno, % dos válidos);2 TSE + setor do local;secoes_acima_90pct;164;72.56;55.975;87;0
+Flávio (1º turno, % dos válidos);2 TSE + setor do local;secoes_abaixo_10pct;6001;4895.92;4813.95;4986.1;0
+Flávio (1º turno, % dos válidos);2 TSE + setor do local;dp_dentro_municipio;0.0691009155093449;0.0704101094162289;0.0702688597105854;0.0705478569146785;0
+Flávio (1º turno, % dos válidos);3 TSE + raio 1000 m;secoes_com_zero;60;24.64;15;34.025;0
+Flávio (1º turno, % dos válidos);3 TSE + raio 1000 m;secoes_acima_90pct;164;68.95;54.975;84.05;0
+Flávio (1º turno, % dos válidos);3 TSE + raio 1000 m;secoes_abaixo_10pct;6001;5112.6;5006.975;5219.175;0
+Flávio (1º turno, % dos válidos);3 TSE + raio 1000 m;dp_dentro_municipio;0.0691009155093449;0.0700972901337764;0.0699629392422261;0.0702251547640461;0
