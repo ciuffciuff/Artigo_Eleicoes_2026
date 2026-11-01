@@ -1,0 +1,210 @@
+Spherical geometry (s2) switched off
+MODO DE TESTE: só as UFs AC, RR, SE
+
+==== 1. Censo 2022 - agregados por setor ====
+  basico
+Baixando Agregados_por_setores_basico_BR_20260520.zip ...
+Espaço livre no disco: 110.1 GB (necessário: 0.6 GB)
+  Extraindo Agregados_por_setores_basico_BR.csv (0.14 GB)
+    468099 setores; 2 com sigilo/ausente em alguma coluna
+  cor
+Baixando Agregados_por_setores_cor_ou_raca_BR.zip ...
+Espaço livre no disco: 110.1 GB (necessário: 0.7 GB)
+  Extraindo Agregados_por_setores_cor_ou_raca_BR.csv (0.20 GB)
+    458772 setores; 162756 com sigilo/ausente em alguma coluna
+  alfab
+Baixando Agregados_por_setores_alfabetizacao_BR.zip ...
+Espaço livre no disco: 110.0 GB (necessário: 1.2 GB)
+  Extraindo Agregados_por_setores_alfabetizacao_BR.csv (0.74 GB)
+    458772 setores; 52795 com sigilo/ausente em alguma coluna
+  dom2
+Baixando Agregados_por_setores_caracteristicas_domicilio2_BR_20250417.zip ...
+Espaço livre no disco: 110.0 GB (necessário: 1.3 GB)
+  Extraindo Agregados_por_setores_caracteristicas_domicilio2_BR_20250417.csv (0.78 GB)
+    458772 setores; 254358 com sigilo/ausente em alguma coluna
+  renda
+Baixando Agregados_por_setores_renda_responsavel_BR_20260508_csv.zip ...
+Espaço livre no disco: 110.1 GB (necessário: 0.5 GB)
+  Extraindo Agregados_por_setores_renda_responsavel_BR.csv (0.03 GB)
+    458772 setores; 9241 com sigilo/ausente em alguma coluna
+  Setores: 468099 | população: 203.080.756 | com renda: 449531 | com cor/raça: 450088
+Warning message:
+In prettyNum(.Internal(format(x, trim, digits, nsmall, width, 3L,  :
+  'big.mark' and 'decimal.mark' are both '.', which could be confusing
+
+==== 2. Locais de votação e correspondência TSE x IBGE ====
+Baixando eleitorado_local_votacao_2026.zip ...
+Espaço livre no disco: 109.9 GB (necessário: 0.9 GB)
+  Extraindo eleitorado_local_votacao_2026_BRASIL.csv (0.43 GB)
+  Seções x turno: 20210 | sem coordenada válida: 222 (1.10%)
+Baixando municipio_tse_ibge.zip ...
+Espaço livre no disco: 109.7 GB (necessário: 0.5 GB)
+  Extraindo municipio_tse_ibge.csv (0.00 GB)
+[1] TRUE
+  Seções sem correspondência de município: 0
+  Locais distintos com coordenada: 2231
+
+==== 2b. Malha de setores e ligação ponto -> setor ====
+Baixando BR_setores_CD2022.gpkg (malha de setores) ...
+[1] TRUE
+  AC: 671 locais, 2215 setores; sem setor: 0; setores por local no raio (mediana): 9
+  RR: 349 locais, 1986 setores; sem setor: 0; setores por local no raio (mediana): 5
+  SE: 1211 locais, 5347 setores; sem setor: 0; setores por local no raio (mediana): 9
+   locais sem_setor outro_municipio    ok
+    <int>     <int>           <int> <int>
+1:   2231         0              34  2197
+                    territorio secoes
+                        <char>  <int>
+1:             urbano (demais)   8072
+2:                       rural   1471
+3:          sem ligação válida    170
+4:        agrupamento indígena    167
+5: favela ou comunidade urbana    150
+6:      agrupamento quilombola     75
+
+==== 3. Perfil do eleitorado por seção (com cor ou raça) ====
+Baixando perfil_eleitor_secao_2026_AC.zip ...
+Espaço livre no disco: 108.2 GB (necessário: 0.6 GB)
+  Extraindo perfil_eleitor_secao_2026_AC.csv (0.09 GB)
+  Lendo perfil_eleitor_secao_2026_AC.csv
+Baixando perfil_eleitor_secao_2026_RR.zip ...
+Espaço livre no disco: 108.2 GB (necessário: 0.6 GB)
+  Extraindo perfil_eleitor_secao_2026_RR.csv (0.06 GB)
+  Lendo perfil_eleitor_secao_2026_RR.csv
+Baixando perfil_eleitor_secao_2026_SE.zip ...
+Espaço livre no disco: 108.2 GB (necessário: 0.7 GB)
+  Extraindo perfil_eleitor_secao_2026_SE.csv (0.25 GB)
+  Lendo perfil_eleitor_secao_2026_SE.csv
+  Perfil: 10085 seções | eleitores: 2.755.995 | com cor/raça informada: 24.7%
+Warning message:
+In prettyNum(.Internal(format(x, trim, digits, nsmall, width, 3L,  :
+  'big.mark' and 'decimal.mark' are both '.', which could be confusing
+
+==== 4. Votação por seção (Presidente) ====
+Baixando votacao_secao_2026_BR.zip ...
+Espaço livre no disco: 107.9 GB (necessário: 2.1 GB)
+  Extraindo votacao_secao_2026_BR.csv (1.58 GB)
+Espaço livre no disco: 106.4 GB (necessário: 0.5 GB)
+  Extraindo leiame.pdf (0.00 GB)
+[1] TRUE
+Lendo votacao_secao_2026_BR.csv ...
+Teste de carga (Presidente):
+   NR_TURNO   UFs secoes     votos
+      <int> <int>  <int>     <num>
+1:        1    28 499206 125275835
+2:        2    28 499205 128236074
+  OK: 28 UFs (27 + exterior) em todos os turnos.
+           used  (Mb) gc trigger   (Mb)  max used   (Mb)
+Ncells  1331231  71.1    4229249  225.9   6608201  353.0
+Vcells 37589408 286.8  135885392 1036.8 169639552 1294.3
+
+==== 5. A - Modelo de perfil (N7) com e sem o Censo 2022 ====
+  Lula (2º turno, % dos 2 finalistas): 9450 seções com todas as covariáveis (de 9687 no N7; 97.6%)
+    1 perfil TSE                 R² dentro = 0.204 | rho = 0.0144 | |z|>3: 1.64% | sinalizadas: 69 | >90%: obs 126 x sim 80
+    2 TSE + setor do local       R² dentro = 0.389 | rho = 0.0110 | |z|>3: 1.54% | sinalizadas: 36 | >90%: obs 126 x sim 88
+    3 TSE + raio 1000 m          R² dentro = 0.401 | rho = 0.0109 | |z|>3: 1.57% | sinalizadas: 37 | >90%: obs 126 x sim 93
+  Lula (1º turno, % dos válidos): 9453 seções com todas as covariáveis (de 9691 no N7; 97.5%)
+    1 perfil TSE                 R² dentro = 0.185 | rho = 0.0151 | |z|>3: 1.45% | sinalizadas: 71 | >90%: obs 42 x sim 21
+    2 TSE + setor do local       R² dentro = 0.380 | rho = 0.0106 | |z|>3: 1.49% | sinalizadas: 37 | >90%: obs 42 x sim 28
+    3 TSE + raio 1000 m          R² dentro = 0.392 | rho = 0.0105 | |z|>3: 1.51% | sinalizadas: 42 | >90%: obs 42 x sim 30
+  Flávio (1º turno, % dos válidos): 9453 seções com todas as covariáveis (de 9691 no N7; 97.5%)
+    1 perfil TSE                 R² dentro = 0.171 | rho = 0.0152 | |z|>3: 1.53% | sinalizadas: 59 | >90%: obs 7 x sim 4
+    2 TSE + setor do local       R² dentro = 0.345 | rho = 0.0116 | |z|>3: 1.50% | sinalizadas: 35 | >90%: obs 7 x sim 4
+    3 TSE + raio 1000 m          R² dentro = 0.358 | rho = 0.0114 | |z|>3: 1.51% | sinalizadas: 38 | >90%: obs 7 x sim 4
+                                  alvo                 modelo secoes    rho
+                                <char>                 <char>  <int>  <num>
+1: Lula (2º turno, % dos 2 finalistas)           1 perfil TSE   9450 0.0144
+2: Lula (2º turno, % dos 2 finalistas) 2 TSE + setor do local   9450 0.0110
+3: Lula (2º turno, % dos 2 finalistas)    3 TSE + raio 1000 m   9450 0.0109
+4:      Lula (1º turno, % dos válidos)           1 perfil TSE   9453 0.0151
+5:      Lula (1º turno, % dos válidos) 2 TSE + setor do local   9453 0.0106
+6:      Lula (1º turno, % dos válidos)    3 TSE + raio 1000 m   9453 0.0105
+7:    Flávio (1º turno, % dos válidos)           1 perfil TSE   9453 0.0152
+8:    Flávio (1º turno, % dos válidos) 2 TSE + setor do local   9453 0.0116
+9:    Flávio (1º turno, % dos válidos)    3 TSE + raio 1000 m   9453 0.0114
+      r2 absz3 sinalizadas
+   <num> <num>       <int>
+1: 0.204  1.64          69
+2: 0.389  1.54          36
+3: 0.401  1.57          37
+4: 0.185  1.45          71
+5: 0.380  1.49          37
+6: 0.392  1.51          42
+7: 0.171  1.53          59
+8: 0.345  1.50          35
+9: 0.358  1.51          38
+                                  alvo       modelo_comparado
+                                <char>                 <char>
+1: Lula (2º turno, % dos 2 finalistas) 2 TSE + setor do local
+2:      Lula (1º turno, % dos válidos) 2 TSE + setor do local
+3:    Flávio (1º turno, % dos válidos) 2 TSE + setor do local
+4: Lula (2º turno, % dos 2 finalistas)    3 TSE + raio 1000 m
+5:      Lula (1º turno, % dos válidos)    3 TSE + raio 1000 m
+6:    Flávio (1º turno, % dos válidos)    3 TSE + raio 1000 m
+   sinalizadas_so_tse continuam pct_continuam
+                <int>     <int>         <num>
+1:                 69        20          29.0
+2:                 71        17          23.9
+3:                 59        17          28.8
+4:                 69        19          27.5
+5:                 71        20          28.2
+6:                 59        18          30.5
+  Tabela por seção para o painel: 10105 seções
+
+==== 6. B - Território das seções sinalizadas (T1, N7, N8, N11) ====
+    teste           territorio sinalizadas pct_sinalizadas pct_todas
+   <char>               <char>       <int>           <num>     <num>
+1:     N7 agrupamento indígena          56           61.54      1.65
+2:     N7                rural          18           19.78     14.56
+3:     N7   sem ligação válida          17           18.68      1.68
+4:     N8 agrupamento indígena           9           60.00      1.65
+5:     N8                rural           3           20.00     14.56
+6:     N8   sem ligação válida           2           13.33      1.68
+7:     N8      urbano (demais)           1            6.67     79.88
+8:     T1 agrupamento indígena           2           50.00      1.65
+9:     T1   sem ligação válida           2           50.00      1.68
+   razao_sobre_base
+              <num>
+1:             37.2
+2:              1.4
+3:             11.1
+4:             36.3
+5:              1.4
+6:              7.9
+7:              0.1
+8:             30.3
+9:             29.7
+
+==== 7. C - Eleitorado 2026 (TSE) x população de 15 anos ou mais (Censo 2022) ====
+   municipios  mediana      p95 acima_1 acima_1.2
+        <int>    <num>    <num>   <int>     <int>
+1:        112 1.134458 1.486046      97        37
+
+==== 8. D - Cor ou raça declarada ao TSE x Censo 2022 ====
+    SG_UF locais cobertura_raca_tse cor_preta_parda cor_indigena media_tse_pp
+   <char>  <num>              <num>           <num>        <num>        <num>
+1: BRASIL   2146              0.246           0.901        0.961        0.781
+2:     AC    639              0.288           0.854        0.914        0.807
+3:     RR    333              0.349           0.957        0.973        0.706
+4:     SE   1174              0.209           0.807        0.931        0.795
+   media_censo_pp
+            <num>
+1:          0.730
+2:          0.738
+3:          0.671
+4:          0.747
+
+==== 9. E - Renda dentro dos municípios multimodais do N12 ====
+  CV da renda entre setores: mediana nacional 0.29 | mediana dos multimodais 0.50
+    SG_UF             NM_MUNICIPIO setores    cv percentil_cv
+   <char>                   <char>   <int> <num>        <num>
+1:     AM                TABATINGA     148  0.99         98.5
+2:     MS                  AMAMBAI      96  0.59         93.3
+3:     AM SÃO GABRIEL DA CACHOEIRA     275  0.54         91.7
+4:     AM    SÃO PAULO DE OLIVENÇA      86  0.52         90.5
+5:     SC                   IPUAÇU      21  0.48         87.5
+6:     MS                   JAPORÃ      17  0.40         78.3
+7:     MT             CAMPINÁPOLIS     112  0.39         77.8
+8:     TO               TOCANTÍNIA      66  0.31         56.8
+
+Concluído. Resultados em resultados/N15_*.csv

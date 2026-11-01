@@ -1,0 +1,41 @@
+       cod                                nome sinalizadas
+    <char>                              <char>       <int>
+ 1:     T1                        Zeros e 100%         164
+ 2:     T5              Homogeneidade no local         123
+ 3:     T6          Consistência 1º x 2º turno          14
+ 4:    T6c         Comparecimento entre turnos         730
+ 5:     T8    Comparecimento x mudança de voto         594
+ 6:     N4      Ritmo de votação (log da urna)          16
+ 7:     N5             Liberação sem biometria         895
+ 8:     N7       Perfil do eleitorado (só TSE)        1257
+ 9:     N8                  Painel 2022 → 2026         822
+10:    N11                  Floresta aleatória           2
+11:    N13      Liberação biográfica: 3 marcas         517
+12:   N13p        Liberação biográfica: painel         192
+13:   N14C Ganho de Lula x reserva de esquerda          22
+14:   N14D       Acima do teto de participação         436
+15:    N15             Perfil TSE + Censo 2022          52
+
+==== Votação ====
+Lendo votacao_secao_2026_BR.csv ...
+Teste de carga (Presidente):
+   NR_TURNO   UFs secoes     votos
+      <int> <int>  <int>     <num>
+1:        1    28 499206 125275835
+2:        2    28 499205 128236074
+  OK: 28 UFs (27 + exterior) em todos os turnos.
+          used (Mb) gc trigger  (Mb)  max used   (Mb)
+Ncells  608993 32.6    2722937 145.5   5318235  284.1
+Vcells 9122086 69.6  110143852 840.4 136706235 1043.0
+
+==== Perfil TSE e Censo ====
+  Seções: 499206 | com perfil: 9692 | com Censo: 9562 | sinalizadas em algum teste: 5093
+
+==== Resumo por UF ====
+
+==== Arquivos por UF ====
+  AC: 2270 seções, 660 locais, 0.3 MB
+  RR: 1519 seções, 355 locais, 0.2 MB
+  SE: 5923 seções, 1208 locais, 0.6 MB
+
+Concluído. Arquivos em /home/runner/work/Artigo_Eleicoes_2026/Artigo_Eleicoes_2026/painel/dados
