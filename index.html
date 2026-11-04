@@ -143,10 +143,12 @@ const NUM_LULA = 13, NUM_FLAVIO = 22;
 const corCand = n => n === NUM_LULA ? "var(--lula)" : n === NUM_FLAVIO ? "var(--flavio)" : "var(--outro)";
 const nomeCurto = c => c.especial ? c.nome : cap(c.nome);
 
+// Se a página for servida de outro ramo (ex.: painel-html), busca os dados no ramo painel-dados
+const RAW = "https://raw.githubusercontent.com/ciuffciuff/artigo_eleicoes_2026/painel-dados/";
 const G = { base: "", resumo: null, cand: null, mun: null, ufs: {}, estado: {} };
 
 async function getJSON(nome, opcional) {
-  for (const b of [G.base, "", "dados/"]) {
+  for (const b of [G.base, "", "dados/", RAW]) {
     try {
       const r = await fetch(b + nome);
       if (r.ok) { G.base = b; return await r.json(); }
