@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eleição 2026 por município</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* Plano: faixa verde com fio amarelo no topo (bandeira), conteúdo em grade de cartões brancos;
+   azul = Lula, verde = Flávio, amarelo = alerta dos testes, cinza = demais. */
+:root {
+  color-scheme: light;
+  --verde: #009c3b; --verde-esc: #00692a; --amarelo: #ffdf00; --azul: #002776; --azul-cand: #1f4fa0;
+  --page: #f4f6f2; --surface: #ffffff; --ink: #0e1a12; --ink2: #4a5650; --muted: #7d877f;
+  --grid: #e3e8e1; --axis: #c3cbc2; --ring: rgba(0,39,118,0.10); --wash: rgba(0,156,59,0.07);
+  --c-lula: var(--azul-cand); --c-flavio: var(--verde); --c-outro: #a7ada6; --c-esp: #d8ddd6;
+  --alerta-bg: #fff6b8; --alerta-borda: #e0c200; --amarelo-esc: #e0b800; --link: #00509e; --meio: #e9ece7;
+  --display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0b120e; --surface: #141d17; --ink: #eef2ec; --ink2: #b9c3bb; --muted: #87918a;
+    --grid: #26302a; --axis: #3a463e; --ring: rgba(255,255,255,0.09); --wash: rgba(0,200,80,0.08);
+    --c-lula: #5b8ce6; --c-flavio: #22b85a; --c-outro: #6d756e; --c-esp: #3b443d;
+    --alerta-bg: rgba(255,223,0,0.14); --alerta-borda: #b39b00; --link: #8fb8ff; --meio: #2a332d; --amarelo-esc: #c9a800;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark; --amarelo-esc: #c9a800;
+  --page: #0b120e; --surface: #141d17; --ink: #eef2ec; --ink2: #b9c3bb; --muted: #87918a;
+  --grid: #26302a; --axis: #3a463e; --ring: rgba(255,255,255,0.09); --wash: rgba(0,200,80,0.08);
+  --c-lula: #5b8ce6; --c-flavio: #22b85a; --c-outro: #6d756e; --c-esp: #3b443d;
+  --alerta-bg: rgba(255,223,0,0.14); --alerta-borda: #b39b00; --link: #8fb8ff; --meio: #2a332d;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--page); color: var(--ink); font: 15px/1.45 var(--body); }
+a { color: var(--link); cursor: pointer; text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--amarelo); outline-offset: 2px; }
+.topo { background: var(--verde); color: #fff; border-bottom: 5px solid var(--amarelo); position: relative; }
+.topo::after { content: ""; position: absolute; left: 0; right: 0; bottom: -9px; height: 4px; background: var(--azul); }
+.topo .in { max-width: 1320px; margin: 0 auto; padding: 18px 20px 14px; display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: flex-end; justify-content: space-between; }
+.topo h1 { font: 700 30px/1.05 var(--display); letter-spacing: .01em; margin: 0; text-wrap: balance; }
+.topo .sub { font-size: 14px; opacity: .92; margin-top: 3px; }
+.ctl { display: flex; gap: 10px; flex-wrap: wrap; }
+.ctl label { font-size: 12px; display: flex; flex-direction: column; gap: 3px; opacity: .95; }
+.ctl select, .ctl input { font: inherit; font-size: 14px; padding: 6px 9px; border-radius: 6px; border: 2px solid var(--amarelo);
+  background: #fff; color: #0e1a12; min-width: 150px; }
+.ctl input { min-width: 250px; }
+.wrap { max-width: 1320px; margin: 0 auto; padding: 22px 20px 40px; }
+.trilha { font: 600 20px/1.2 var(--display); margin: 2px 0 14px; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; }
+.trilha .sep { color: var(--muted); }
+.kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.kpi { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 10px 13px; border-top: 3px solid var(--verde); }
+.kpi.az { border-top-color: var(--c-lula); } .kpi.vd { border-top-color: var(--c-flavio); } .kpi.am { border-top-color: var(--amarelo); }
+.kpi .r { color: var(--ink2); font-size: 12.5px; }
+.kpi .v { font: 700 28px/1.1 var(--display); }
+.kpi .n { color: var(--muted); font-size: 12.5px; }
+.grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 14px; }
+@media (max-width: 440px) { .grade { grid-template-columns: 1fr; } .ctl input { min-width: 0; width: 100%; } }
+.cartao { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.cartao h2 { font: 700 19px/1.15 var(--display); margin: 0 0 3px; letter-spacing: .01em; }
+.cartao .nota { color: var(--ink2); font-size: 13px; margin: 0 0 10px; }
+.cheio { grid-column: 1 / -1; }
+.hb { display: grid; grid-template-columns: minmax(150px, 44%) 1fr 78px; gap: 5px 10px; align-items: center; }
+.hb .rot { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hb .rot small { color: var(--muted); }
+.hb .tr { position: relative; height: 14px; }
+.hb .bar { position: absolute; left: 0; top: 1px; height: 12px; border-radius: 0 4px 4px 0; }
+.hb .ref { position: absolute; top: -3px; width: 2px; height: 20px; background: var(--ink); opacity: .6; border-radius: 1px; }
+.hb .ref.r2 { opacity: .3; }
+.hb .val { font-size: 14px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hb .val small { color: var(--muted); display: block; font-size: 11.5px; line-height: 1.1; }
+.esp { height: 10px; }
+.leg { display: flex; gap: 14px; flex-wrap: wrap; color: var(--ink2); font-size: 12.5px; margin-top: 10px; }
+.leg i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.leg i.tk { width: 2px; height: 13px; background: var(--ink); opacity: .6; }
+.leg i.tk2 { width: 2px; height: 13px; background: var(--ink); opacity: .3; }
+.dl { display: grid; grid-template-columns: minmax(0, 55%) 1fr; gap: 4px 14px; font-size: 14px; margin: 0 0 12px; }
+.dl dt { color: var(--ink2); } .dl dd { margin: 0; font-variant-numeric: tabular-nums; }
+.dl dd small { color: var(--muted); }
+.teste { display: grid; grid-template-columns: 50px 1fr auto; gap: 1px 10px; padding: 7px 4px; border-top: 1px solid var(--grid); }
+.teste .cod { font: 700 15px var(--display); }
+.teste .d { grid-column: 2 / 4; color: var(--ink2); font-size: 12.5px; }
+.teste .q { text-align: right; font-variant-numeric: tabular-nums; }
+.teste.zero { opacity: .5; }
+.teste.on { background: var(--alerta-bg); border-radius: 6px; }
+.selo { display: inline-block; padding: 0 7px; border-radius: 999px; font-size: 12.5px; background: var(--alerta-bg); border: 1px solid var(--alerta-borda); white-space: nowrap; }
+.aviso { border-left: 4px solid var(--amarelo); background: var(--surface); padding: 8px 12px; border-radius: 0 8px 8px 0; font-size: 13.5px; color: var(--ink2); margin: 0 0 14px; }
+.ferr { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 0 0 8px; }
+.ferr input { font: inherit; padding: 5px 9px; border: 1px solid var(--axis); border-radius: 6px; background: var(--surface); color: var(--ink); min-width: 220px; }
+.ferr button { font: inherit; font-size: 13px; padding: 5px 10px; border: 1px solid var(--axis); border-radius: 6px; background: var(--surface); color: var(--ink); cursor: pointer; }
+.ferr button:hover { background: var(--wash); }
+.ferr .conta { margin-left: auto; color: var(--ink2); font-size: 12.5px; }
+.tabw { overflow: auto; max-height: 72vh; border: 1px solid var(--ring); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { padding: 5px 9px; border-bottom: 1px solid var(--grid); text-align: left; white-space: nowrap; }
+th { position: sticky; top: 0; background: var(--surface); font-weight: 600; cursor: pointer; user-select: none; z-index: 1; box-shadow: inset 0 -2px 0 var(--verde); }
+th.n, td.n { text-align: right; font-variant-numeric: tabular-nums; }
+th .s { color: var(--muted); font-size: 11px; }
+tbody tr { cursor: pointer; } tbody tr:hover { background: var(--wash); }
+tbody tr.sel { background: var(--alerta-bg); box-shadow: inset 4px 0 0 var(--verde); }
+.tabw { scrollbar-gutter: stable; }
+.abrir { font-size: 12.5px; white-space: nowrap; }
+td .pill { display: inline-block; width: 46px; height: 8px; border-radius: 4px; background: var(--c-flavio); position: relative; vertical-align: 1px; margin-right: 6px; overflow: hidden; }
+td .pill b { position: absolute; left: 0; top: 0; bottom: 0; background: var(--c-lula); }
+svg text { fill: var(--muted); font: 12px var(--body); }
+svg .tile text { fill: #fff; font: 700 14px var(--display); }
+svg .tile text.pv { font: 500 11px var(--body); }
+svg .tile { cursor: pointer; }
+svg .tile:hover rect, svg .tile:focus rect { stroke: var(--amarelo); stroke-width: 3; }
+#tip { position: fixed; pointer-events: none; z-index: 20; background: var(--surface); color: var(--ink); border: 1px solid var(--ring);
+  box-shadow: 0 6px 18px rgba(0,0,0,.18); border-radius: 8px; padding: 7px 10px; font-size: 13px; display: none; max-width: 320px; }
+footer { max-width: 1320px; margin: 0 auto; padding: 0 20px 34px; color: var(--ink2); font-size: 12.5px; }
+footer p { margin: 5px 0; max-width: 95ch; }
+
+.abas { max-width: 1320px; margin: 0 auto; padding: 16px 20px 0; display: flex; gap: 6px; }
+.abas a { font: 600 16px var(--display); letter-spacing: .02em; padding: 7px 14px; border-radius: 8px 8px 0 0; color: var(--ink2);
+  border: 1px solid transparent; border-bottom: 3px solid transparent; }
+.abas a:hover { text-decoration: none; background: var(--wash); }
+.abas a.on { color: var(--ink); background: var(--surface); border-color: var(--ring); border-bottom-color: var(--verde); }
+.metodo { margin-bottom: 14px; scroll-margin-top: 12px; }
+.metodo .mhead { display: flex; gap: 14px; align-items: center; border-bottom: 1px solid var(--grid); padding-bottom: 10px; margin-bottom: 10px; }
+.metodo .mcod { font: 700 22px var(--display); background: var(--verde); color: #fff; border-radius: 8px; padding: 6px 10px; min-width: 64px; text-align: center;
+  box-shadow: inset 0 -4px 0 var(--amarelo); }
+.metodo .mhead h2 { margin: 0; }
+.metodo .fam { color: var(--ink2); font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; }
+.metodo .mnum { margin-left: auto; text-align: right; font-size: 13px; color: var(--ink2); }
+.metodo .mnum b { font: 700 24px var(--display); color: var(--ink); }
+.metodo .perg { font-size: 16.5px; font-weight: 500; margin: 0 0 8px; max-width: 70ch; }
+.metodo h3 { font: 700 15px var(--display); text-transform: uppercase; letter-spacing: .05em; color: var(--verde-esc); margin: 12px 0 3px; }
+.metodo p { margin: 0 0 4px; max-width: 72ch; }
+.mcols { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 10px 28px; }
+@media (max-width: 860px) { .mcols { grid-template-columns: 1fr; } .metodo .mhead { flex-wrap: wrap; } .metodo .mnum { margin-left: 0; text-align: left; } }
+.formula { font: 14px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace; background: var(--page); border-left: 3px solid var(--azul-cand);
+  padding: 7px 10px; border-radius: 0 6px 6px 0; margin: 8px 0; overflow-x: auto; }
+.intro p { margin: 0 0 8px; max-width: 72ch; }
+.indice { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.indice a { font: 600 14px var(--display); padding: 3px 10px; border: 1px solid var(--axis); border-radius: 999px; }
+.indice a:hover { background: var(--wash); text-decoration: none; }
+ol.bib { margin: 4px 0 0; padding-left: 22px; font-size: 13px; color: var(--ink2); }
+ol.bib li { margin: 0 0 5px; max-width: 95ch; overflow-wrap: anywhere; }
+ol.bib a { overflow-wrap: anywhere; }
+ol.bib .usos a { display: inline-block; font: 600 12px var(--display); padding: 0 7px; border: 1px solid var(--axis); border-radius: 999px; margin-left: 3px; word-break: normal; }
+#metodo-referencias { margin-top: 14px; scroll-margin-top: 12px; }
+.crits { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.crit { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 10px 12px; }
+.crit h3 { font: 700 15px var(--display); margin: 0 0 2px; }
+.crit .nota { margin: 2px 0 0; font-size: 12.5px; }
+.ksel { display: inline-flex; gap: 6px; margin-left: 12px; vertical-align: middle; }
+.ksel button { font: 600 14px var(--body); padding: 4px 12px; border-radius: 999px; border: 1px solid var(--axis); background: var(--surface); color: var(--ink); cursor: pointer; }
+.ksel button.on { background: var(--verde); color: #fff; border-color: var(--verde); }
+.gcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; }
+.gcard { background: var(--surface); border: 1px solid var(--ring); border-top: 5px solid; border-radius: 10px; padding: 12px 14px; position: relative; }
+.gcard h3 { font: 700 18px/1.15 var(--display); margin: 0 30px 4px 0; text-wrap: balance; }
+.gcard .gnum { position: absolute; top: 10px; right: 12px; color: #fff; font: 700 14px var(--display); width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; }
+.gcard .gk { color: var(--ink2); font-size: 13px; }
+.traco { display: inline-block; padding: 0 6px; border: 1px solid var(--axis); border-radius: 999px; font-size: 12px; margin: 2px 2px 0 0; white-space: nowrap; }
+table.heat td { text-align: center; font-size: 12px; font-variant-numeric: tabular-nums; padding: 5px 3px; min-width: 36px; cursor: default; }
+table.heat th.hv { font-size: 11.5px; writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; padding: 6px 2px; box-shadow: none; cursor: default; }
+table.heat th.hb2 { font-size: 11.5px; text-align: center; color: var(--ink2); border-left: 1px solid var(--grid); box-shadow: none; cursor: default; }
+table.heat th.hg { white-space: nowrap; font-size: 13px; text-align: left; position: sticky; left: 0; background: var(--surface); cursor: default; }
+table.heat th.hg i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; }
+table.heat tbody tr { cursor: default; }
+h2.secao { font: 700 24px var(--display); margin: 22px 0 2px; }
+.teste .cod a { color: inherit; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="topo"><div class="in">
+  <div><h1>Eleição presidencial 2026 por município</h1>
+  <div class="sub">Votação nos dois turnos, perfil do eleitorado, Censo 2022 e testes forenses, do Brasil ao município</div></div>
+  <div class="ctl">
+    <label for="selUf">Estado<select id="selUf"></select></label>
+    <label for="selMun">Município<input id="selMun" list="lista" placeholder="Escolha o estado" disabled autocomplete="off"><datalist id="lista"></datalist></label>
+  </div>
+</div></div>
+<nav class="abas" aria-label="Seções do painel"><a id="abaPainel" data-ir="brasil">Painel</a><a id="abaMetodo" data-ir="metodologia">Metodologia dos testes</a><a id="abaClusters" data-ir="agrupamentos">Agrupamentos de municípios</a></nav>
+<div class="wrap"><nav class="trilha" id="trilha" aria-label="Navegação"></nav><main id="main"></main></div>
+<footer id="rodape"></footer>
+<div id="tip"></div>
+<script id="dados" type="application/json">__DADOS__</script>
+<script>
+"use strict";
+const D = JSON.parse(document.getElementById("dados").textContent);
+const NF = new Intl.NumberFormat("pt-BR");
+const fmt = x => x == null || !isFinite(x) ? "–" : NF.format(Math.round(x));
+const pct = (x, d = 1) => x == null || !isFinite(x) ? "–" : (100 * x).toLocaleString("pt-BR", {minimumFractionDigits: d, maximumFractionDigits: d}) + "%";
+const pctA = x => pct(x, x != null && x < 0.01 ? 2 : 1);
+const dec = (x, d = 2) => x == null || !isFinite(x) ? "–" : x.toLocaleString("pt-BR", {minimumFractionDigits: d, maximumFractionDigits: d});
+const brl = x => x == null || !isFinite(x) ? "–" : "R$ " + NF.format(Math.round(x));
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const $ = id => document.getElementById(id);
+const cap = s => String(s).toLowerCase().replace(/(^|[\s\-\/(.'])([a-zà-ú])/g, (m, a, b) => a + b.toUpperCase())
+  .replace(/ (De|Da|Do|Das|Dos|E|Em|Ou)(?= )/g, w => w.toLowerCase());
+const NOMES_UF = {AC:"Acre",AL:"Alagoas",AM:"Amazonas",AP:"Amapá",BA:"Bahia",CE:"Ceará",DF:"Distrito Federal",ES:"Espírito Santo",GO:"Goiás",
+  MA:"Maranhão",MG:"Minas Gerais",MS:"Mato Grosso do Sul",MT:"Mato Grosso",PA:"Pará",PB:"Paraíba",PE:"Pernambuco",PI:"Piauí",PR:"Paraná",
+  RJ:"Rio de Janeiro",RN:"Rio Grande do Norte",RO:"Rondônia",RR:"Roraima",RS:"Rio Grande do Sul",SC:"Santa Catarina",SE:"Sergipe",SP:"São Paulo",TO:"Tocantins"};
+const UFS = Object.keys(D.ufs).sort();
+const C1 = D.cand["1"], C2 = D.cand["2"];
+const iC = (C, n) => C.findIndex(c => c.num === n);
+const L1 = iC(C1, 13), F1 = iC(C1, 22), L2 = iC(C2, 13), F2 = iC(C2, 22);
+const corCand = n => n === 13 ? "var(--c-lula)" : n === 22 ? "var(--c-flavio)" : "var(--c-outro)";
+const PER = [["fem","Mulheres"],["i1624","16 a 24 anos"],["i60","60 anos ou mais"],["sup","Ensino superior"],["baixa","Até fundamental incompleto"],
+  ["bio","Com biometria"],["rinf","Informou cor ou raça"],["rpp","Preta ou parda (de quem informou)"]];
+const CEN = [["pp","Preta ou parda"],["ind","Indígena"],["analf","Analfabetismo (15 anos ou mais)"],["esg","Esgoto por rede geral"]];
+
+// ---- agregação de um conjunto de municípios -----------------------------------
+function agregar(U, ids) {
+  const a = {mun: ids.length, sec: 0, loc: 0, apt: 0, cmp1: 0, cmp2: 0, v1: C1.map(() => 0), v2: C2.map(() => 0),
+    p: {}, c: {}, terr: D.territorios.map(() => 0), fl: D.testes.map(() => 0), qual: 0, pop: 0, pop15: 0, aptPop: 0};
+  const ps = {}, cs = {}; let wp = 0, wr = 0, wc = 0, rp = 0;
+  PER.forEach(([k]) => ps[k] = 0); CEN.forEach(([k]) => cs[k] = 0); cs.renda = 0;
+  for (const m of ids) {
+    a.sec += U.sec[m]; a.loc += U.loc[m]; a.apt += U.apt[m]; a.cmp1 += U.cmp1[m]; a.cmp2 += U.cmp2[m];
+    U.v1.forEach((col, k) => a.v1[k] += col[m]); U.v2.forEach((col, k) => a.v2[k] += col[m]);
+    if (U.wp[m]) { wp += U.wp[m]; for (const k in U.p) ps[k] += (U.p[k][m] || 0) * U.wp[m]; }
+    if (U.wr[m] && U.rpp[m] != null) { wr += U.wr[m]; rp += U.rpp[m] * U.wr[m]; }
+    if (U.wc[m]) { wc += U.wc[m]; for (const k in U.c) cs[k] += (U.c[k][m] || 0) * U.wc[m]; }
+    U.terr.forEach((col, k) => a.terr[k] += col[m]); U.fl.forEach((col, k) => a.fl[k] += col[m]); a.qual += U.qual[m];
+    if (U.pop[m] != null) { a.pop += U.pop[m]; a.pop15 += U.pop15[m]; a.aptPop += U.apt[m]; }
+  }
+  for (const k in U.p) a.p[k] = wp ? ps[k] / wp : null;
+  a.p.rpp = wr ? rp / wr : null;
+  for (const k in cs) a.c[k] = wc ? cs[k] / wc : null;
+  return a;
+}
+const todos = U => U.cod.map((_, m) => m);
+const AG = {};
+UFS.forEach(u => AG[u] = agregar(D.ufs[u], todos(D.ufs[u])));
+const BR = (() => {   // Brasil = soma das UFs, médias ponderadas
+  const a = {mun: 0, sec: 0, loc: 0, apt: 0, cmp1: 0, cmp2: 0, v1: C1.map(() => 0), v2: C2.map(() => 0), p: {}, c: {},
+    terr: D.territorios.map(() => 0), fl: D.testes.map(() => 0), qual: 0, pop: 0, pop15: 0, aptPop: 0};
+  const wsum = {}, vsum = {};
+  for (const u of UFS) { const x = AG[u], U = D.ufs[u];
+    for (const k of ["mun","sec","loc","apt","cmp1","cmp2","qual","pop","pop15","aptPop"]) a[k] += x[k];
+    x.v1.forEach((v, k) => a.v1[k] += v); x.v2.forEach((v, k) => a.v2[k] += v);
+    x.terr.forEach((v, k) => a.terr[k] += v); x.fl.forEach((v, k) => a.fl[k] += v);
+    const wp = U.wp.reduce((s, v) => s + v, 0), wr = U.wr.reduce((s, v) => s + v, 0), wc = U.wc.reduce((s, v) => s + v, 0);
+    for (const k in x.p) { const w = k === "rpp" ? wr : wp; if (x.p[k] != null) { wsum["p" + k] = (wsum["p" + k] || 0) + w; vsum["p" + k] = (vsum["p" + k] || 0) + x.p[k] * w; } }
+    for (const k in x.c) if (x.c[k] != null) { wsum["c" + k] = (wsum["c" + k] || 0) + wc; vsum["c" + k] = (vsum["c" + k] || 0) + x.c[k] * wc; }
+  }
+  for (const k in AG[UFS[0]].p) a.p[k] = vsum["p" + k] / wsum["p" + k];
+  for (const k in AG[UFS[0]].c) a.c[k] = vsum["c" + k] / wsum["c" + k];
+  return a;
+})();
+const validos = (C, v) => C.reduce((s, c, k) => s + (c.esp ? 0 : v[k]), 0);
+const sh = (C, v, k) => { const t = validos(C, v); return t ? v[k] / t : null; };
+const lula2 = a => sh(C2, a.v2, L2);
+
+// ---- dica flutuante ----------------------------------------------------------
+const tip = $("tip");
+function poeTip(ev, h) { tip.innerHTML = h; tip.style.display = "block";
+  tip.style.left = Math.min(ev.clientX + 14, innerWidth - tip.offsetWidth - 8) + "px";
+  tip.style.top = Math.min(ev.clientY + 14, innerHeight - tip.offsetHeight - 8) + "px"; }
+document.addEventListener("mousemove", ev => { const t = ev.target.closest("[data-tip]"); if (t) poeTip(ev, t.dataset.tip); else tip.style.display = "none"; });
+
+// ---- componentes ---------------------------------------------------------------
+// refs: [{nome, a}] até dois níveis de comparação (traço escuro e traço claro)
+function barras(itens, max) {
+  max = max || Math.max(1e-9, ...itens.map(x => Math.max(x.v || 0, ...(x.r || []).map(r => r || 0))));
+  return '<div class="hb">' + itens.map(x => `<div class="rot" title="${esc(x.rot)}">${esc(x.rot)}${x.sub ? ` <small>${esc(x.sub)}</small>` : ""}</div>
+    <div class="tr" data-tip="${esc(x.tip || "")}"><div class="bar" style="width:${x.v == null ? 0 : Math.min(100, 100 * x.v / max)}%;background:${x.cor || "var(--verde)"}"></div>
+    ${(x.r || []).map((r, j) => r == null ? "" : `<div class="ref ${j ? "r2" : ""}" style="left:calc(${Math.min(100, 100 * r / max)}% - 1px)"></div>`).join("")}</div>
+    <div class="val">${x.txt ?? ""}${x.txt2 ? `<small>${x.txt2}</small>` : ""}</div>`).join("") + "</div>";
+}
+const legRefs = refs => refs.map((r, j) => `<span><i class="${j ? "tk2" : "tk"}"></i>${esc(r.nome)}</span>`).join("");
+const tipRefs = (refs, f) => refs.map(r => `<br>${esc(r.nome)}: ${f(r)}`).join("");
+
+function cartaoTurno(t, a, refs) {
+  const C = t === 1 ? C1 : C2, v = t === 1 ? a.v1 : a.v2, cmp = t === 1 ? a.cmp1 : a.cmp2, val = validos(C, v);
+  const shR = (r, k) => sh(C, t === 1 ? r.a.v1 : r.a.v2, k);
+  const espR = (r, k) => (t === 1 ? r.a.v1 : r.a.v2)[k] / (t === 1 ? r.a.cmp1 : r.a.cmp2);
+  const it = [], es = [];
+  C.forEach((c, k) => {
+    if (c.esp) { const p = cmp ? v[k] / cmp : null;
+      es.push({rot: c.nome, sub: "% do comparecimento", v: p, r: refs.map(r => espR(r, k)), cor: "var(--c-esp)", txt: pctA(p), txt2: fmt(v[k]),
+        tip: `<b>${esc(c.nome)}</b><br>${pct(p, 2)} do comparecimento` + tipRefs(refs, r => pct(espR(r, k), 2))}); return; }
+    const p = val ? v[k] / val : null;
+    it.push({rot: cap(c.nome), sub: String(c.num), v: p, r: refs.map(r => shR(r, k)), cor: corCand(c.num), txt: pctA(p), txt2: fmt(v[k]) + (v[k] === 1 ? " voto" : " votos"),
+      tip: `<b>${esc(cap(c.nome))}</b> (${c.num})<br>${pct(p, 2)} dos válidos · ${fmt(v[k])} votos` + tipRefs(refs, r => pct(shR(r, k), 2))});
+  });
+  const abst = a.apt ? 1 - cmp / a.apt : null, abR = r => 1 - (t === 1 ? r.a.cmp1 : r.a.cmp2) / r.a.apt;
+  es.push({rot: "Abstenção", sub: "% dos aptos", v: abst, r: refs.map(abR), cor: "var(--c-esp)", txt: pct(abst), txt2: fmt(a.apt - cmp),
+    tip: `<b>Abstenção</b><br>${pct(abst, 2)} dos aptos` + tipRefs(refs, r => pct(abR(r), 2))});
+  return `<section class="cartao"><h2>${t}º turno${t === 1 ? " · todos os candidatos" : ""}</h2>
+    <p class="nota">% dos ${fmt(val)} votos válidos. Comparecimento: ${fmt(cmp)} de ${fmt(a.apt)} aptos (${pct(cmp / a.apt)}).</p>
+    ${barras(it)}<div class="esp"></div>${barras(es)}
+    <div class="leg"><span><i style="background:var(--c-lula)"></i>Lula</span><span><i style="background:var(--c-flavio)"></i>Flávio</span>
+    <span><i style="background:var(--c-outro)"></i>demais</span>${legRefs(refs)}</div></section>`;
+}
+function cartaoPerfil(a, refs) {
+  const it = PER.map(([k, r]) => ({rot: r, v: a.p[k], r: refs.map(x => x.a.p[k]), txt: pct(a.p[k]), cor: "var(--verde)",
+    tip: `<b>${esc(r)}</b><br>${pct(a.p[k], 2)}` + tipRefs(refs, x => pct(x.a.p[k], 2))}));
+  return `<section class="cartao"><h2>Perfil do eleitorado (TSE)</h2>
+    <p class="nota">% dos eleitores aptos, pelo cadastro de 2026. Cor ou raça só existe para cerca de 1 em cada 5 eleitores.</p>
+    ${barras(it, 1)}<div class="leg"><span><i style="background:var(--verde)"></i>esta seleção</span>${legRefs(refs)}</div></section>`;
+}
+function cartaoCenso(a, refs, extra) {
+  const it = CEN.map(([k, r]) => ({rot: r, v: a.c[k], r: refs.map(x => x.a.c[k]), txt: k === "ind" ? pct(a.c[k], 2) : pct(a.c[k]), cor: "var(--azul-cand)",
+    tip: `<b>${esc(r)}</b><br>${pct(a.c[k], 2)}` + tipRefs(refs, x => pct(x.a.c[k], 2))}));
+  const tot = a.terr.reduce((s, x) => s + x, 0) || 1;
+  const te = D.territorios.map((t, k) => ({rot: cap(t), v: a.terr[k] / tot, r: refs.map(x => x.a.terr[k] / (x.a.terr.reduce((s, y) => s + y, 0) || 1)),
+    cor: "var(--c-outro)", txt: pct(a.terr[k] / tot), txt2: fmt(a.terr[k]) + " seções",
+    tip: `<b>${esc(cap(t))}</b><br>${fmt(a.terr[k])} seções`})).filter((x, k) => a.terr[k] || refs.some(r => r.a.terr[k]));
+  return `<section class="cartao"><h2>Censo 2022 (IBGE) em volta dos locais de votação</h2>
+    <p class="nota">Setores censitários num raio de 1 km de cada local de votação, ponderados pelos eleitores.</p>
+    <dl class="dl"><dt>Renda média do responsável pelo domicílio</dt><dd>${brl(a.c.renda)}${refs.map(r => `<br><small>${esc(r.nome)}: ${brl(r.a.c.renda)}</small>`).join("")}</dd>
+    ${a.pop ? `<dt>População (Censo 2022)</dt><dd>${fmt(a.pop)}</dd><dt>Eleitorado TSE / população de 15 anos ou mais</dt><dd>${dec(a.aptPop / a.pop15)}${refs.map(r => r.a.pop15 ? `<br><small>${esc(r.nome)}: ${dec(r.a.aptPop / r.a.pop15)}</small>` : "").join("")}</dd>` : ""}
+    ${extra || ""}</dl>
+    ${barras(it, Math.max(0.05, ...it.map(x => Math.max(x.v || 0, ...x.r.map(y => y || 0)))))}
+    <div class="esp"></div><div class="nota" style="margin:0 0 5px">Território das seções</div>${barras(te, 1)}
+    <div class="leg"><span><i style="background:var(--azul-cand)"></i>esta seleção</span>${legRefs(refs)}</div></section>`;
+}
+function cartaoTestes(a) {
+  return `<section class="cartao"><h2>Testes forenses</h2>
+    <p class="nota">Seções sinalizadas em cada teste: ${fmt(a.qual)} em pelo menos um, ${pct(a.qual / a.sec, 2)} das ${fmt(a.sec)} seções.
+    Sinalização é um alerta estatístico para verificar, não prova de irregularidade.</p>
+    ${D.testes.map((t, b) => `<div class="teste ${a.fl[b] ? "" : "zero"} ${a.fl[b] && a.fl[b] / a.sec > 0.01 ? "on" : ""}">
+      <span class="cod"><a data-ir="metodo-${t.cod.toLowerCase()}" title="Ver a metodologia">${t.cod}</a></span><span><a data-ir="metodo-${t.cod.toLowerCase()}" style="color:inherit">${esc(t.nome)}</a></span><span class="q">${fmt(a.fl[b])}${a.fl[b] ? ` <small style="color:var(--muted)">${pct(a.fl[b] / a.sec, 2)}</small>` : ""}</span>
+      <span class="d">${esc(t.descricao)}</span></div>`).join("")}
+    <p class="nota" style="margin-top:8px">Fundo amarelo: mais de 1% das seções sinalizadas no teste. Clique num teste para ver a metodologia.</p></section>`;
+}
+function kpis(a, extra) {
+  const k = [["Seções", fmt(a.sec), `${fmt(a.loc)} locais${a.mun > 1 ? " · " + fmt(a.mun) + " municípios" : ""}`, ""],
+    ["Eleitores aptos", fmt(a.apt), a.pop ? `população ${fmt(a.pop)}` : "", ""],
+    ["Comparecimento 1º turno", pct(a.cmp1 / a.apt), fmt(a.cmp1), ""], ["Comparecimento 2º turno", pct(a.cmp2 / a.apt), fmt(a.cmp2), ""],
+    ["Lula no 2º turno", pct(sh(C2, a.v2, L2)), fmt(a.v2[L2]) + " votos", "az"], ["Flávio no 2º turno", pct(sh(C2, a.v2, F2)), fmt(a.v2[F2]) + " votos", "vd"],
+    ["Sinalizadas em algum teste", fmt(a.qual), pct(a.qual / a.sec, 2) + " das seções", "am"]];
+  return `<div class="kpis">${k.map(([r, v, n, c]) => `<div class="kpi ${c}"><div class="r">${r}</div><div class="v">${v}</div><div class="n">${n}</div></div>`).join("")}</div>`;
+}
+
+// ---- cor divergente: azul (Lula) ← cinza → verde (Flávio) --------------------------
+const RAMPA_A = ["#c9d6ef", "#93acdc", "#5b82c6", "#2f5aa8", "#1a3f86", "#0d2a64"];
+const RAMPA_V = ["#c6e8d0", "#8fd2a4", "#52b878", "#1e9c52", "#0c7a3c", "#055a2b"];
+function corDiv(p) {   // p = % de Lula entre os finalistas
+  if (p == null) return "var(--meio)";
+  const d = p - 0.5, k = Math.min(5, Math.floor(Math.abs(d) / 0.05));
+  if (Math.abs(d) < 0.02) return "#a9aea8";
+  return d > 0 ? RAMPA_A[k] : RAMPA_V[k];
+}
+function legDiv() {
+  const cs = RAMPA_V.slice().reverse().concat(["#a9aea8"], RAMPA_A);
+  return `<div class="leg" style="align-items:center;gap:8px"><span style="white-space:nowrap">Flávio à frente
+    <span style="display:inline-flex;vertical-align:-1px;margin:0 6px">${cs.map(c => `<i style="background:${c};width:14px;margin:0;border-radius:0"></i>`).join("")}</span>
+    Lula à frente</span><span style="color:var(--muted)">Cada tom = 5 pontos de vantagem; cinza = até 2 pontos.</span></div>`;
+}
+
+// mapa em grade dos estados
+const GRADE = {RR:[1,0],AP:[3,0],AM:[1,1],PA:[2,1],MA:[3,1],CE:[4,1],RN:[5,1],AC:[0,2],RO:[1,2],MT:[2,2],TO:[3,2],PI:[4,2],PE:[5,2],PB:[6,2],
+  MS:[2,3],GO:[3,3],DF:[4,3],BA:[5,3],AL:[6,3],PR:[2,4],SP:[3,4],MG:[4,4],ES:[5,4],SE:[6,4],SC:[2,5],RJ:[4,5],RS:[2,6]};
+function mapa() {
+  const s = 74, g = 4; let h = "";
+  for (const u of UFS) { const [c, r] = GRADE[u], x = c * s, y = r * s, p = lula2(AG[u]);
+    const escuro = p == null || Math.abs(p - 0.5) >= 0.1;
+    h += `<g class="tile" tabindex="0" role="link" aria-label="${NOMES_UF[u]}" data-ir="uf-${u.toLowerCase()}"
+      data-tip="<b>${NOMES_UF[u]}</b><br>2º turno: Lula ${pct(p)} · Flávio ${pct(sh(C2, AG[u].v2, F2))}<br>${fmt(AG[u].qual)} seções sinalizadas">
+      <rect x="${x + g / 2}" y="${y + g / 2}" width="${s - g}" height="${s - g}" rx="6" fill="${corDiv(p)}"/>
+      <text x="${x + s / 2}" y="${y + s / 2 - 2}" text-anchor="middle" style="fill:${escuro ? "#fff" : "#0e1a12"}">${u}</text>
+      <text class="pv" x="${x + s / 2}" y="${y + s / 2 + 15}" text-anchor="middle" style="fill:${escuro ? "#fff" : "#0e1a12"}">${pct(Math.max(p, 1 - p), 0)}</text></g>`; }
+  return `<section class="cartao"><h2>Quem venceu o 2º turno em cada estado</h2>
+    <p class="nota">Cada quadrado é um estado, na posição aproximada do mapa. O número é o % do vencedor entre os dois finalistas. Clique para abrir.</p>
+    <svg viewBox="0 0 ${7 * s} ${7 * s}" width="100%" style="max-width:520px;display:block;margin:0 auto" role="img" aria-label="Mapa em grade dos estados">${h}</svg>${legDiv()}</section>`;
+}
+function histMun(U, ids, titulo) {
+  const nb = 25, cont = new Array(nb).fill(0);
+  for (const m of ids) { const p = sh(C2, U.v2.map(c => c[m]), L2); if (p == null) continue; cont[Math.min(nb - 1, Math.floor(p * nb))]++; }
+  const W = 640, H = 210, ml = 40, mr = 10, mt = 10, mb = 30, w = W - ml - mr, h = H - mt - mb, mx = Math.max(...cont, 1), bw = w / nb;
+  const st = [1, 2, 5, 10, 20, 50, 100, 200].find(k => mx / k <= 5) || 500; let s = "";
+  for (let v = st; v <= mx; v += st) { const y = mt + h - h * v / mx; s += `<line x1="${ml}" x2="${W - mr}" y1="${y}" y2="${y}" stroke="var(--grid)"/><text x="${ml - 6}" y="${y + 4}" text-anchor="end">${v}</text>`; }
+  cont.forEach((c, b) => { const x = ml + b * bw, bh = h * c / mx, mid = (b + 0.5) / nb;
+    s += `<g data-tip="Lula entre ${b * 4}% e ${b * 4 + 4}%<br><b>${c}</b> municípios"><rect x="${x}" y="${mt}" width="${bw}" height="${h}" fill="transparent"/>
+      ${c ? `<rect x="${x + 1}" y="${mt + h - bh}" width="${bw - 2}" height="${bh}" rx="3" fill="${corDiv(mid)}"/>` : ""}</g>`; });
+  s += `<line x1="${ml}" x2="${W - mr}" y1="${mt + h}" y2="${mt + h}" stroke="var(--axis)"/>`;
+  [0, 25, 50, 75, 100].forEach(v => s += `<text x="${ml + w * v / 100}" y="${H - 10}" text-anchor="middle">${v}%</text>`);
+  return `<section class="cartao"><h2>${titulo}</h2><p class="nota">Número de municípios por faixa de 4 pontos de % de Lula entre os dois finalistas no 2º turno.</p>
+    <svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Histograma dos municípios">${s}</svg>${legDiv()}</section>`;
+}
+
+// ---- tabela ---------------------------------------------------------------------
+const TAB = {};
+function tabela(id, cols, linhas, ord, ir, opc = {}) {
+  linhas.forEach((r, k) => r._k = k);
+  TAB[id] = {cols, linhas, ord, desc: !!opc.desc, busca: "", ir, lim: opc.lim || 400, acao: opc.acao, filtro: null, rotFiltro: "", sel: null};
+  return `<div class="ferr"><input type="search" id="b_${id}" placeholder="Buscar (nome, UF, seção, teste)" aria-label="Buscar"><button data-copia="${id}">Copiar tabela</button>
+    <span class="conta" id="c_${id}"></span></div><div class="tabw" ${opc.altura ? `style="max-height:${opc.altura}px"` : ""}><table id="t_${id}"></table></div>`;
+}
+function desenha(id) {
+  const T = TAB[id]; let ls = T.linhas;
+  if (T.filtro) ls = ls.filter(T.filtro);
+  if (T.busca) { const b = T.busca.toLowerCase(); ls = ls.filter(r => T.cols.some(c => { const v = String(c.v(r) ?? "").toLowerCase(); return c.t === "UF" || c.t === "Zona" || c.t === "Seção" ? v === b : !c.n && v.includes(b); })); }
+  const c = T.cols[T.ord], sg = T.desc ? -1 : 1;
+  ls = ls.slice().sort((x, y) => { const a = c.v(x), b = c.v(y); if (a == null) return 1; if (b == null) return -1; return (a > b ? 1 : a < b ? -1 : 0) * sg; });
+  const vis = ls.slice(0, T.lim);
+  $("t_" + id).innerHTML = `<thead><tr>${T.cols.map((c, k) => `<th class="${c.n ? "n" : ""}" data-ord="${id}:${k}" title="${esc(c.dica || "Ordenar")}">${esc(c.t)}${T.ord === k ? ` <span class="s">${T.desc ? "▼" : "▲"}</span>` : ""}</th>`).join("")}</tr></thead>
+   <tbody>${vis.map(r => `<tr data-lin="${id}:${r._k}" class="${T.sel === r._k ? "sel" : ""}">${T.cols.map(c => `<td class="${c.n ? "n" : ""}">${c.h ? c.h(r) : esc(c.f ? c.f(c.v(r)) : c.v(r))}</td>`).join("")}</tr>`).join("")}</tbody>`;
+  $("c_" + id).innerHTML = (T.filtro ? `<b>${esc(T.rotFiltro)}</b> · <a data-limpa="${id}">ver todas</a> · ` : "") +
+    `${fmt(ls.length)} linhas${ls.length > T.lim ? ` · mostrando ${fmt(T.lim)} · <a data-mais="${id}">mostrar todas</a>` : ""}`;
+  $("b_" + id).oninput = e => { T.busca = e.target.value; desenha(id); };
+}
+async function copia(id, btn) {
+  const T = TAB[id], txt = [T.cols.map(c => c.t).join("\t")].concat(T.linhas.map(r => T.cols.map(c => { const v = c.v(r); return typeof v === "number" ? String(+v.toFixed(6)).replace(".", ",") : (v ?? ""); }).join("\t"))).join("\n");
+  try { await navigator.clipboard.writeText(txt); btn.textContent = "Copiada: cole no Excel"; } catch (e) { btn.textContent = "Não foi possível copiar"; }
+  setTimeout(() => btn.textContent = "Copiar tabela", 2500);
+}
+const barra2 = p => p == null ? "–" : `<span class="pill"><b style="width:${100 * p}%"></b></span>${pct(p)}`;
+const colsVoto = (U) => [
+  {t: "Lula 1º", v: r => sh(C1, r.a.v1, L1), n: 1, f: pct}, {t: "Flávio 1º", v: r => sh(C1, r.a.v1, F1), n: 1, f: pct},
+  {t: "Outros 1º", v: r => { const p = validos(C1, r.a.v1); return p ? 1 - (r.a.v1[L1] + r.a.v1[F1]) / p : null; }, n: 1, f: pct, dica: "Demais candidatos no 1º turno, % dos válidos"},
+  {t: "Lula × Flávio 2º", v: r => lula2(r.a), n: 1, h: r => barra2(lula2(r.a)), dica: "% de Lula entre os dois finalistas no 2º turno"}];
+
+// ---- telas -----------------------------------------------------------------------
+document.addEventListener("click", ev => {
+  const t = ev.target;
+  const ir = t.closest("[data-ir]"); if (ir) { vai(ir.dataset.ir); return; }
+  const th = t.closest("[data-ord]"); if (th) { const [id, k] = th.dataset.ord.split(":"); const T = TAB[id];
+    if (T.ord === +k) T.desc = !T.desc; else { T.ord = +k; T.desc = !!T.cols[k].n; } desenha(id); return; }
+  const lp = t.closest("[data-limpa]"); if (lp) { const T = TAB[lp.dataset.limpa]; T.filtro = null; if (T.dono) { TAB[T.dono].sel = null; desenha(T.dono); } desenha(lp.dataset.limpa); return; }
+  const tr = t.closest("[data-lin]"); if (tr) { const [id, k] = tr.dataset.lin.split(":"); const T = TAB[id], r = T.linhas[+k];
+    if (T.acao) T.acao(r, id); else vai(T.ir(r)); return; }
+  const mais = t.closest("[data-mais]"); if (mais) { TAB[mais.dataset.mais].lim = 1e9; desenha(mais.dataset.mais); return; }
+  const cp = t.closest("[data-copia]"); if (cp) copia(cp.dataset.copia, cp);
+});
+document.addEventListener("keydown", ev => { if (ev.key === "Enter") { const ir = ev.target.closest && ev.target.closest("[data-ir]"); if (ir) vai(ir.dataset.ir); } });
+$("selUf").innerHTML = '<option value="">Brasil</option>' + UFS.map(u => `<option value="${u}">${u} – ${NOMES_UF[u]}</option>`).join("");
+$("selUf").onchange = e => vai(e.target.value ? "uf-" + e.target.value.toLowerCase() : "brasil");
+$("selMun").onchange = e => { const uf = $("selUf").value, U = D.ufs[uf]; if (!U) return;
+  const v = e.target.value.trim().toLowerCase(), m = U.nome.findIndex(n => cap(n).toLowerCase() === v);
+  if (m >= 0) vai(`mun-${uf.toLowerCase()}-${U.cod[m]}`); };
+
+function trilha(p) { $("trilha").innerHTML = p.map((x, k) => k === p.length - 1 ? `<span>${esc(x[0])}</span>` : `<a data-ir="${x[1]}">${esc(x[0])}</a>`).join('<span class="sep">›</span>'); }
+
+function telaBrasil() {
+  trilha([["Brasil"]]);
+  $("selUf").value = ""; $("selMun").value = ""; $("selMun").disabled = true; $("selMun").placeholder = "Escolha o estado";
+  const linhas = UFS.map(u => ({u, nome: NOMES_UF[u], a: AG[u]}));
+  const cols = [{t: "Estado", v: r => r.nome}, {t: "Municípios", v: r => r.a.mun, n: 1, f: fmt}, {t: "Seções", v: r => r.a.sec, n: 1, f: fmt},
+    {t: "Aptos", v: r => r.a.apt, n: 1, f: fmt}, {t: "Comp. 2º", v: r => r.a.cmp2 / r.a.apt, n: 1, f: pct}].concat(colsVoto(),
+    [{t: "Renda (Censo)", v: r => r.a.c.renda, n: 1, f: brl}, {t: "Sinalizadas", v: r => r.a.qual, n: 1, f: fmt},
+     {t: "% sinalizadas", v: r => r.a.qual / r.a.sec, n: 1, f: x => pct(x, 2)}]);
+  $("main").innerHTML = kpis(BR) + `<div class="grade">${mapa()}${cartaoTurno(2, BR, [])}${cartaoTurno(1, BR, [])}${cartaoPerfil(BR, [])}${cartaoCenso(BR, [])}${cartaoTestes(BR)}
+    <section class="cartao cheio"><h2>Estados</h2><p class="nota">Clique numa linha para abrir o estado. Clique no título de uma coluna para ordenar.</p>${tabela("ufs", cols, linhas, 0, r => "uf-" + r.u.toLowerCase())}</section></div>`;
+  desenha("ufs");
+}
+function prepMun(uf) {
+  const U = D.ufs[uf], dl = $("lista");
+  $("selUf").value = uf; $("selMun").disabled = false; $("selMun").placeholder = "Digite o nome";
+  if (dl.dataset.uf !== uf) { dl.innerHTML = U.nome.map(n => `<option value="${esc(cap(n))}">`).join(""); dl.dataset.uf = uf; }
+  return U;
+}
+function telaUf(uf) {
+  const U = prepMun(uf), a = AG[uf]; $("selMun").value = "";
+  trilha([["Brasil", "brasil"], [NOMES_UF[uf]]]);
+  const refs = [{nome: "Brasil", a: BR}];
+  const linhas = todos(U).map(m => ({m, nome: cap(U.nome[m]), a: agregar(U, [m]), razao: U.razao[m], n12: U.n12[m], pop: U.pop[m]}));
+  const cols = [{t: "Município", v: r => r.nome}, {t: "População", v: r => r.pop, n: 1, f: fmt}, {t: "Seções", v: r => r.a.sec, n: 1, f: fmt},
+    {t: "Aptos", v: r => r.a.apt, n: 1, f: fmt}, {t: "Comp. 2º", v: r => r.a.cmp2 / r.a.apt, n: 1, f: pct}].concat(colsVoto(U),
+    [{t: "Renda (Censo)", v: r => r.a.c.renda, n: 1, f: brl},
+     {t: "Eleitorado / pop. 15+", v: r => r.razao, n: 1, f: x => dec(x), dica: "Eleitores aptos (TSE 2026) / população de 15 anos ou mais (Censo 2022)"},
+     {t: "Sinalizadas", v: r => r.a.qual, n: 1, f: fmt}, {t: "% sinal.", v: r => r.a.qual / r.a.sec, n: 1, f: x => pct(x, 2)},
+     {t: "N12", v: r => r.n12, n: 1, h: r => r.n12 != null ? `<span class="selo">⚑ multimodal</span>` : "", dica: "Teste N12: distribuição do voto entre as seções com mais de uma moda"}]);
+  $("main").innerHTML = kpis(a) + `<div class="grade">${cartaoTurno(2, a, refs)}${cartaoTurno(1, a, refs)}${histMun(U, todos(U), "Municípios de " + NOMES_UF[uf])}
+    ${cartaoPerfil(a, refs)}${cartaoCenso(a, refs)}${cartaoTestes(a)}
+    <section class="cartao cheio"><h2>Municípios de ${NOMES_UF[uf]}</h2><p class="nota">Clique numa linha para abrir o município.</p>${tabela("muns", cols, linhas, 0, r => `mun-${uf.toLowerCase()}-${U.cod[r.m]}`)}</section></div>`;
+  desenha("muns");
+}
+function telaMun(uf, cod) {
+  const U = prepMun(uf), m = U.cod.indexOf(cod);
+  if (m < 0) { $("main").innerHTML = "<p>Município não encontrado.</p>"; return; }
+  const nome = cap(U.nome[m]); $("selMun").value = nome;
+  trilha([["Brasil", "brasil"], [NOMES_UF[uf], "uf-" + uf.toLowerCase()], [nome]]);
+  const a = agregar(U, [m]), refs = [{nome: NOMES_UF[uf], a: AG[uf]}, {nome: "Brasil", a: BR}];
+  const extra = `<dt>Código IBGE · código TSE</dt><dd>${U.ibge[m] ?? "–"} · ${cod}</dd>`;
+  const n12 = U.n12[m] != null ? `<div class="aviso">⚑ <b>Teste N12:</b> a distribuição do voto entre as seções deste município tem mais de uma moda (dip de Hartigan = ${dec(U.n12[m], 3)}).
+    Costuma refletir bairros ou comunidades com perfis muito diferentes; ver o Censo abaixo.</div>` : "";
+  const secMun = SM.filter(r => r.u === uf && r.m === m).sort((x, y) => x.z - y.z || x.s - y.s);
+  const posL = (() => { const ord = todos(U).map(j => [j, lula2(agregar(U, [j]))]).filter(x => x[1] != null).sort((x, y) => y[1] - x[1]); return ord.findIndex(x => x[0] === m) + 1; })();
+  $("main").innerHTML = kpis(a) + n12 + grupoMunHtml(uf, cod) + `<div class="aviso" style="border-left-color:var(--verde)">No 2º turno, ${nome} ficou em ${posL}º lugar entre os ${U.cod.length} municípios de ${NOMES_UF[uf]} no % de Lula.
+    Traços nas barras: ${NOMES_UF[uf]} (escuro) e Brasil (claro).</div>
+    <div class="grade">${cartaoTurno(2, a, refs)}${cartaoTurno(1, a, refs)}${cartaoPerfil(a, refs)}${cartaoCenso(a, refs, extra)}${cartaoTestes(a)}
+    ${secMun.length ? `<section class="cartao cheio"><h2>Seções marcadas neste município (${fmt(secMun.length)})</h2>
+      <p class="nota">Seções com pelo menos um teste. Passe o mouse sobre o código do teste para ver o nome; a aba Metodologia explica cada um.</p>
+      ${tabela("secmun", colsSecoes(false), secMun, 0, () => "metodologia", {altura: 420})}</section>` : ""}</div>`;
+  if (secMun.length) desenha("secmun");
+}
+function render() {
+  const h = ATUAL.toLowerCase();
+  let r;
+  const met = h === "metodologia" || h.startsWith("metodo-"), clu = h === "agrupamentos";
+  $("abaPainel").classList.toggle("on", !met && !clu); $("abaMetodo").classList.toggle("on", met); $("abaClusters").classList.toggle("on", clu);
+  if (clu) { telaClusters(); tip.style.display = "none"; return; }
+  if (met) { telaMetodo(); tip.style.display = "none";
+    const alvo = h !== "metodologia" && document.getElementById(h); if (alvo) requestAnimationFrame(() => alvo.scrollIntoView()); else scrollTo(0, 0);
+    return; }
+  if ((r = h.match(/^mun-([a-z]{2})-(\d+)$/)) && D.ufs[r[1].toUpperCase()]) telaMun(r[1].toUpperCase(), +r[2]);
+  else if ((r = h.match(/^uf-([a-z]{2})$/)) && D.ufs[r[1].toUpperCase()]) telaUf(r[1].toUpperCase());
+  else telaBrasil();
+  tip.style.display = "none";
+}
+// navegação: chama a tela diretamente (não depende do evento hashchange, que o
+// visualizador do claude.ai pode não repassar) e grava o endereço quando possível
+let ATUAL = "";
+function vai(h) {
+  ATUAL = h || "brasil";
+  try { history.pushState(null, "", "#" + ATUAL); } catch (e) { /* endereço não pôde ser gravado; a tela abre mesmo assim */ }
+  render();
+  if (!ATUAL.startsWith("metodo-")) scrollTo(0, 0);
+}
+addEventListener("hashchange", () => { const h = location.hash.slice(1); if (h && h !== ATUAL) { ATUAL = h; render(); if (!h.startsWith("metodo-")) scrollTo(0, 0); } });
+addEventListener("popstate", () => { const h = location.hash.slice(1) || "brasil"; if (h !== ATUAL) { ATUAL = h; render(); } });
+$("rodape").innerHTML = `<p><b>Fontes.</b> Votação por seção, detalhe da apuração e perfil do eleitorado: Portal de Dados Abertos do TSE. Censo Demográfico 2022: setores censitários (IBGE).
+  Testes: scripts do artigo "Forense estatística da eleição presidencial brasileira de 2026 por seção eleitoral". Exterior fora do painel. Dados gerados em ${esc(D.gerado)}.</p>
+  <p><b>Como ler.</b> As sinalizações indicam seções com padrão estatístico incomum num teste, para verificação; não são prova de fraude. Boa parte delas fica em
+  territórios indígenas, quilombolas e rurais, onde o voto é muito homogêneo. A razão eleitorado / população compara bases com 4 anos de diferença e não considera quem vota fora de onde mora.
+  As cores seguem a bandeira; azul para Lula e verde para Flávio é só uma convenção do painel.</p>`;
+// ---- bibliografia (do references.bib do artigo) ----------------------------------
+const doi = d => ` DOI: <a href="https://doi.org/${d}" target="_blank" rel="noopener">${d}</a>.`;
+const url = u => ` Disponível em: <a href="${u}" target="_blank" rel="noopener">${u.replace(/^https?:\/\//, "")}</a>.`;
+const REFS = {
+  hicken2017: "HICKEN, A.; MEBANE JR., W. R. <i>A guide to election forensics</i>. Washington, DC: USAID, 2017.",
+  beber2012: "BEBER, B.; SCACCO, A. What the numbers say: a digit-based test for election fraud. <i>Political Analysis</i>, v. 20, n. 2, p. 211–234, 2012." + doi("10.1093/pan/mps003"),
+  mack2019: "MACK, V.; STOETZER, L. F. Election fraud, digit tests and how humans fabricate vote counts: an experimental approach. <i>Electoral Studies</i>, v. 58, p. 31–47, 2019." + doi("10.1016/j.electstud.2018.12.002"),
+  kobak2016: "KOBAK, D.; SHPILKIN, S.; PSHENICHNIKOV, M. S. Integer percentages as electoral falsification fingerprints. <i>The Annals of Applied Statistics</i>, v. 10, n. 1, p. 54–73, 2016." + doi("10.1214/16-AOAS904"),
+  rozenas2017: "ROZENAS, A. Detecting election fraud from irregularities in vote-share distributions. <i>Political Analysis</i>, v. 25, n. 1, p. 41–56, 2017." + doi("10.1017/pan.2016.9"),
+  klimek2012: "KLIMEK, P.; YEGOROV, Y.; HANEL, R.; THURNER, S. Statistical detection of systematic election irregularities. <i>Proceedings of the National Academy of Sciences</i>, v. 109, n. 41, p. 16469–16473, 2012." + doi("10.1073/pnas.1210722109"),
+  klimek2018: "KLIMEK, P.; JIMÉNEZ, R.; HIDALGO, M.; HINTEREGGER, A.; THURNER, S. Forensic analysis of Turkish elections in 2017–2018. <i>PLoS ONE</i>, v. 13, n. 10, e0204975, 2018." + doi("10.1371/journal.pone.0204975"),
+  klimek2023: "KLIMEK, P.; AYKAÇ, A.; THURNER, S. Forensic analysis of the Turkey 2023 presidential election reveals extreme vote swings in remote areas. <i>PLoS ONE</i>, v. 18, n. 11, e0293239, 2023." + doi("10.1371/journal.pone.0293239"),
+  benjamini1995: "BENJAMINI, Y.; HOCHBERG, Y. Controlling the false discovery rate: a practical and powerful approach to multiple testing. <i>Journal of the Royal Statistical Society: Series B</i>, v. 57, n. 1, p. 289–300, 1995." + doi("10.1111/j.2517-6161.1995.tb02031.x"),
+  leys2013: "LEYS, C. et al. Detecting outliers: do not use standard deviation around the mean, use absolute deviation around the median. <i>Journal of Experimental Social Psychology</i>, v. 49, n. 4, p. 764–766, 2013." + doi("10.1016/j.jesp.2013.03.013"),
+  hampel1974: "HAMPEL, F. R. The influence curve and its role in robust estimation. <i>Journal of the American Statistical Association</i>, v. 69, n. 346, p. 383–393, 1974." + doi("10.1080/01621459.1974.10482962"),
+  wedderburn1974: "WEDDERBURN, R. W. M. Quasi-likelihood functions, generalized linear models, and the Gauss–Newton method. <i>Biometrika</i>, v. 61, n. 3, p. 439–447, 1974." + doi("10.1093/biomet/61.3.439"),
+  williams1982: "WILLIAMS, D. A. Extra-binomial variation in logistic linear models. <i>Journal of the Royal Statistical Society: Series C (Applied Statistics)</i>, v. 31, n. 2, p. 144–148, 1982." + doi("10.2307/2347977"),
+  gelman1996: "GELMAN, A.; MENG, X.-L.; STERN, H. Posterior predictive assessment of model fitness via realized discrepancies. <i>Statistica Sinica</i>, v. 6, n. 4, p. 733–760, 1996." + url("https://www3.stat.sinica.edu.tw/statistica/j6n4/j6n41/j6n41.htm"),
+  haldane1956: "HALDANE, J. B. S. The estimation and significance of the logarithm of a ratio of frequencies. <i>Annals of Human Genetics</i>, v. 20, n. 4, p. 309–311, 1956." + doi("10.1111/j.1469-1809.1955.tb01285.x"),
+  goodman1953: "GOODMAN, L. A. Ecological regressions and behavior of individuals. <i>American Sociological Review</i>, v. 18, n. 6, p. 663–664, 1953.",
+  spearman1904: "SPEARMAN, C. The proof and measurement of association between two things. <i>The American Journal of Psychology</i>, v. 15, n. 1, p. 72–101, 1904." + doi("10.2307/1412159"),
+  anselin1995: "ANSELIN, L. Local indicators of spatial association — LISA. <i>Geographical Analysis</i>, v. 27, n. 2, p. 93–115, 1995." + doi("10.1111/j.1538-4632.1995.tb00338.x"),
+  breiman2001: "BREIMAN, L. Random forests. <i>Machine Learning</i>, v. 45, n. 1, p. 5–32, 2001." + doi("10.1023/A:1010933404324"),
+  wright2017: "WRIGHT, M. N.; ZIEGLER, A. ranger: a fast implementation of random forests for high dimensional data in C++ and R. <i>Journal of Statistical Software</i>, v. 77, n. 1, p. 1–17, 2017." + doi("10.18637/jss.v077.i01"),
+  zhang2019: "ZHANG, M.; ALVAREZ, R. M.; LEVIN, I. Election forensics: using machine learning and synthetic data for possible election anomaly detection. <i>PLoS ONE</i>, v. 14, n. 10, e0223950, 2019." + doi("10.1371/journal.pone.0223950"),
+  hartigan1985: "HARTIGAN, J. A.; HARTIGAN, P. M. The dip test of unimodality. <i>The Annals of Statistics</i>, v. 13, n. 1, p. 70–84, 1985." + doi("10.1214/aos/1176346577"),
+  vandegraaf2017: "VAN DE GRAAF, J. <i>O mito da urna: desvendando a (in)segurança da urna eletrônica</i>. Versão 1.0. Edição do autor, 2017." + url("http://www.o-mito-da-urna.org"),
+  hill1995: "HILL, T. P. A statistical derivation of the significant-digit law. <i>Statistical Science</i>, v. 10, n. 4, p. 354–363, 1995." + doi("10.1214/ss/1177009869"),
+  pearson1900: "PEARSON, K. On the criterion that a given system of deviations from the probable in the case of a correlated system of variables is such that it can be reasonably supposed to have arisen from random sampling. <i>Philosophical Magazine</i>, v. 50, n. 302, p. 157–175, 1900." + doi("10.1080/14786440009463897"),
+  mebane2008: "MEBANE JR., W. R. Election forensics: the second-digit Benford's Law test and recent American presidential elections. In: ALVAREZ, R. M.; HALL, T. E.; HYDE, S. D. (ed.). <i>Election fraud: detecting and deterring electoral manipulation</i>. Washington, DC: Brookings, 2008. p. 162–181.",
+  phipson2010: "PHIPSON, B.; SMYTH, G. K. Permutation P-values should never be zero: calculating exact P-values when permutations are randomly drawn. <i>Statistical Applications in Genetics and Molecular Biology</i>, v. 9, n. 1, art. 39, 2010." + doi("10.2202/1544-6115.1585"),
+  dunn1961: "DUNN, O. J. Multiple comparisons among means. <i>Journal of the American Statistical Association</i>, v. 56, n. 293, p. 52–64, 1961." + doi("10.1080/01621459.1961.10482090"),
+  fips180: "NATIONAL INSTITUTE OF STANDARDS AND TECHNOLOGY. <i>Secure Hash Standard (SHS): FIPS 180-4</i>. Gaithersburg, MD: NIST, 2015." + doi("10.6028/NIST.FIPS.180-4"),
+  fips186: "NATIONAL INSTITUTE OF STANDARDS AND TECHNOLOGY. <i>Digital Signature Standard (DSS): FIPS 186-5</i>. Gaithersburg, MD: NIST, 2023." + doi("10.6028/NIST.FIPS.186-5"),
+  aranha2013: "ARANHA, D. F.; BARRETO, P. S. L. M.; PEREIRA, G. C. C. F.; RICARDINI, J. E. A note on high-security general-purpose elliptic curves. Cryptology ePrint Archive, Paper 2013/647, 2013." + url("https://eprint.iacr.org/2013/647"),
+  tse2023tps: "TRIBUNAL SUPERIOR ELEITORAL. <i>Teste Público de Segurança da Urna 2023: hardware da urna eletrônica (modelos UE2020/UE2022)</i>. Brasília, DF, 2023." + url("https://www.justicaeleitoral.jus.br/tps/arquivos/2023/apresentacoes/teste2023-cotel-hardware-da-urna-eletronica-1.pdf"),
+  chapman2000: "CHAPMAN, P. et al. <i>CRISP-DM 1.0: step-by-step data mining guide</i>. SPSS, 2000.",
+  wirth2000: "WIRTH, R.; HIPP, J. CRISP-DM: towards a standard process model for data mining. In: INTERNATIONAL CONFERENCE ON THE PRACTICAL APPLICATIONS OF KNOWLEDGE DISCOVERY AND DATA MINING, 4., 2000. <i>Proceedings</i>. p. 29–39.",
+  tse2026: "TRIBUNAL SUPERIOR ELEITORAL. <i>Portal de Dados Abertos: Resultados 2026 — Votação por seção eleitoral (Presidente) e Detalhe da apuração por seção eleitoral</i>. Brasília, DF, 2026." + url("https://dadosabertos.tse.jus.br/"),
+  tse2026urna: "TRIBUNAL SUPERIOR ELEITORAL. <i>Portal de Dados Abertos: Resultados 2026 — Arquivos transmitidos para totalização (BU, RDV, log e assinaturas, por UF e turno)</i>. Brasília, DF, 2026." + url("https://dadosabertos.tse.jus.br/dataset/resultados-2026-arquivos-transmitidos-para-totalizacao"),
+  tse2026eleitorado: "TRIBUNAL SUPERIOR ELEITORAL. <i>Portal de Dados Abertos: Eleitorado 2026 — Perfil do eleitorado por seção eleitoral e eleitorado por local de votação</i>. Brasília, DF, 2026." + url("https://dadosabertos.tse.jus.br/dataset/eleitorado-2026"),
+  tse2022res: "TRIBUNAL SUPERIOR ELEITORAL. <i>Portal de Dados Abertos: Resultados 2022 — Votação por seção eleitoral (Presidente)</i>. Brasília, DF, 2022." + url("https://dadosabertos.tse.jus.br/dataset/resultados-2022"),
+  ibge2022: "INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA. <i>Censo Demográfico 2022: agregados por setores censitários e malha de setores censitários</i>. Rio de Janeiro: IBGE, 2023–2025." + url("https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022/")
+};
+// referências de base de cada teste (as citadas no artigo para o método)
+const BIB = {
+  intro: ["chapman2000", "wirth2000", "wedderburn1974", "williams1982", "hampel1974", "leys2013", "benjamini1995", "phipson2010"],
+  T1: ["hicken2017", "klimek2012"], T2: ["beber2012", "mack2019", "pearson1900"], T3: ["hill1995", "mebane2008", "pearson1900"],
+  T4: ["kobak2016", "rozenas2017", "phipson2010"], T5: ["wedderburn1974", "benjamini1995"], T6: ["klimek2023", "hampel1974", "leys2013"],
+  T6c: ["klimek2023", "leys2013"], T7: ["klimek2012", "klimek2018"], T8: ["klimek2012", "goodman1953", "spearman1904", "leys2013"],
+  N1: ["tse2026urna"], N2: ["fips180", "fips186", "aranha2013", "tse2023tps"], N4: ["tse2026urna"], N5: ["tse2026urna", "leys2013"],
+  N6: ["benjamini1995"], N7: ["tse2026eleitorado", "williams1982", "gelman1996", "haldane1956", "benjamini1995"],
+  N8: ["tse2022res", "klimek2023", "leys2013"], N9: ["rozenas2017", "kobak2016", "phipson2010", "dunn1961"],
+  N10: ["anselin1995", "phipson2010", "benjamini1995"], N11: ["zhang2019", "breiman2001", "wright2017"],
+  N12: ["hartigan1985", "benjamini1995"], N13: ["vandegraaf2017", "tse2026urna", "leys2013"], N13p: ["vandegraaf2017", "tse2026urna"],
+  N14C: ["goodman1953", "leys2013", "benjamini1995"], N14D: ["goodman1953"],
+  N15: ["ibge2022", "tse2026eleitorado", "williams1982", "gelman1996", "benjamini1995"]
+};
+const ORDEM_REF = k => REFS[k].replace(/<[^>]+>/g, "");
+const bibHtml = (cod, titulo = "Bibliografia de base") => {
+  const ks = BIB[cod]; if (!ks || !ks.length) return "";
+  return `<h3>${titulo}</h3><ol class="bib">${ks.slice().sort((a, b) => ORDEM_REF(a).localeCompare(ORDEM_REF(b), "pt")).map(k => `<li>${REFS[k]}</li>`).join("")}</ol>`;
+};
+function bibCompleta() {
+  const usadas = [...new Set(Object.values(BIB).flat().concat(["tse2026"]))].sort((a, b) => ORDEM_REF(a).localeCompare(ORDEM_REF(b), "pt"));
+  const onde = k => Object.entries(BIB).filter(([c, ks]) => c !== "intro" && ks.includes(k)).map(([c]) => c);
+  return `<section class="cartao" id="metodo-referencias"><h2>Referências</h2>
+    <p class="nota">Todas as referências usadas na metodologia, com os testes em que cada uma é base. Lista extraída da bibliografia do artigo.</p>
+    <ol class="bib">${usadas.map(k => `<li>${REFS[k]}${onde(k).length ? ` <span class="usos">${onde(k).map(c => `<a data-ir="metodo-${c.toLowerCase()}">${c}</a>`).join(" ")}</span>` : ""}</li>`).join("")}</ol></section>`;
+}
+
+// ============================================================================
+// Aba "Metodologia dos testes" (fonte: manuscrito do artigo e scripts 04-13)
+// ============================================================================
+const FAMILIAS = {
+  cont: "Regularidade das contagens", turno: "Entre turnos e comparecimento", urna: "Arquivos da urna",
+  perfil: "Perfil do eleitorado e território", ml: "Aprendizado de máquina", painel: "Comparação com 2022"};
+const METODO = {
+  T1: {fam: "cont", pergunta: "Há mais seções unânimes (um finalista com 0 votos ou com 100% dos válidos) do que o esperado?",
+    metodo: `Para cada seção, a participação esperada do candidato (π) é a das <em>outras</em> seções do mesmo local de votação
+      (ou do município, se o local tem uma seção só). Se os eleitores da seção votassem como os vizinhos, a probabilidade de 0 votos
+      seria (1 − π)<sup>n</sup> e a de 100% seria π<sup>n</sup>, com n votos válidos. A soma dessas probabilidades dá o número esperado
+      de seções unânimes, comparado com o observado por uma distribuição de Poisson.`,
+    formula: "E₀ = Σ (1 − πₛ)ⁿˢ   ·   E₁₀₀ = Σ πₛⁿˢ   ·   p = P{Poisson(E) ≥ observado}",
+    regra: "A seção é marcada quando um dos finalistas teve 0 votos ou 100% dos votos válidos, em qualquer turno.",
+    resultado: `Há excesso de unanimidade, pequeno em números absolutos: no 2º turno, 106 seções com 100% para Lula contra 49,7 esperadas
+      e 4 com 100% para Flávio contra 2,3; no 1º turno, 38 com 100% para Lula (18,5 esperadas) e 81 com zero voto para Flávio (37,4 esperadas).`,
+    leitura: `As seções são pequenas (mediana de 81 votos válidos), ficam sobretudo no Norte e no Maranhão, repetem a unanimidade nos dois turnos
+      e algumas são unânimes para o <em>outro</em> finalista. O padrão é o de comunidades homogêneas, como aldeias. O valor esperado subestima
+      a unanimidade porque supõe que a seção vota como as vizinhas, o que não vale para comunidades isoladas.`},
+  T5: {fam: "cont", pergunta: "Alguma seção vota muito diferente das outras seções do mesmo prédio?",
+    metodo: `Compara o % do candidato na seção com o % no restante do local de votação, por um teste de duas proporções.
+      Como os eleitores não são distribuídos ao acaso entre as seções, a variância é corrigida por um fator de sobredispersão (quase-binomial, φ),
+      estimado com os resíduos de Pearson de todas as seções.`,
+    formula: "z = (p̂ₛ − p̂₋ₛ) / √[ π̄(1 − π̄)(1/nₛ + 1/n₋ₛ) ]   ·   z̃ = z / √φ",
+    regra: "Marca a seção com z̃ significativo após a correção de Benjamini-Hochberg (q < 0,001) e diferença de pelo menos 20 pontos percentuais.",
+    resultado: `As seções de um mesmo prédio são quase tão parecidas quanto seriam com eleitores sorteados (razão de dispersão de 1,23 a 1,26).
+      Entre 67 e 85 seções por candidato e turno foram marcadas (0,014% a 0,018%).`,
+    leitura: `As 46 seções marcadas para Lula nos dois turnos desviam no mesmo sentido nas duas vezes, o que indica um eleitorado diferente na seção
+      (seção especial, eleitores transferidos), e não uma alteração pontual de um turno.`},
+  T6: {fam: "turno", pergunta: "O resultado do 2º turno é coerente com o 1º turno da própria seção?",
+    metodo: `Regressão do % do finalista no 2º turno sobre a composição do 1º turno da mesma seção (participação de cada candidato, de brancos e de nulos),
+      com efeito fixo de município (cada seção é comparada às do seu município) e peso pelo número de votos. O resíduo, multiplicado por √n,
+      é transformado em z robusto (mediana e desvio absoluto mediano, que não se deixam levar pelos próprios extremos).`,
+    formula: "z robusto = (x − mediana) / (1,4826 × MAD)",
+    regra: "Marca a seção com |z| ≥ 6, isto é, seis desvios robustos longe do previsto.",
+    resultado: `O 1º turno de cada seção explica 93% da variação do 2º turno dentro do município (R² = 0,93). Catorze seções foram marcadas:
+      seis em aldeias ou terras indígenas, uma no exterior (Porto) e quatro no mesmo local em São Paulo (município 71072, zona 2), onde Flávio foi
+      melhor do que o previsto e as seções receberam de 16% a 25% mais votos no 2º turno.`,
+    leitura: `As quatro seções de São Paulo podem ser de eleitores em trânsito, que podem pedir o voto em trânsito em só um dos turnos. A hipótese não foi verificada.`},
+  T6c: {fam: "turno", pergunta: "O número de votantes mudou entre os turnos muito mais do que nas outras seções do município?",
+    metodo: `Calcula a variação do comparecimento como o logaritmo da razão entre os votos do 2º e do 1º turno (ΔC), centrada na mediana do município,
+      e transforma em z robusto. A primeira versão comparava com a mediana nacional e marcava estados inteiros onde o comparecimento caiu (AC, AP, RR, MA, PA);
+      foi corrigida antes da análise final.`,
+    formula: "ΔCₛ = ln(V₂ / V₁) − mediana do município",
+    regra: "Marca a seção com |z| ≥ 6 na variação do comparecimento.",
+    resultado: `730 seções (0,15%): 574 com <em>menos</em> votos no 2º turno e 156 com mais. Pelo nome do local, 55 são presídios ou unidades de internação
+      (54 perdendo eleitores), 53 são aldeias (40 ganhando), 18 ficam no exterior e 3 em hospitais ou abrigos. As outras 601 (82%) são locais comuns.`,
+    leitura: `Presídios perdem eleitores entre os turnos por solturas e transferências. A maioria das seções marcadas está em locais comuns e precisa ser vista uma a uma.`},
+  T8: {fam: "turno", pergunta: "As seções em que o comparecimento mudou muito também mudaram o voto de forma desproporcional?",
+    metodo: `Encher uma seção com votos para um candidato deixa duas marcas juntas: mais votos e um perfil deslocado para o mesmo lado.
+      Para cada seção com 30 votos ou mais nos dois turnos, calcula ΔC (variação do comparecimento, como no T6c) e ΔP, a parte da mudança do voto
+      que o 1º turno não explica. O voto previsto vem de uma regressão de transferência de Goodman, estimada por estado, que diz quanto dos eleitores
+      de cada candidato, dos brancos e nulos e dos eleitores novos foi para cada finalista.`,
+    formula: "ΔPₛ = 100 × (p₂ₛ − p̂₂ₛ),   p̂₂ₛ previsto pelo 1º turno da própria seção",
+    regra: "Marca a seção com |z| ≥ 4 em ΔC e |z| ≥ 2 em ΔP. Depois testa se as marcadas favorecem um finalista mais do que o outro.",
+    resultado: `594 seções. Das 158 que <em>ganharam</em> eleitores, o padrão de enchimento, 88 se deslocaram para Lula e 70 para Flávio:
+      o teste binomial não rejeita a simetria (p = 0,18). Das 436 que perderam eleitores, 263 foram para Lula e 173 para Flávio, assimetria que votos
+      acrescentados não produzem. A correlação nacional entre ΔC e ΔP é de 0,045 e muda de sinal entre estados (19 positivos, 9 negativos).`,
+    leitura: `Uma manipulação coordenada empurraria todos os estados na mesma direção. Os sinais misturados combinam mais com diferenças regionais
+      de mobilização entre os turnos. Na validação com fraudes inseridas, o T8 achou 4 das 5 seções infladas.`},
+  N4: {fam: "urna", pergunta: "O registro de eventos (log) da urna mostra votos fora de hora, rajadas ou intervalos curtos demais?",
+    metodo: `O log de cada urna registra cada voto com horário. O teste procura votos antes de a urna estar pronta ou depois do encerramento,
+      o maior número de votos num minuto, intervalos de menos de 5 segundos entre votos e seções em que o número de eventos de voto no log
+      é diferente do número de votos do boletim de urna (BU).`,
+    formula: "Lidos os logs de 499.176 seções (1º turno) e 499.177 (2º turno)",
+    regra: "Marca a seção-turno em que o número de eventos de voto no log difere do BU (as outras marcas não ocorreram).",
+    resultado: `Nenhum voto foi registrado fora da sessão; o máximo foi de 3 votos num minuto no 1º turno e 4 no 2º; nenhuma seção teve dois votos
+      com menos de 5 segundos de intervalo. Em 16 seção-turnos (9 e 7) o log tinha número de eventos diferente do BU; em todas, a recontagem do RDV
+      bateu com o BU e as assinaturas eram válidas.`,
+    leitura: `No 1º turno, 2,97% dos votos foram dados depois das 17h (eleitores já na fila), contra 0,03% no 2º turno: o 1º turno pedia seis cargos e as filas eram maiores.`},
+  N5: {fam: "urna", pergunta: "Alguma seção liberou eleitores sem biometria (pelo ano de nascimento) muito mais do que o normal?",
+    metodo: `O BU informa quantos eleitores foram habilitados pela digital e quantos pelo dado biográfico, quando a digital não é reconhecida.
+      O % de liberações biográficas de cada seção é comparado com as demais seções do município por z robusto.`,
+    formula: "x = liberações biográficas / comparecimento,   z robusto dentro do município",
+    regra: "Marca a seção com z > 6.",
+    resultado: `A mediana foi de 6,1% de liberações biográficas nos dois turnos (percentil 99: 19%). Foram marcadas 589 seções no 1º turno e 517 no 2º (0,1%).
+      A mais extrema, em Minas Gerais, liberou 266 de 290 eleitores pelo dado biográfico.`,
+    leitura: `Percentuais próximos de 100% indicam leitor biométrico com defeito e devem ser conferidos na ata da seção. A liberação alta, sozinha,
+      não separa defeito de uso indevido; o teste N13 faz essa separação.`},
+  N7: {fam: "perfil", pergunta: "O voto da seção é coerente com o perfil dos seus eleitores?",
+    metodo: `Modelo logit com efeito fixo de município que relaciona o % de Lula às proporções de mulheres, faixas de idade, escolaridade
+      e eleitores com biometria de cada seção (cadastro do TSE). A sobredispersão é tratada com o modelo beta-binomial (ρ = 0,013),
+      e o ajuste é conferido por simulação preditiva.`,
+    formula: "logit(πₛ) = efeito do município + β · perfilₛ,   Var(y) = nπ(1 − π)[1 + (n − 1)ρ]",
+    regra: "Marca a seção cujo voto se afasta do previsto com q < 0,001 (Benjamini-Hochberg). O painel marca a seção em qualquer dos alvos (Lula no 1º e no 2º turno, Flávio no 1º).",
+    resultado: `Os coeficientes têm os sinais esperados (a escolaridade baixa tem o maior efeito) e o perfil explica 26% da variação dentro do município.
+      No 2º turno, 1.024 seções (0,21%) se afastam do modelo. O modelo erra nas caudas: há 6.714 seções com mais de 90% para Lula contra 4.734 simuladas.`,
+    leitura: `O perfil do TSE vem só em categorias amplas e não capta comunidades homogêneas. 28% das seções marcadas ficam em agrupamentos indígenas,
+      que são 0,3% das seções. O N15 refaz este modelo com o Censo.`},
+  N8: {fam: "painel", pergunta: "A mudança do voto entre 2022 e 2026 na mesma seção foge muito do padrão do município?",
+    metodo: `Usa as 443.458 seções que mantiveram o mesmo número e local de votação de 2022 e tiveram 50 votos ou mais para os dois finalistas nos dois anos.
+      Calcula a variação do logit do % de Lula entre 2022 e 2026, centrada no município, e transforma em z robusto.`,
+    formula: "Δₛ = logit(p₂₀₂₆) − logit(p₂₀₂₂) − mediana do município",
+    regra: "Marca a seção com |z| > 6.",
+    resultado: `O % de Lula em 2026 é muito correlacionado com o de 2022 (r = 0,973). Foram marcadas 822 seções (0,19%): 585 se afastaram de Lula
+      e 237 se aproximaram. Cerca de 90 ficam em aldeias; a mais extrema, na terra indígena Maxakali (MG), foi de 99,5% para 70,1%.`,
+    leitura: `O adversário de 2026 é outro candidato, então mudanças locais são esperadas. As maiores mudanças foram, na maioria, contra o vencedor.`},
+  N11: {fam: "ml", pergunta: "Um classificador treinado com fraudes simuladas reconhece alguma seção real como manipulada?",
+    metodo: `Foram geradas 150 mil seções sintéticas limpas (a partir do 1º turno real de cada seção mais uma mudança típica entre turnos) e 150 mil
+      manipuladas, com enchimento de urna, troca de votos ou números redondos fabricados. Uma floresta aleatória de 300 árvores foi treinada com 11 variáveis.
+      O limiar de decisão foi fixado para 0,1% de falsos positivos nas seções limpas.`,
+    formula: "AUC em dados sintéticos de teste: 0,863 (enchimento 0,858; troca 0,794; fabricação 0,938)",
+    regra: "Marca a seção com probabilidade estimada acima do limiar de 0,1% de falso positivo.",
+    resultado: `Se todas as 498.950 seções reais fossem limpas, cerca de 499 seriam marcadas por acaso. O modelo marcou 2, ambas no mesmo local de São Paulo
+      que aparece no T6 e no T8.`,
+    leitura: `Nesse limiar a sensibilidade é baixa (18% para enchimento, 15% para troca, 0,3% para fabricação): é uma triagem conservadora.
+      A moda secundária perto de 0,75 nas probabilidades parece efeito da variável do último dígito; falta reajustar o modelo sem ela.`},
+  N13: {fam: "urna", pergunta: "Há sinais de votos em nome de eleitores ausentes, liberados pelo dado biográfico?",
+    metodo: `Votar no lugar de um eleitor ausente deixaria três marcas na mesma seção: uma liberação biográfica a mais, um votante a mais e, em geral,
+      um voto a mais no fim do dia (a partir das 15h), quando já se sabe quem faltou. Um leitor biométrico com defeito deixa só a primeira.
+      Cada marca vira um z robusto dentro do município e as três são combinadas num escore.`,
+    formula: "S = (z₁ + z₂ + z₃) / √3",
+    regra: "Marca a seção com S > 4, z₁ > 1, z₂ > 1 e z₃ > 0, em cada turno (comparação de níveis entre seções).",
+    resultado: `Foram marcadas 291 seções no 1º turno e 250 no 2º (0,06% e 0,05%). Nas regressões dentro do município, mais liberações biográficas vieram com
+      <em>menos</em> comparecimento (−0,17 e −0,12 ponto por ponto), o contrário do que a personificação produziria.`,
+    leitura: `61% e 65% das marcadas pendem para Lula, mas essa comparação põe lado a lado seções com eleitorados diferentes, e o N5 já mostrou que a liberação
+      biográfica acompanha o voto em Lula (falha de leitura entre idosos e trabalhadores manuais, hipótese não testada). Na comparação da seção com ela mesma (N13p)
+      a assimetria some. Mesmo que todas as 7.530 liberações das 250 seções do 2º turno fossem fraude, seriam 0,006% dos votos.`},
+  N13p: {fam: "urna", pergunta: "Entre o 1º e o 2º turno, as seções que liberaram mais eleitores sem biometria também ganharam votantes e votos tardios?",
+    metodo: `Mesma ideia do N13, mas comparando cada seção com ela mesma entre os turnos, nas 499.018 seções cujo eleitorado mudou no máximo 5%.
+      Assim o perfil fixo da seção se cancela. Regride a variação de votantes (dV) e de votos tardios (dL) sobre a variação de liberações biográficas (dB),
+      com efeito fixo de município e erros agrupados.`,
+    formula: "dV = β · dB + efeito do município   (personificação pura implicaria β ≈ 1)",
+    regra: "Marca a seção com escore S > 4 calculado sobre as variações entre turnos.",
+    resultado: `Uma liberação biográfica a mais por 100 aptos veio com só 0,13 votante a mais (erro-padrão 0,004), longe de 1, e com <em>menos</em> votos tardios (−0,10).
+      Foram marcadas 192 seções (0,04%), simétricas entre os finalistas: 93 para Lula e 98 para Flávio (p = 0,77).`,
+    leitura: `Na validação, com 40% a 80% dos ausentes personificados em 300 seções, a lista achou 91% delas. A seção de maior escore (PE 25836/26/153) teve
+      95 liberações a mais e só 12 votantes a mais: padrão de leitor com defeito.`},
+  N14C: {fam: "turno", pergunta: "O ganho de Lula entre os turnos é explicado pelos votos disponíveis no 1º turno da própria seção?",
+    metodo: `Lula foi de 45,2% dos válidos no 1º turno para 51,8% no 2º (+6,6 pontos); os outros candidatos de esquerda tinham só 0,17%.
+      Uma regressão de transferência por estado, em que os eleitores que não voltaram são retirados na proporção do 1º turno da própria seção,
+      prevê o voto do 2º turno. O resíduo (observado menos previsto) é centrado no município e transformado em z robusto.`,
+    formula: "resíduo = p₂ observado − p₂ previsto pelo 1º turno da seção",
+    regra: "Marca a seção com q < 0,001 (Benjamini-Hochberg) e desvio de pelo menos 10 pontos percentuais.",
+    resultado: `O ganho previsto acompanha o observado em todos os decis de voto de esquerda. O ganho de Lula subiu 0,82 ponto por ponto de voto de esquerda
+      disponível, abaixo de 1 (não há votos de esquerda contados duas vezes). Foram marcadas 22 seções; as 13 em locais comuns dividem-se em 6 para Lula e 7 para Flávio (p = 1).`,
+    leitura: `Sete das marcadas são aldeias e três são do local de São Paulo do T6 e do T8. Duas seções da mesma escola em Barcelos (AM) se moveram em sentidos opostos,
+      o que sugere eleitores remanejados entre elas.`},
+  N14D: {fam: "turno", pergunta: "Algum finalista teve no 2º turno mais votos do que o máximo possível dado o 1º turno da seção?",
+    metodo: `O teto de um finalista é tudo o que não era do adversário no 1º turno: o próprio voto, os votos dos outros candidatos, brancos, nulos e os
+      eleitores a mais do 2º turno. O número de seções acima do teto é comparado com 200 simulações feitas com as transferências estimadas e a dispersão observada.`,
+    formula: "votos₂(A) > votos₁(A) + outros₁ + brancos e nulos₁ + eleitores extras",
+    regra: "Marca a seção em que um finalista passou do teto por 5 votos ou mais, ou por 3% dos votos dos finalistas.",
+    resultado: `Aconteceu em 418 seções para Lula e 18 para Flávio. O desequilíbrio é o que o modelo prevê, porque Lula atraiu mais do total disponível:
+      nas simulações, a parte de Lula entre essas seções foi de 95,6% contra 96,3% observada (p = 0,36), e as contagens ficaram abaixo do esperado.`,
+    leitura: `É um teste explicativo, não detector de fraude: como só se conhece a variação líquida do comparecimento, o teto é aproximado. As seções passam
+      do teto por uma mediana de 8 votos e se agrupam em alguns municípios, o que sugere mudanças políticas locais entre os turnos.`},
+  N15: {fam: "perfil", pergunta: "O voto da seção continua incoerente depois de considerar o Censo 2022 em volta do local de votação?",
+    metodo: `Refaz o modelo do N7 acrescentando, para cada local de votação, os setores censitários do IBGE num raio de 1 km: renda, cor ou raça,
+      população indígena, analfabetismo, esgoto, densidade e o tipo de território (rural, favela ou comunidade urbana, agrupamento indígena ou quilombola).
+      98,9% dos locais com coordenada caíram num setor do próprio município.`,
+    formula: "logit(πₛ) = efeito do município + β · perfil TSEₛ + γ · Censo (raio de 1 km)",
+    regra: "Marca a seção com q < 0,001 no modelo com perfil TSE + Censo num raio de 1 km.",
+    resultado: `O R² dentro do município passou de 0,257 para 0,361 (2º turno, Lula) e as seções marcadas caíram de 959 para 805. O déficit de seções com
+      mais de 90% para Lula caiu de 1.933 para 651: o Censo explica cerca de dois terços. Só 51% a 57% das seções marcadas pelo modelo só com o TSE continuam marcadas.`,
+    leitura: `Boa parte das incoerências do N7 vinha da falta de informação sobre o território. As que restam continuam concentradas em áreas rurais e indígenas.`}
+};
+const GLOBAIS = [
+  ["T2", "Último dígito", "cont", "O último dígito das contagens com dois ou mais algarismos deve ser uniforme (10% cada). Qui-quadrado contra a referência teórica e contra uma referência simulada que preserva o tamanho das seções.",
+    "Uniforme para os dois finalistas nos dois turnos (p de 0,23 a 0,76)."],
+  ["T3", "Segundo dígito (Benford)", "cont", "Frequência do segundo dígito comparada com a lei de Benford e com uma referência simulada por reamostragem binomial.",
+    "A referência teórica sempre rejeita (as seções têm tamanho limitado); contra a simulada, os desvios são de no máximo 0,12 ponto percentual. Só o segundo dígito de Flávio no 2º turno fica abaixo do limite de Bonferroni, com efeito irrelevante."],
+  ["T4", "Percentuais inteiros", "cont", "Conta seções em que o % do candidato é um número inteiro e compara com 100 reamostragens binomiais das mesmas seções (picos de frações simples em seções pequenas ficam na referência).",
+    "Sem excesso no 2º turno (razão observado/esperado 0,995 para os dois). No 1º turno, só Augusto Cury chegou ao menor p possível, com excesso de cerca de 250 seções."],
+  ["T7", "Impressão digital eleitoral", "turno", "Histograma conjunto de comparecimento e % do líder. Enchimento de urna produz uma mancha em direção ao canto 100% de comparecimento / 100% de votos e correlação positiva entre os dois dentro das regiões.",
+    "Uma nuvem única em torno de 80% de comparecimento, sem mancha. Dentro dos municípios, o comparecimento teve correlação <em>negativa</em> com o voto em Lula (−0,095 e −0,069), o oposto do enchimento a favor do vencedor."],
+  ["N1", "Recontagem do RDV", "urna", "O Registro Digital do Voto guarda cada voto como foi dado. Todos os RDVs foram decodificados, recontados e comparados com o BU, cargo a cargo, e cada BU com o resultado oficial publicado.",
+    "Recontagem igual ao BU nas 3.030.617 comparações seção-cargo dos dois turnos. Os BUs reproduzem o resultado oficial sem um voto de diferença."],
+  ["N2", "Integridade e assinaturas", "urna", "Recalcula o SHA-512 do BU, do RDV e do log de cada seção e verifica a assinatura de hardware da urna (ECDSA P-521 nos modelos 2013 e 2015; Ed521 nos de 2020 e 2022).",
+    "As 998.414 assinaturas são válidas e nenhum hash diferiu. Limite: a cadeia até a autoridade raiz do TSE não foi verificada porque os certificados raiz não são públicos."],
+  ["N6", "Modelo da urna", "urna", "Regressão com efeito fixo do local de votação: compara urnas de modelos diferentes no mesmo prédio, com erros agrupados por município e correção de Benjamini-Hochberg.",
+    "Nenhum modelo teve efeito sobre o voto, o comparecimento ou brancos e nulos dentro do mesmo local (todos q ≥ 0,29)."],
+  ["N9", "Picos em múltiplos de 5%", "cont", "Conta seções com % a até 0,05 ponto de um múltiplo de 5% e compara com 500 reamostragens binomiais (ideia do kernel reamostrado de Rozenas).",
+    "Só Lula no 1º turno teve excesso: 247 seções (0,05%; p = 0,008), espalhadas entre 30% e 50%, e não em valores altos como nas fraudes russas descritas na literatura."],
+  ["N10", "Agrupamento espacial", "perfil", "Moran local com os 8 locais de votação mais próximos, sobre os resíduos dos testes T6, N8 e N7, com permutações e correção de Benjamini-Hochberg.",
+    "Nenhum agrupamento local de resíduos extremos. O resultado é pouco informativo: com 199 permutações o menor p possível é 0,005, que não sobrevive à correção."],
+  ["N12", "Multimodalidade no município", "cont", "Teste do dip de Hartigan na distribuição do % de Lula entre as seções de cada município com 20 seções ou mais; 2022 como controle. Uma mistura de dois regimes de voto produz duas modas.",
+    "8 de 3.932 municípios em 2026 contra 4 de 3.774 em 2022. Todos os oito têm terras indígenas, onde as seções das aldeias votam muito diferente das urbanas. Aparece na página de cada município."]
+];
+
+// municípios com seções marcadas no teste b
+function linhasMunTeste(b) {
+  const out = [];
+  for (const u of UFS) { const U = D.ufs[u];
+    U.cod.forEach((c, m) => { const n = b == null ? (U.n12[m] != null ? 1 : 0) : U.fl[b][m];
+      if (n) out.push({u, m, nome: cap(U.nome[m]), n, sec: U.sec[m], l2: sh(C2, U.v2.map(col => col[m]), L2), dip: U.n12[m]}); }); }
+  return out;
+}
+const colsMunTeste = [
+  {t: "Município", v: r => r.nome}, {t: "UF", v: r => r.u},
+  {t: "Seções marcadas", v: r => r.n, n: 1, f: fmt}, {t: "Seções do município", v: r => r.sec, n: 1, f: fmt},
+  {t: "% marcadas", v: r => r.n / r.sec, n: 1, f: x => pct(x, 2)},
+  {t: "Lula × Flávio 2º", v: r => r.l2, n: 1, h: r => barra2(r.l2), dica: "% de Lula entre os dois finalistas no 2º turno"}];
+const irMun = r => `mun-${r.u.toLowerCase()}-${D.ufs[r.u].cod[r.m]}`;
+const colAbrir = {t: "", v: r => "", h: r => `<a class="abrir" data-ir="${irMun(r)}" title="Abrir a página do município">abrir ›</a>`};
+// clique num município da lista do teste: filtra a lista de seções do mesmo teste
+function filtraSecoes(r, idMun) {
+  const idSec = idMun.replace(/^mt_/, "st_"), T = TAB[idSec], M = TAB[idMun];
+  if (!T) { vai(irMun(r)); return; }
+  if (M.sel === r._k) { M.sel = null; T.filtro = null; }
+  else { M.sel = r._k; T.filtro = x => x.u === r.u && x.m === r.m; T.rotFiltro = `${r.nome} (${r.u})`; T.dono = idMun; }
+  desenha(idMun); desenha(idSec);
+  const alvo = $("t_" + idSec).closest(".tabw"); alvo.scrollTop = 0;
+  alvo.previousElementSibling.scrollIntoView({block: "nearest", behavior: "smooth"});
+}
+const TABS_MET = [];
+function tabMunTeste(t, b) {
+  const ls = linhasMunTeste(b);
+  if (!ls.length) return "";
+  const id = "mt_" + t.cod.toLowerCase(); TABS_MET.push(id);
+  return `<h3 style="margin-top:14px">Municípios com seções marcadas (${fmt(ls.length)})</h3>
+    <p class="nota">Role a lista para ver todos. Clique num município para ver só as seções dele na lista abaixo (clique de novo para voltar a todas);
+    "abrir" leva à página do município. Busque pelo nome ou pela sigla do estado.</p>
+    ${tabela(id, colsMunTeste.concat([colAbrir]), ls, 2, irMun, {desc: true, lim: 1e9, altura: 300, acao: filtraSecoes})}`;
+}
+// seções marcadas
+const SM = D.sm.rows.map(r => ({u: r[0], m: r[1], z: r[2], s: r[3], loc: D.sm.locais[r[4]], terr: r[5], apt: r[6], cmp1: r[7], cmp2: r[8], l2: r[9], z15: r[10], fl: r[11], apt1: r[12]}));
+const codsDe = fl => D.testes.filter((t, b) => fl >> b & 1).map(t => t.cod);
+const selos = fl => codsDe(fl).map(c => `<span class="selo" data-tip="${esc(D.testes.find(t => t.cod === c).nome)}">${c}</span>`).join(" ");
+function colsSecoes(comMun) {
+  return [].concat(comMun ? [{t: "Município", v: r => cap(D.ufs[r.u].nome[r.m])}, {t: "UF", v: r => r.u}, {t: "Cód. TSE", v: r => String(D.ufs[r.u].cod[r.m]), dica: "Código do município no TSE"}] : [],
+    [{t: "Zona", v: r => r.z, n: 1}, {t: "Seção", v: r => r.s, n: 1},
+     {t: "Local de votação", v: r => cap(r.loc || "–"), h: r => `<span style="display:inline-block;max-width:320px;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom" title="${esc(cap(r.loc || ""))}">${esc(cap(r.loc || "–"))}</span>`},
+     {t: "Território", v: r => cap(D.territorios[r.terr])},
+     {t: "Aptos", v: r => r.apt, n: 1, f: fmt},
+     {t: "Comp. 1º", v: r => r.apt1 ? r.cmp1 / r.apt1 : null, n: 1, f: pct}, {t: "Comp. 2º", v: r => r.apt ? r.cmp2 / r.apt : null, n: 1, f: pct},
+     {t: "Lula × Flávio 2º", v: r => r.l2, n: 1, h: r => barra2(r.l2), dica: "% de Lula entre os dois finalistas no 2º turno"},
+     {t: "z (N15)", v: r => r.z15, n: 1, f: x => dec(x), dica: "Desvio padronizado do % de Lula no 2º turno em relação ao previsto pelo perfil TSE + Censo. |z| > 3 é incomum."},
+     {t: "Testes", v: r => codsDe(r.fl).join(" "), h: r => selos(r.fl)}]);
+}
+function tabSecTeste(t, b) {
+  const ls = SM.filter(r => r.fl >> b & 1); if (!ls.length) return "";
+  const id = "st_" + t.cod.toLowerCase(); TABS_MET.push(id);
+  return `<h3 style="margin-top:14px">Seções marcadas (${fmt(ls.length)})</h3>
+    <p class="nota">Identificação TSE: município, zona e seção. Role a lista para ver todas; clique numa seção para abrir o município.
+    A coluna Testes mostra todos os testes em que a seção foi marcada.</p>
+    ${tabela(id, colsSecoes(true), ls, 0, irMun, {lim: 1e9, altura: 380})}`;
+}
+function tabMunN12() {
+  const ls = linhasMunTeste(null); if (!ls.length) return "";
+  TABS_MET.push("mt_n12");
+  const cols = [{t: "Município", v: r => r.nome}, {t: "UF", v: r => r.u}, {t: "Dip", v: r => r.dip, n: 1, f: x => dec(x, 3), dica: "Estatística do dip de Hartigan"},
+    {t: "Seções", v: r => r.sec, n: 1, f: fmt}, colsMunTeste[5]];
+  return `<h3 style="margin-top:12px">Municípios multimodais (${ls.length})</h3>${tabela("mt_n12", cols.concat([colAbrir]), ls, 2, irMun, {desc: true, lim: 1e9, altura: 300})}`;
+}
+function telaMetodo() {
+  TABS_MET.length = 0;
+  trilha([["Brasil", "brasil"], ["Metodologia dos testes"]]);
+  $("selUf").value = ""; $("selMun").value = ""; $("selMun").disabled = true;
+  const tot = BR.sec, base = D.tbase, nbase = base.reduce((s, x) => s + x, 0);
+  const ind = (D.testes.map(t => t.cod));
+  const cartao = (t, b) => {
+    const m = METODO[t.cod] || {}, n = BR.fl[b];
+    const ufsR = UFS.map(u => ({u, r: AG[u].fl[b] / AG[u].sec, n: AG[u].fl[b]})).filter(x => x.n).sort((x, y) => y.r - x.r).slice(0, 5);
+    const terr = D.tterr[b], tn = terr.reduce((s, x) => s + x, 0) || 1;
+    const terrIt = D.territorios.map((nome, k) => ({rot: cap(nome), v: terr[k] / tn, r: [base[k] / nbase], cor: "var(--c-outro)",
+      txt: pct(terr[k] / tn), txt2: fmt(terr[k]) + " seções",
+      tip: `<b>${esc(cap(nome))}</b><br>${fmt(terr[k])} das ${fmt(tn)} seções marcadas (${pct(terr[k] / tn)})<br>Todas as seções: ${pct(base[k] / nbase)}`}))
+      .filter((x, k) => terr[k] || base[k] / nbase > 0.01);
+    const maxUf = Math.max(...ufsR.map(x => x.r), 1e-9);
+    return `<article class="cartao metodo" id="metodo-${t.cod.toLowerCase()}">
+      <div class="mhead"><span class="mcod">${t.cod}</span><div><h2>${esc(t.nome)}</h2><div class="fam">${FAMILIAS[m.fam] || ""}</div></div>
+        <div class="mnum"><b>${fmt(n)}</b> seções marcadas<br><small>${pct(n / tot, 3)} das seções do país</small></div></div>
+      <p class="perg">${m.pergunta || esc(t.descricao)}</p>
+      <div class="mcols"><div>
+        <h3>Como funciona</h3><p>${m.metodo || ""}</p>
+        ${m.formula ? `<div class="formula">${m.formula}</div>` : ""}
+        <h3>Quando a seção é marcada</h3><p>${m.regra || ""}</p>
+        <h3>Resultado no artigo</h3><p>${m.resultado || ""}</p>
+        <h3>Como ler</h3><p>${m.leitura || ""}</p>
+        ${bibHtml(t.cod)}
+      </div><div>
+        <h3>Onde ficam as seções marcadas</h3>
+        <p class="nota">Território do setor censitário do local de votação. Traço: participação do território entre todas as seções do país.</p>
+        ${barras(terrIt, 1)}
+        <h3 style="margin-top:16px">Estados com maior proporção</h3>
+        ${ufsR.length ? barras(ufsR.map(x => ({rot: NOMES_UF[x.u], v: x.r, cor: "var(--amarelo-esc)", txt: pct(x.r, 2), txt2: fmt(x.n) + " seções",
+          tip: `<b>${NOMES_UF[x.u]}</b><br>${fmt(x.n)} de ${fmt(AG[x.u].sec)} seções`})), maxUf) : '<p class="nota">Nenhuma seção marcada.</p>'}
+        ${ufsR.length ? `<p class="nota" style="margin-top:8px">${ufsR.map(x => `<a data-ir="uf-${x.u.toLowerCase()}">${x.u}</a>`).join(" · ")}: abrir o estado</p>` : ""}
+      </div></div>
+      ${tabMunTeste(t, b)}${tabSecTeste(t, b)}</article>`;
+  };
+  $("main").innerHTML = `
+    <section class="cartao intro"><h2>Como os testes funcionam</h2>
+      <div class="mcols"><div>
+      <p>Os testes procuram, nas contagens publicadas pelo TSE, padrões que uma apuração manipulada deixaria: unanimidades em excesso, seções que destoam
+      das vizinhas, comparecimento que cresce junto com o voto de um lado, votos fora de hora no log da urna. Cada teste tem uma hipótese de "nada de errado"
+      e uma regra para dizer quando uma seção foge dela.</p>
+      <p><b>Referência local.</b> Cada seção é comparada com as outras seções do mesmo local de votação ou do mesmo município, e não com a média do país.
+      Uma comparação nacional confunde diferenças regionais com anomalias (foi o erro corrigido no T6c).</p>
+      <p><b>Variação natural.</b> Se os eleitores fossem sorteados entre as seções, os votos de um candidato seguiriam uma binomial. Como não são,
+      as seções variam mais; os testes corrigem isso com um fator de sobredispersão (quase-binomial ou beta-binomial).</p>
+      </div><div>
+      <p><b>Desvio robusto.</b> A distância de uma seção ao seu grupo é medida em desvios robustos, z = (x − mediana) / (1,4826 × MAD).
+      Mediana e MAD não se deixam puxar pelos próprios extremos. Limiares de 4 ou 6 desvios são conservadores.</p>
+      <p><b>Muitos testes ao mesmo tempo.</b> Com meio milhão de seções, alguma sempre parece estranha por acaso. A correção de Benjamini-Hochberg
+      (q < 0,001) mantém a proporção esperada de falsos alarmes abaixo de 0,1% da lista.</p>
+      <p><b>Validação antes dos dados reais.</b> Seguindo o CRISP-DM, cada teste foi rodado primeiro em seções simuladas com fraudes conhecidas,
+      o que corrigiu três testes antes da análise real.</p>
+      </div></div>
+      ${bibHtml("intro", "Bibliografia de base dos procedimentos comuns")}
+      <div class="aviso" style="margin:12px 0 0">Seção marcada é seção para conferir (ata, boletim impresso, log), não prova de fraude. Boa parte das marcadas fica em aldeias,
+      quilombos, presídios e áreas rurais, onde o eleitorado é muito homogêneo ou muda entre os turnos.</div>
+      <nav class="indice" aria-label="Testes">${D.testes.map(t => `<a data-ir="metodo-${t.cod.toLowerCase()}">${t.cod}</a>`).join("")}<a data-ir="metodo-globais">Testes do conjunto</a><a data-ir="metodo-referencias">Referências</a></nav>
+    </section>
+    <h2 class="secao">Testes que marcam seções (${D.testes.length})</h2>
+    <p class="nota">Cada cartão traz o método, a regra de marcação, o resultado publicado no artigo e onde ficam as seções marcadas neste painel (Brasil, sem o exterior).</p>
+    ${D.testes.map(cartao).join("")}
+    <h2 class="secao" id="metodo-globais">Testes do conjunto das seções</h2>
+    <p class="nota">Estes testes avaliam o conjunto, sem marcar seções individuais (o N12 marca municípios).</p>
+    <div class="grade">${GLOBAIS.map(([c, n, f, m, r]) => `<article class="cartao metodo"><div class="mhead"><span class="mcod">${c}</span><div><h2>${n}</h2><div class="fam">${FAMILIAS[f]}</div></div></div>
+      <h3>Como funciona</h3><p>${m}</p><h3>Resultado</h3><p>${r}</p>${bibHtml(c)}${c === "N12" ? tabMunN12() : ""}</article>`).join("")}</div>
+    ${bibCompleta()}`;
+  TABS_MET.forEach(desenha);
+}
+
+// ============================================================================
+// Aba "Agrupamentos": K-means dos municípios (script 16_clusters_municipios.R)
+// ============================================================================
+const CL = D.cl;
+const CORES_G = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"];
+const NOMES_VAR = {lula2: "Lula no 2º turno (% dos finalistas)", lula1: "Lula no 1º turno (% válidos)", flavio1: "Flávio no 1º turno (% válidos)",
+  outros1: "Demais candidatos no 1º turno", brnul1: "Brancos e nulos no 1º turno", abst2: "Abstenção no 2º turno",
+  fem: "Mulheres", jovens: "16 a 24 anos", idosos: "60 anos ou mais", superior: "Ensino superior", esc_baixa: "Até fundamental incompleto",
+  biometria: "Com biometria", renda: "Renda do responsável (log)", preta_parda: "Preta ou parda (Censo)", indigena_censo: "Indígena (Censo, raiz)",
+  analf: "Analfabetismo", esgoto: "Esgoto por rede geral", rural: "Seções em setor rural", favela: "Seções em favela (raiz)",
+  quilombola: "Seções em quilombo (raiz)", indigena_terr: "Seções em terra indígena (raiz)", aptos: "Eleitores aptos (log)"};
+const CURTO_VAR = {lula2: "Lula 2º", lula1: "Lula 1º", flavio1: "Flávio 1º", outros1: "Outros 1º", brnul1: "Br./nulos", abst2: "Abstenção",
+  fem: "Mulheres", jovens: "16–24", idosos: "60+", superior: "Superior", esc_baixa: "Fund. inc.", biometria: "Biometria", renda: "Renda",
+  preta_parda: "Preta/parda", indigena_censo: "Indígena", analf: "Analfab.", esgoto: "Esgoto", rural: "Rural", favela: "Favela",
+  quilombola: "Quilombo", indigena_terr: "Terra ind.", aptos: "Porte"};
+// nomes dos grupos (definidos depois de ler os perfis; grupos ordenados pelo % de Lula no 2º turno)
+const NOMES_G = {"3": ["Renda e escolaridade mais altas, voto em Flávio", "Municípios com terras indígenas", "Renda menor e analfabetismo alto, voto em Lula"], "8": ["Pequenos e rurais, população mais velha", "Cidades médias de renda alta", "Pequenos, eleitorado mais masculino e pouco saneamento", "Baixa cobertura biométrica", "Grandes cidades, com favelas", "Municípios com terras indígenas", "Renda baixa e analfabetismo alto", "Municípios com quilombos"]};
+let K_SEL = String(CL.k_recomendado);
+const munGrupo = {};   // "UF-cod" -> {k: grupo}
+for (const k in CL.finais) CL.finais[k].mun.forEach(r => { const c = r.uf + "-" + r.cod; (munGrupo[c] = munGrupo[c] || {})[k] = r; });
+const corG = g => CORES_G[(g - 1) % CORES_G.length];
+const nomeG = (k, g) => (NOMES_G[k] && NOMES_G[k][g - 1]) || `Grupo ${g}`;
+
+function grafCriterio(chave, titulo, nota, melhor, opc = {}) {
+  const C = CL.criterios, ks = C.map(r => r.k), ys = C.map(r => r[chave]);
+  const W = 300, H = 170, ml = 46, mr = 10, mt = 12, mb = 28, w = W - ml - mr, h = H - mt - mb;
+  let lo = Math.min(...ys), hi = Math.max(...ys);
+  if (opc.se) { lo = Math.min(...C.map(r => r[chave] - r[opc.se])); hi = Math.max(...C.map(r => r[chave] + r[opc.se])); }
+  const pad = (hi - lo) * 0.12 || 1; lo -= pad; hi += pad;
+  const x = k => ml + w * (k - ks[0]) / (ks[ks.length - 1] - ks[0]), y = v => mt + h - h * (v - lo) / (hi - lo);
+  const f = opc.fmt || (v => dec(v, 3));
+  let s = "";
+  for (let j = 0; j <= 3; j++) { const v = lo + (hi - lo) * j / 3; s += `<line x1="${ml}" x2="${W - mr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${ml - 5}" y="${y(v) + 4}" text-anchor="end">${f(v)}</text>`; }
+  ks.forEach(k => s += `<text x="${x(k)}" y="${H - 9}" text-anchor="middle">${k}</text>`);
+  const kr = +K_SEL;
+  s += `<line x1="${x(kr)}" x2="${x(kr)}" y1="${mt}" y2="${mt + h}" stroke="var(--amarelo-esc)" stroke-width="2" stroke-dasharray="4 3"/>`;
+  if (opc.se) C.forEach(r => s += `<line x1="${x(r.k)}" x2="${x(r.k)}" y1="${y(r[chave] - r[opc.se])}" y2="${y(r[chave] + r[opc.se])}" stroke="var(--c-outro)" stroke-width="2"/>`);
+  s += `<polyline fill="none" stroke="var(--verde)" stroke-width="2" points="${C.map(r => x(r.k) + "," + y(r[chave])).join(" ")}"/>`;
+  C.forEach(r => { const best = r.k === melhor;
+    s += `<g data-tip="k = ${r.k}<br>${esc(titulo)}: <b>${f(r[chave])}</b>${best ? "<br>indicação deste critério" : ""}">
+      <circle cx="${x(r.k)}" cy="${y(r[chave])}" r="12" fill="transparent"/>
+      <circle cx="${x(r.k)}" cy="${y(r[chave])}" r="${best ? 6 : 4}" fill="${best ? "var(--azul)" : "var(--verde)"}" stroke="var(--surface)" stroke-width="2"/></g>`; });
+  return `<div class="crit"><h3>${titulo}</h3><svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(titulo)}">${s}</svg>
+    <p class="nota">${nota} <b>Indica k = ${melhor}.</b></p></div>`;
+}
+
+function dendrograma(k) {
+  const T = CL.dendro, F = CL.finais[k].dendro_folhas, n = T.tam_sub.length;
+  // ordem das folhas pela travessia da árvore
+  const filhos = j => T.topo[j - 1];   // fusão j (1..29): [a, b]; negativo = folha
+  const ordem = []; (function vis(x) { if (x < 0) ordem.push(-x); else filhos(x).forEach(vis); })(T.topo.length);
+  const W = 900, H = 300, ml = 46, mr = 10, mt = 14, mb = 64, w = W - ml - mr, h = H - mt - mb;
+  const hmax = Math.max(...T.topo_altura) * 1.03, hmin = 0;
+  const xF = {}; ordem.forEach((f, i) => xF[f] = ml + w * (i + 0.5) / n);
+  const y = v => mt + h - h * (v - hmin) / (hmax - hmin);
+  const pos = {}; let s = "";
+  [0, 50, 100, 150, 200, 250].filter(v => v < hmax).forEach(v => s += `<line x1="${ml}" x2="${W - mr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${ml - 5}" y="${y(v) + 4}" text-anchor="end">${v}</text>`);
+  const grupoFolha = f => (F.find(r => r.folha === f) || {}).grupo_km;
+  const p = x => x < 0 ? {x: xF[-x], y: y(0), g: grupoFolha(-x)} : pos[x];
+  T.topo.forEach((par, j) => { const a = p(par[0]), b = p(par[1]), yy = y(T.topo_altura[j]);
+    const g = a.g === b.g ? a.g : null, cor = g ? corG(g) : "var(--ink2)";
+    s += `<path d="M${a.x},${a.y}V${yy}H${b.x}V${b.y}" fill="none" stroke="${cor}" stroke-width="${g ? 2.2 : 1.6}"/>`;
+    pos[j + 1] = {x: (a.x + b.x) / 2, y: yy, g}; });
+  ordem.forEach(f => { const g = grupoFolha(f), nn = T.tam_sub[f - 1];
+    s += `<g data-tip="Subgrupo de Ward com <b>${fmt(nn)}</b> municípios<br>maioria no grupo K-means: ${esc(nomeG(k, g))}">
+      <rect x="${xF[f] - w / n / 2 + 1}" y="${y(0) + 4}" width="${w / n - 2}" height="${Math.max(4, 40 * Math.sqrt(nn / 1200))}" rx="2" fill="${corG(g)}"/></g>`; });
+  // linha de corte em k grupos
+  const alt = CL.dendro.alturas, corte = (alt[k - 2] + alt[k - 1]) / 2;
+  s += `<line x1="${ml}" x2="${W - mr}" y1="${y(corte)}" y2="${y(corte)}" stroke="var(--amarelo-esc)" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="${W - mr}" y="${y(corte) - 6}" text-anchor="end" style="fill:var(--ink2)">corte em ${k} grupos</text>`;
+  s += `<text x="${ml - 34}" y="${mt + h / 2}" transform="rotate(-90 ${ml - 34} ${mt + h / 2})" text-anchor="middle">altura (Ward)</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Dendrograma de Ward">${s}</svg>`;
+}
+
+function heatCentros(k) {
+  const fin = CL.finais[k], V = CL.vars, cz = fin.centros_z, kk = cz.length;
+  const cor = z => { const a = Math.min(1, Math.abs(z) / 2); return z >= 0 ? `rgba(0,156,59,${0.12 + 0.75 * a})` : `rgba(0,39,118,${0.12 + 0.75 * a})`; };
+  let blocoAnt = "", cab = "", sub = "";
+  V.forEach((v, j) => { const b = CL.blocos[j]; cab += `<th class="hv" title="${esc(NOMES_VAR[v])}">${esc(CURTO_VAR[v])}</th>`;
+    sub += b !== blocoAnt ? `<th class="hb2" colspan="${CL.blocos.filter(x => x === b).length}">${esc(b)}</th>` : ""; blocoAnt = b; });
+  const linhas = cz.map((row, g) => `<tr><th class="hg"><i style="background:${corG(g + 1)}"></i>${esc(nomeG(k, g + 1))}</th>${row.map((z, j) =>
+    `<td style="background:${cor(z)};color:${Math.abs(z) > 1.1 ? "#fff" : "var(--ink)"}" data-tip="<b>${esc(nomeG(k, g + 1))}</b><br>${esc(NOMES_VAR[V[j]])}<br>média padronizada: ${dec(z)}">${dec(z, 1)}</td>`).join("")}</tr>`).join("");
+  return `<div class="tabw" style="max-height:none"><table class="heat"><thead><tr><th></th>${sub}</tr><tr><th></th>${cab}</tr></thead><tbody>${linhas}</tbody></table></div>
+    <div class="leg"><span>Abaixo da média do país</span><span style="display:inline-flex">${[-2, -1.3, -0.6, 0, 0.6, 1.3, 2].map(z => `<i style="background:${cor(z)};width:20px;margin:0;border-radius:0"></i>`).join("")}</span><span>Acima da média</span>
+    <span style="color:var(--muted)">Valores em desvios-padrão (z) em relação à média dos 5.571 municípios.</span></div>`;
+}
+
+function dispersao(k) {
+  const fin = CL.finais[k], W = 900, H = 460, ml = 40, mr = 14, mt = 12, mb = 36, w = W - ml - mr, h = H - mt - mb;
+  const xs = fin.mun.map(r => r.pc1), ys = fin.mun.map(r => r.pc2);
+  const q = (a, p) => { const s = a.slice().sort((x, y) => x - y); return s[Math.floor(p * (s.length - 1))]; };
+  const x0 = q(xs, 0.002), x1 = q(xs, 0.998), y0 = q(ys, 0.002), y1 = q(ys, 0.998);
+  const px = v => ml + w * (Math.min(Math.max(v, x0), x1) - x0) / (x1 - x0), py = v => mt + h - h * (Math.min(Math.max(v, y0), y1) - y0) / (y1 - y0);
+  let s = `<rect x="${ml}" y="${mt}" width="${w}" height="${h}" fill="none" stroke="var(--grid)"/>`;
+  const tam = g => fin.perfil[g - 1].municipios;   // grupos grandes primeiro, os pequenos por cima
+  const ordem = fin.mun.map((r, i) => i).sort((a, b) => tam(fin.mun[b].grupo) - tam(fin.mun[a].grupo));
+  for (const i of ordem) { const r = fin.mun[i], U = D.ufs[r.uf], m = U.cod.indexOf(r.cod);
+    s += `<circle class="pt g${r.grupo}" cx="${px(r.pc1).toFixed(1)}" cy="${py(r.pc2).toFixed(1)}" r="3.2" fill="${corG(r.grupo)}" fill-opacity=".7" stroke="var(--surface)" stroke-width=".6"
+      data-ir="mun-${r.uf.toLowerCase()}-${r.cod}" data-tip="<b>${esc(cap(U.nome[m]))}</b> (${r.uf})<br>${esc(nomeG(k, r.grupo))}<br>silhueta ${dec(r.silh)}"/>`; }
+  // setas das variáveis mais importantes nos dois eixos
+  const rot = fin.pca_rot, V = CL.vars, top = V.map((v, j) => [v, rot[j][0], rot[j][1]]).sort((a, b) => (b[1] ** 2 + b[2] ** 2) - (a[1] ** 2 + a[2] ** 2)).slice(0, 7);
+  const cx = px(0), cy = py(0), esc_ = Math.min(w, h) * 0.9;
+  const rotulos = [];
+  top.forEach(([v, a, b]) => { const ex = cx + a * esc_, ey = cy - b * esc_;
+    let ly = ey + (b >= 0 ? -6 : 14);
+    while (rotulos.some(r => Math.abs(r.x - ex) < 70 && Math.abs(r.y - ly) < 14)) ly += b >= 0 ? -14 : 14;   // evita sobreposição
+    rotulos.push({x: ex, y: ly});
+    s += `<line x1="${cx}" y1="${cy}" x2="${ex}" y2="${ey}" stroke="var(--ink)" stroke-width="1.6" opacity=".75"/>
+      <text x="${ex + (a >= 0 ? 4 : -4)}" y="${ly}" text-anchor="${a >= 0 ? "start" : "end"}" style="fill:var(--ink);font-weight:600;paint-order:stroke;stroke:var(--surface);stroke-width:3px">${esc(CURTO_VAR[v])}</text>`; });
+  s += `<text x="${ml + w / 2}" y="${H - 6}" text-anchor="middle">Componente principal 1 (${pct(fin.pca_var[0], 0)} da variância)</text>
+    <text x="14" y="${mt + h / 2}" transform="rotate(-90 14 ${mt + h / 2})" text-anchor="middle">Componente 2 (${pct(fin.pca_var[1], 0)})</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Municípios nos dois primeiros componentes principais" id="svgDisp">${s}</svg>`;
+}
+
+function legendaGrupos(k, interativa) {
+  const fin = CL.finais[k];
+  return `<div class="leg" style="gap:8px 16px">${fin.perfil.map(p => `<span ${interativa ? `class="legG" data-grupo="${p.grupo}" style="cursor:pointer"` : ""}><i style="background:${corG(p.grupo)}"></i>${esc(nomeG(k, p.grupo))} <small style="color:var(--muted)">(${fmt(p.municipios)})</small></span>`).join("")}
+    ${interativa ? '<span style="color:var(--muted)">Clique num grupo para destacá-lo; clique num ponto para abrir o município.</span>' : ""}</div>`;
+}
+
+function cartoesGrupos(k) {
+  const fin = CL.finais[k], V = CL.vars, tot = fin.perfil.reduce((s, p) => s + p.secoes, 0), sinT = fin.perfil.reduce((s, p) => s + p.sinalizadas, 0);
+  return `<div class="gcards">${fin.perfil.map(p => { const g = p.grupo, cz = fin.centros_z[g - 1];
+    const traços = V.map((v, j) => [v, cz[j]]).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1])).slice(0, 5);
+    return `<article class="gcard" style="border-top-color:${corG(g)}"><div class="gnum" style="background:${corG(g)}">${g}</div>
+      <h3>${esc(nomeG(k, g))}</h3>
+      <div class="gk"><b>${fmt(p.municipios)}</b> municípios · ${fmt(p.secoes)} seções · ${pct(p.secoes / tot)} das seções</div>
+      <dl class="dl" style="margin:8px 0">
+        <dt>Lula no 2º turno (mediana)</dt><dd>${pct(p.lula2)}</dd>
+        <dt>Renda do responsável (mediana)</dt><dd>${brl(p.renda)}</dd>
+        <dt>Até fundamental incompleto</dt><dd>${pct(p.esc_baixa)}</dd>
+        <dt>Seções em setor rural</dt><dd>${pct(p.rural)}</dd>
+        <dt>Eleitores por município (mediana)</dt><dd>${fmt(p.aptos_mediana)}</dd>
+        <dt>Seções marcadas em algum teste</dt><dd><b>${pct(p.sinalizadas / p.secoes, 2)}</b> <small>(${fmt(p.sinalizadas)}; país ${pct(sinT / tot, 2)})</small></dd>
+        <dt>Silhueta média</dt><dd>${dec(p.silh)}</dd></dl>
+      <div class="nota" style="margin:0">Mais distante da média do país em: ${traços.map(([v, z]) => `<span class="traco">${esc(CURTO_VAR[v])} ${z > 0 ? "▲" : "▼"}${dec(Math.abs(z), 1)}</span>`).join(" ")}</div>
+    </article>`; }).join("")}</div>`;
+}
+
+function testesPorGrupo(k) {
+  const fin = CL.finais[k], T = D.testes;
+  const taxa = (g, b) => fin.testes_grupo[g - 1][b] / fin.perfil[g - 1].secoes;
+  const totS = fin.perfil.reduce((s, p) => s + p.secoes, 0);
+  const mx = Math.max(...fin.perfil.flatMap(p => T.map((t, b) => taxa(p.grupo, b))));
+  const cel = (g, b) => { const r = taxa(g, b), base = T.length ? fin.testes_grupo.reduce((s, row) => s + row[b], 0) / totS : 0, raz = base ? r / base : 0;
+    return `<td class="n" style="background:rgba(224,184,0,${Math.min(0.85, 0.85 * Math.sqrt(r / mx))})" data-tip="<b>${esc(nomeG(k, g))}</b> · ${T[b].cod}<br>${fmt(fin.testes_grupo[g - 1][b])} seções (${pct(r, 3)})<br>${dec(raz, 1)} vezes a taxa do país">${r ? pct(r, 2) : "–"}</td>`; };
+  return `<div class="tabw" style="max-height:none"><table><thead><tr><th>Grupo</th>${T.map(t => `<th class="n"><a data-ir="metodo-${t.cod.toLowerCase()}" style="color:inherit" title="${esc(t.nome)}">${t.cod}</a></th>`).join("")}<th class="n">Algum</th></tr></thead>
+    <tbody>${fin.perfil.map(p => `<tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;background:${corG(p.grupo)}"></i>${esc(nomeG(k, p.grupo))}</td>${T.map((t, b) => cel(p.grupo, b)).join("")}<td class="n"><b>${pct(p.sinalizadas / p.secoes, 2)}</b></td></tr>`).join("")}</tbody></table></div>
+    <p class="nota" style="margin-top:6px">% das seções do grupo marcadas em cada teste. Os testes não entraram no agrupamento: a tabela mostra onde as marcações se concentram.</p>`;
+}
+
+function ufsPorGrupo(k) {
+  const fin = CL.finais[k], cont = {}; UFS.forEach(u => cont[u] = new Array(fin.perfil.length).fill(0));
+  fin.mun.forEach(r => cont[r.uf][r.grupo - 1]++);
+  const W = 900, rowH = 17, ml = 150, mr = 10, H = UFS.length * rowH + 10, w = W - ml - mr;
+  let s = "";
+  UFS.forEach((u, i) => { const tot = cont[u].reduce((a, b) => a + b, 0); let x = ml; const y = 4 + i * rowH;
+    s += `<text x="${ml - 6}" y="${y + 11}" text-anchor="end" style="fill:var(--ink2)">${esc(NOMES_UF[u])}</text>`;
+    cont[u].forEach((c, g) => { if (!c) return; const ww = w * c / tot;
+      s += `<rect x="${x}" y="${y}" width="${Math.max(ww - 1.5, 0.5)}" height="${rowH - 4}" fill="${corG(g + 1)}" data-tip="<b>${esc(NOMES_UF[u])}</b><br>${esc(nomeG(k, g + 1))}: ${c} de ${tot} municípios (${pct(c / tot)})"/>`; x += ww; }); });
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Composição dos estados por grupo">${s}</svg>`;
+}
+
+function telaClusters() {
+  trilha([["Brasil", "brasil"], ["Agrupamentos de municípios"]]);
+  $("selUf").value = ""; $("selMun").value = ""; $("selMun").disabled = true;
+  const C = CL.criterios, ind = CL.indicacao, k = K_SEL, fin = CL.finais[k];
+  const kRec = CL.k_recomendado;
+  const votos = Object.entries(ind), nomesCrit = {cotovelo: "Cotovelo", silhueta: "Silhueta", calinski: "Calinski-Harabasz", davies: "Davies-Bouldin",
+    gap_tibs: "Gap (Tibshirani)", gap_primeiro: "Gap (primeiro máximo)", ward_salto: "Maior salto no dendrograma", estabilidade: "Estabilidade"};
+  const contaVotos = {}; votos.forEach(([c, kk]) => contaVotos[kk] = (contaVotos[kk] || 0) + 1);
+  const linhasMun = fin.mun.map(r => { const U = D.ufs[r.uf], m = U.cod.indexOf(r.cod), a = agregar(U, [m]);
+    return {u: r.uf, m, nome: cap(U.nome[m]), g: r.grupo, silh: r.silh, l2: lula2(a), renda: a.c.renda, sec: a.sec, sin: a.qual, apt: a.apt}; });
+  const colsMun = [{t: "Município", v: r => r.nome}, {t: "UF", v: r => r.u},
+    {t: "Grupo", v: r => r.g, h: r => `<i style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;background:${corG(r.g)}"></i>${esc(nomeG(k, r.g))}`},
+    {t: "Silhueta", v: r => r.silh, n: 1, f: x => dec(x), dica: "Quanto o município se parece com o próprio grupo (perto de 1) ou com outro grupo (negativo)"},
+    {t: "Aptos", v: r => r.apt, n: 1, f: fmt}, {t: "Lula × Flávio 2º", v: r => r.l2, n: 1, h: r => barra2(r.l2)},
+    {t: "Renda (Censo)", v: r => r.renda, n: 1, f: brl}, {t: "Seções", v: r => r.sec, n: 1, f: fmt},
+    {t: "% marcadas", v: r => r.sin / r.sec, n: 1, f: x => pct(x, 2)}, colAbrir];
+  const irM = r => `mun-${r.u.toLowerCase()}-${D.ufs[r.u].cod[r.m]}`;
+  $("main").innerHTML = `
+  <section class="cartao intro"><h2>Agrupamento dos municípios por K-means</h2><div class="mcols"><div>
+    <p>O K-means divide os ${fmt(CL.n)} municípios em k grupos de modo que cada município fique no grupo cujo centro (a média do grupo) esteja mais perto dele.
+    A distância é calculada sobre ${CL.vars.length} variáveis em quatro blocos: <b>votação</b> (Lula e Flávio nos dois turnos, demais candidatos, brancos e nulos, abstenção),
+    <b>perfil do eleitorado</b> (sexo, idade, escolaridade, biometria), <b>Censo 2022</b> em volta dos locais de votação (renda, cor ou raça, população indígena, analfabetismo, esgoto)
+    e <b>território</b> (seções em setor rural, favela, quilombo e terra indígena), mais o porte do município.</p>
+    <p><b>Preparação.</b> Renda e porte entram em logaritmo; as proporções muito concentradas (indígena, favela, quilombo) entram pela raiz quadrada, para que poucos municípios
+    extremos não dominem a distância. Todas as variáveis foram padronizadas (média 0 e desvio 1), para pesar igual. Seis municípios sem ligação com o Censo receberam a mediana do estado.</p>
+  </div><div>
+    <p><b>Os testes forenses ficaram de fora</b> do agrupamento, de propósito: os grupos descrevem o perfil dos municípios, e depois se compara em quais grupos as seções marcadas se concentram.</p>
+    <p><b>Execução.</b> Para cada k, o K-means foi rodado com 50 inícios aleatórios (200 no modelo final), guardando a melhor solução. Script: <code>16_clusters_municipios.R</code>, em R
+    (pacotes <code>stats</code>, <code>cluster</code> e <code>data.table</code>).</p>
+  </div></div></section>
+
+  <h2 class="secao">1. Escolha do número de grupos</h2>
+  <p class="nota">Antes de rodar o modelo final, k foi comparado de 2 a 10 por oito critérios. O ponto azul é a indicação de cada critério; a linha amarela, o k em exibição.</p>
+  <div class="crits">
+    ${grafCriterio("wss", "Cotovelo (soma de quadrados dentro dos grupos)", "Quanto menor, mais compactos os grupos; procura-se o ponto em que a queda perde força (maior distância à reta entre k = 1 e k = 10).", ind.cotovelo, {fmt: v => fmt(v)})}
+    ${grafCriterio("silhueta", "Silhueta média", "Compara a distância de cada município ao próprio grupo com a distância ao grupo vizinho; vai de −1 a 1, maior é melhor.", ind.silhueta)}
+    ${grafCriterio("calinski", "Calinski-Harabasz", "Razão entre a dispersão entre grupos e dentro dos grupos, corrigida por k; maior é melhor. Tende a favorecer k pequeno quando não há grupos nítidos.", ind.calinski, {fmt: v => fmt(v)})}
+    ${grafCriterio("davies", "Davies-Bouldin", "Média, para cada grupo, da maior semelhança com outro grupo (espalhamento sobre distância entre centros); menor é melhor.", ind.davies)}
+    ${grafCriterio("gap", "Estatística gap (± erro-padrão)", "Compara a compactação real com a de dados sem estrutura (50 simulações uniformes); escolhe o menor k a até um erro-padrão do seguinte.", ind.gap_tibs, {se: "gap_se"})}
+    ${grafCriterio("estabilidade", "Estabilidade (índice de Rand ajustado)", "Concordância entre o agrupamento completo e 30 reagrupamentos em subamostras de 80%; perto de 1 é estável.", ind.estabilidade)}
+    ${grafCriterio("ward_salto", "Salto no dendrograma de Ward", "Quanto a altura da árvore cai na fusão que cria k grupos; um salto grande indica separação nítida.", ind.ward_salto, {fmt: v => dec(v, 0)})}
+    ${grafCriterio("ari_ward", "Concordância K-means × Ward", "Índice de Rand ajustado entre o K-means e o corte do dendrograma de Ward no mesmo k; mostra se dois métodos diferentes acham os mesmos grupos.", C.reduce((b, r) => r.ari_ward > b.ari_ward ? r : b).k)}
+  </div>
+  <div class="grade" style="margin-top:14px">
+  <section class="cartao"><h2>Quadro dos critérios</h2>
+    <div class="tabw" style="max-height:none"><table><thead><tr><th>Critério</th><th class="n">k indicado</th></tr></thead><tbody>
+    ${votos.map(([c, kk]) => `<tr style="cursor:default"><td>${nomesCrit[c] || c}</td><td class="n"><b>${kk}</b></td></tr>`).join("")}</tbody></table></div>
+    <p class="nota" style="margin-top:8px">Votos: ${Object.entries(contaVotos).sort((a, b) => b[1] - a[1]).map(([kk, n]) => `k = ${kk}: ${n}`).join(" · ")}.</p></section>
+  <section class="cartao"><h2>Decisão</h2>${CL.decisao}</section></div>
+
+  <section class="cartao" style="margin-top:14px"><h2>Dendrograma de Ward</h2>
+    <p class="nota">Agrupamento hierárquico das mesmas variáveis padronizadas (método de Ward). Para caber na tela, a árvore mostra só as 29 fusões do topo:
+    cada barra na base é um subgrupo de municípios (a altura da barra cresce com o tamanho), colorido pelo grupo K-means em que está a maioria deles.
+    Ramos de uma cor só indicam que Ward e K-means concordam.</p>${dendrograma(k)}${legendaGrupos(k)}</section>
+
+  <h2 class="secao">2. Os grupos <span class="ksel">${Object.keys(CL.finais).map(kk => `<button data-kcl="${kk}" class="${kk === k ? "on" : ""}">k = ${kk}${+kk === kRec ? " (recomendado)" : " (detalhado)"}</button>`).join("")}</span></h2>
+  <p class="nota">Grupos numerados do menor para o maior % de Lula no 2º turno (mediana). ${fmt(CL.n)} municípios; ${pct(1 - C.find(r => r.k === +k).wss / (C[0].wss / (1 - C[0].pct_explicado)), 0)} da variância está entre os grupos;
+    silhueta média ${dec(C.find(r => r.k === +k).silhueta)}; concordância com Ward ${dec(fin.ari_ward)}.</p>
+  ${cartoesGrupos(k)}
+  <section class="cartao" style="margin-top:14px"><h2>Perfil médio de cada grupo</h2><p class="nota">Centro de cada grupo nas variáveis padronizadas: verde acima da média do país, azul abaixo. Passe o mouse para ver o valor.</p>${heatCentros(k)}</section>
+  <section class="cartao" style="margin-top:14px"><h2>Mapa dos municípios nos dois componentes principais</h2>
+    <p class="nota">Cada ponto é um município, projetado nos dois eixos que mais resumem as ${CL.vars.length} variáveis (análise de componentes principais).
+    As setas mostram as variáveis que mais pesam nesses eixos. Pontos extremos foram encostados na borda.</p>${dispersao(k)}${legendaGrupos(k, true)}</section>
+  <section class="cartao" style="margin-top:14px"><h2>Testes forenses por grupo</h2>${testesPorGrupo(k)}</section>
+  <section class="cartao" style="margin-top:14px"><h2>Composição dos estados</h2><p class="nota">Parte dos municípios de cada estado em cada grupo.</p>${ufsPorGrupo(k)}${legendaGrupos(k)}</section>
+  <section class="cartao" style="margin-top:14px"><h2>Municípios e seus grupos</h2>
+    <p class="nota">Busque pelo nome, pela sigla do estado ou pelo nome do grupo. Clique numa linha para abrir o município.</p>
+    <div class="ferr" style="margin-bottom:6px">${fin.perfil.map(p => `<button data-fg="${p.grupo}"><i style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;background:${corG(p.grupo)}"></i>${esc(nomeG(k, p.grupo))}</button>`).join("")}<button data-fg="0">Todos</button></div>
+    ${tabela("clmun", colsMun, linhasMun, 2, irM, {lim: 1e9, altura: 460})}</section>`;
+  desenha("clmun");
+}
+document.addEventListener("click", ev => {
+  const kb = ev.target.closest("[data-kcl]"); if (kb) { K_SEL = kb.dataset.kcl; const y = scrollY; telaClusters(); scrollTo(0, y); return; }
+  const fg = ev.target.closest("[data-fg]"); if (fg) { const T = TAB.clmun, g = +fg.dataset.fg; T.filtro = g ? (r => r.g === g) : null; T.rotFiltro = g ? nomeG(K_SEL, g) : ""; desenha("clmun"); return; }
+  const lg = ev.target.closest(".legG"); if (lg) { const svg = $("svgDisp"), g = lg.dataset.grupo, on = svg.dataset.g === g;
+    svg.dataset.g = on ? "" : g; svg.querySelectorAll(".pt").forEach(p => p.setAttribute("fill-opacity", on || p.classList.contains("g" + g) ? ".7" : ".06"));
+    document.querySelectorAll(".legG").forEach(e => e.style.opacity = on || e.dataset.grupo === g ? "1" : ".45"); }
+});
+// grupo do município (usado na página do município)
+function grupoMunHtml(uf, cod) {
+  const r = munGrupo[uf + "-" + cod]; if (!r) return "";
+  return `<div class="aviso" style="border-left-color:var(--azul-cand)">Agrupamento: ${Object.keys(r).sort((a, b) => a - b).map(k => `<b>k = ${k}</b>: <span style="white-space:nowrap"><i style="display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px;background:${corG(r[k].grupo)}"></i>${esc(nomeG(k, r[k].grupo))}</span> (silhueta ${dec(r[k].silh)})`).join(" · ")}.
+    <a data-ir="agrupamentos">Ver os grupos</a></div>`;
+}
+
+ATUAL = location.hash.slice(1) || "brasil";
+render();
+</script>
+</body>
+</html>

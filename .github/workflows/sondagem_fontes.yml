@@ -1,0 +1,39 @@
+name: Sondagem das fontes (TSE e IBGE)
+
+# Verifica, em poucos minutos, se os servidores do TSE e do IBGE respondem ao
+# GitHub Actions e mostra as colunas dos arquivos usados no script 13.
+on:
+  workflow_dispatch:
+
+jobs:
+  sondagem:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: IBGE - cabeçalhos dos CSV por setor, renda e malha
+        run: |
+          B=https://ftp.ibge.gov.br/Censos/Censo_Demografico_2022
+          S=$B/Agregados_por_Setores_Censitarios/Agregados_por_Setor_csv
+          M=https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_de_setores_censitarios__divisoes_intramunicipais/censo_2022
+          mkdir -p s && cd s
+          for z in Agregados_por_setores_basico_BR_20260520.zip Agregados_por_setores_cor_ou_raca_BR.zip; do
+            curl -sSL -o $z $S/$z; unzip -l $z; unzip -o -q $z; done
+          curl -sSL -o r.zip $B/Agregados_por_Setores_Censitarios_Rendimento_do_Responsavel/Agregados_por_setores_renda_responsavel_BR_20260508_csv.zip
+          unzip -l r.zip; unzip -o -q r.zip
+          for f in $(find . -name "*.csv"); do echo "== $f"; head -c 1500 "$f" | head -3; echo; done
+          pip install -q openpyxl
+          curl -sSL -o dr.xlsx $B/Agregados_por_Setores_Censitarios_Rendimento_do_Responsavel/dicionario_de_dados_renda_responsavel_20260508.xlsx
+          curl -sSL -o dm.xlsx $B/Agregados_por_Setores_Censitarios/malha_com_atributos/Dicionario_de_dados_malha_agregados.xlsx
+          python3 -c "
+          import openpyxl
+          for f in ['dr.xlsx','dm.xlsx']:
+              wb = openpyxl.load_workbook(f, read_only=True)
+              for ws in wb.worksheets:
+                  print('=== ', f, ws.title)
+                  for r in ws.iter_rows(values_only=True):
+                      if any(x is not None for x in r): print(r)
+          "
+          echo "---- malha (HTML cru)"
+          curl -s -m 60 "$M/setores/" | grep -oE 'href="[^"?][^"]*"' | head -40
+          curl -s -m 60 "$M/setores/gpkg/" | grep -oE 'href="[^"?][^"]*"' | head -40
+          curl -s -m 60 "$M/setores/gpkg/BR/" | grep -oE 'href="[^"?][^"]*"|[0-9.]+[MG] ' | head -40
