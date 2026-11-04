@@ -144,7 +144,7 @@ const corCand = n => n === NUM_LULA ? "var(--lula)" : n === NUM_FLAVIO ? "var(--
 const nomeCurto = c => c.especial ? c.nome : cap(c.nome);
 
 // Se a página for servida de outro ramo (ex.: painel-html), busca os dados no ramo painel-dados
-const RAW = "https://raw.githubusercontent.com/ciuffciuff/artigo_eleicoes_2026/painel-dados/";
+const RAW = "https://raw.githubusercontent.com/ciuffciuff/Artigo_Eleicoes_2026/painel-dados/";
 const G = { base: "", resumo: null, cand: null, mun: null, ufs: {}, estado: {} };
 
 async function getJSON(nome, opcional) {
